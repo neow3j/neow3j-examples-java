@@ -1,12 +1,12 @@
 # Neow3j Examples
 
-This git repo contains a Java project with some examples on how to use Neow3j.
+This git repo contains a Java project with some examples on how to use [neow3j](https://github.com/neow3j/neow3j).
 
 ## Requirements
 
 * Java 1.8
 
-## Fetch the Project
+## Clone the Project
 
 ```
 $ git clone https://github.com/neow3j/neow3j-examples.git
