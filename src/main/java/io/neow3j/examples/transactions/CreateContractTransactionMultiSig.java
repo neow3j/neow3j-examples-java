@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CreateRawTransactionMultiSig {
+public class CreateContractTransactionMultiSig {
 
     public static void main(String[] args) {
 
@@ -39,7 +39,6 @@ public class CreateRawTransactionMultiSig {
         );
 
         RawTransaction rawTx = RawTransaction.createContractTransaction(
-                null,
                 null,
                 Arrays.asList(
                         new RawTransactionInput("9feac4774eb0f01ab5d6817c713144b7c020b98f257c30b1105062d434e6f254", 0)
