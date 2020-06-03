@@ -14,5 +14,4 @@ public class GetInfoValidatorNodes {
         NeoGetValidators getValidatorsReq = neow3j.getValidators().send();
         System.out.println(getValidatorsReq.getValidators());
     }
-
 }

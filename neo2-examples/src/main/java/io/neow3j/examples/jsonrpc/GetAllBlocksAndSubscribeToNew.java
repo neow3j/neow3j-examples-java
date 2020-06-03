@@ -18,5 +18,4 @@ public class GetAllBlocksAndSubscribeToNew {
                     System.out.println("transactions: " + blockReqResult.getBlock().getTransactions());
                 });
     }
-
 }

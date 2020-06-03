@@ -29,6 +29,4 @@ public class GetAccountState {
         }
         return address;
     }
-
 }
-

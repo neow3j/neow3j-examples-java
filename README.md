@@ -1,21 +1,23 @@
 # neow3j Examples
 
-This git repo contains a Java project with some examples on how to use [neow3j](https://github.com/neow3j/neow3j).
+This git repo contains two Java projects with some examples on how to use [neow3j](https://github.com/neow3j/neow3j). One project is using the current release (2.4.0) of neow3j that interacts with Neo2 and the other uses a snapshot (3.0.1-SNAPSHOT) that interacts with the upcoming Neo3 net.
+
+You can run a Neo net locally e.g. Neo2 [here](https://github.com/axlabs/neo2-privatenet-openwallet-docker) or Neo3 [here](https://github.com/axlabs/neo3-privatenet-docker).
 
 ## Requirements
 
-* Java 1.8
+- Java 1.8
+- (local running Neo net)
 
 ## Clone the Project
 
 ```
-$ git clone https://github.com/neow3j/neow3j-examples.git
+$ git clone https://github.com/neow3j/neow3j-examples-java.git
 ```
 
 ## Open the project in IntelliJ
 
-Go to `File` -> `New` -> `Project from Existing Sources` -> and select the
-directory you cloned the `neow3j-examples` repo, i.e., where the `build.gradle` is located.
+Go to `File` -> `New` -> `Project from Existing Sources` -> and select the project you want to use -> the neo2-examples or neo3-examples directory, i.e., where a `build.gradle` is located.
 
 In the "Import Project" window, select "Gradle" and press "Next".
 
@@ -32,9 +34,13 @@ For each example, a `main()` method is found. If you want to run
 the example, you can select the `main()` method, right click on it,
 and select "Run".
 
+**Hint:** If you are using the neo3-privatenet-docker from AxLabs for the neo3-examples, first run the `OpenWallet.java` file in the jsonrpc package.
+
 ## Running examples on the command line
 
-First, build the whole project:
+To use the following commands, go to the root of the project you want to use (e.g. `{your_path_to_this_repo}/neo2-examples/`).
+
+First, build the project:
 
 ```
 $ ./gradlew clean build

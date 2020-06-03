@@ -20,7 +20,4 @@ public class GetBlock {
 
         System.out.println("Block: " + neoGetBlock.getBlock());
     }
-
 }
-
-
