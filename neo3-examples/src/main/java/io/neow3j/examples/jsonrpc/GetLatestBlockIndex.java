@@ -14,7 +14,7 @@ public class GetLatestBlockIndex {
         NeoBlockCount blockCountReq = neow3j.getBlockCount().send();
 
         System.out.println("\n####################");
-        System.out.println("latest block index: " + blockCountReq.getBlockIndex());
+        System.out.println("Latest block index: " + blockCountReq.getBlockIndex());
         System.out.println("####################");
     }
 }
