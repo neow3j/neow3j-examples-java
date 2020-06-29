@@ -12,7 +12,9 @@ public class ValidateNEOAddress {
         Neow3j neow3j = Neow3j.build(new HttpService("http://seed1.ngd.network:10332"));
 
         NeoValidateAddress validateReq = neow3j.validateAddress("ARvMqz3hEFE4qBkHAaPNxALquNQtBbH12f").send();
-        System.out.println("isValid=" + validateReq.getValidation().isValid());
-    }
 
+        System.out.println("\n####################");
+        System.out.println("isValid=" + validateReq.getValidation().isValid());
+        System.out.println("####################\n");
+    }
 }

@@ -11,7 +11,7 @@ public class GetAllBlocksAndSubscribeToNew {
 
         neow3j.catchUpToLatestAndSubscribeToNewBlocksObservable(new BlockParameterIndex(2889367), true)
                 .subscribe((blockReqResult) -> {
-                    System.out.println("#######################################");
+                    System.out.println("####################");
                     System.out.println("blockIndex: " + blockReqResult.getBlock().getIndex());
                     System.out.println("hashId: " + blockReqResult.getBlock().getHash());
                     System.out.println("confirmations: " + blockReqResult.getBlock().getConfirmations());

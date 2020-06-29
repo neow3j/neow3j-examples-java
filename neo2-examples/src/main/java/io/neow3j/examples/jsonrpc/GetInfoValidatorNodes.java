@@ -12,6 +12,9 @@ public class GetInfoValidatorNodes {
         Neow3j neow3j = Neow3j.build(new HttpService("http://seed1.ngd.network:10332"));
 
         NeoGetValidators getValidatorsReq = neow3j.getValidators().send();
+
+        System.out.println("\n####################");
         System.out.println(getValidatorsReq.getValidators());
+        System.out.println("####################\n");
     }
 }

@@ -27,13 +27,15 @@ public class Nep5CallMethods {
                 .fromContract(contractScripthash)
                 .build();
 
+        System.out.println("\n####################");
         System.out.println("Total Supply: " + nep5.totalSupply());
         System.out.println("Name: " + nep5.name());
         System.out.println("Symbol: " + nep5.symbol());
         System.out.println("Decimals: " + nep5.decimals());
 
-        System.out.println("Balance1: " + nep5.balanceOf(account1.getScriptHash()));
+        System.out.println("\nBalance1: " + nep5.balanceOf(account1.getScriptHash()));
         System.out.println("Balance2: " + nep5.balanceOf(account2.getScriptHash()));
+        System.out.println("####################\n");
     }
 
 }

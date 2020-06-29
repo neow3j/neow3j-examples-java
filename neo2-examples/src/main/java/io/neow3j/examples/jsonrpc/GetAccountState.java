@@ -16,6 +16,8 @@ public class GetAccountState {
         NeoGetAccountState getAccountState = neow3j.getAccountState("AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y").send();
 
         getAccountState.getAccountState().getBalances().stream().forEach((balance) -> {
+
+            System.out.println("\n####################");
             System.out.println("Asset Address/Name: " + convertToNameIfKnown(balance.getAssetAddress()));
             System.out.println("Balance: " + balance.getValue());
         });

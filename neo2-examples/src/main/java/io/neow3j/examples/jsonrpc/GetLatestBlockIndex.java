@@ -12,7 +12,9 @@ public class GetLatestBlockIndex {
         Neow3j neow3j = Neow3j.build(new HttpService("http://seed1.ngd.network:10332"));
 
         NeoBlockCount blockCountReq = neow3j.getBlockCount().send();
-        System.out.println("Latest block index: " + blockCountReq.getBlockIndex());
-    }
 
+        System.out.println("\n####################");
+        System.out.println("Latest block index: " + blockCountReq.getBlockIndex());
+        System.out.println("####################\n");
+    }
 }

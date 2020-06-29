@@ -18,6 +18,8 @@ public class GetBlock {
                         true)
                 .send();
 
+        System.out.println("\n####################");
         System.out.println("Block: " + neoGetBlock.getBlock());
+        System.out.println("####################\n");
     }
 }

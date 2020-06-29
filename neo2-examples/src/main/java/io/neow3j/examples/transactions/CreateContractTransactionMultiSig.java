@@ -64,7 +64,9 @@ public class CreateContractTransactionMultiSig {
 
         byte[] rawTxSignedArray = tUnsigned.toArray();
         String rawTransactionHexString = Numeric.toHexStringNoPrefix(rawTxSignedArray);
-        System.out.println("rawTransactionHexString: " + rawTransactionHexString);
-    }
 
+        System.out.println("\n####################");
+        System.out.println("rawTransactionHexString: " + rawTransactionHexString);
+        System.out.println("####################\n");
+    }
 }

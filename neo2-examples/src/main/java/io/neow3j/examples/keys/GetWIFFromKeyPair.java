@@ -11,7 +11,10 @@ public class GetWIFFromKeyPair {
     public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         ECKeyPair ecKeyPair = ECKeyPair.createEcKeyPair();
         String wif = ecKeyPair.exportAsWIF();
+
+        System.out.println("\n####################");
         System.out.println("WIF: " + wif);
+        System.out.println("####################\n");
     }
 
 }

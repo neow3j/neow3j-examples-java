@@ -29,11 +29,14 @@ public class CreateClaimTransaction {
                 .build();
 
         byte[] rawTxSignedArray = signedTx.toArray();
+
+        System.out.println("\n####################");
         System.out.println("rawTransactionHexString: " + Numeric.toHexStringNoPrefix(rawTxSignedArray));
 
 //        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:30333"));
 //        NeoSendRawTransaction sendRawTx = neow3j.sendRawTransaction(Numeric.toHexStringNoPrefix(rawTxSignedArray)).send();
 //        System.out.println("Result: " + sendRawTx.getResult());
-    }
 
+        System.out.println("####################\n");
+    }
 }

@@ -28,8 +28,9 @@ public class Nep5TransferTokens {
 
         Boolean transferState = nep5.transfer(account1, account2.getScriptHash(), "20");
         if (transferState) {
+            System.out.println("\n####################");
             System.out.println("Transfer successful.");
+            System.out.println("####################\n");
         }
     }
-
 }

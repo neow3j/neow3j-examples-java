@@ -17,6 +17,6 @@ public class CreateKeyPair {
         System.out.println("Public Key (BigInteger): " + ecKeyPair.getPublicKey());
         System.out.println("Private Key (Hex): " + Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey()));
         System.out.println("Public Key (Hex): " + Numeric.toHexStringNoPrefix(ecKeyPair.getPublicKey()));
-        System.out.println("####################");
+        System.out.println("####################\n");
     }
 }

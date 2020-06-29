@@ -11,8 +11,11 @@ public class GetRawTransaction {
     public static void main(String[] args) throws IOException {
         Neow3j neow3j = Neow3j.build(new HttpService("https://seed0.cityofzion.io:443"));
 
-        NeoGetRawTransaction neoGetRawTransaction = neow3j.getRawTransaction("d5a63225e419aca0c10520708c531d36d9912eef0e12cec04e29568930cc4bf9").send();
-        System.out.println("Raw Transaction: " + neoGetRawTransaction.getRawTransaction());
-    }
+        NeoGetRawTransaction neoGetRawTransaction =
+                neow3j.getRawTransaction("d5a63225e419aca0c10520708c531d36d9912eef0e12cec04e29568930cc4bf9").send();
 
+        System.out.println("\n####################");
+        System.out.println("Raw Transaction: " + neoGetRawTransaction.getRawTransaction());
+        System.out.println("####################\n");
+    }
 }

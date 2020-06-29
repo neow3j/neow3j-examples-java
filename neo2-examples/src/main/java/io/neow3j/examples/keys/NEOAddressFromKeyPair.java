@@ -11,7 +11,10 @@ public class NEOAddressFromKeyPair {
     public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         ECKeyPair ecKeyPair = ECKeyPair.createEcKeyPair();
         String neoAddress = ecKeyPair.getAddress();
+
+        System.out.println("\n####################");
         System.out.println("NEO Address: " + neoAddress);
+        System.out.println("####################\n");
     }
 
 }

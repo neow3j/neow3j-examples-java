@@ -14,6 +14,8 @@ public class CreateNewStandardWalletFile {
 
         Wallet.createGenericWallet("myPassw0rd!@#", tempFile.toFile());
 
+        System.out.println("\n####################");
         System.out.println("Wallet file path: " + tempFile.toAbsolutePath());
+        System.out.println("####################\n");
     }
 }
