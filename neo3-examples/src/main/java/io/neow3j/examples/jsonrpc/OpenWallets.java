@@ -8,7 +8,7 @@ import java.io.IOException;
 public class OpenWallets {
 
     public static void main(String[] args) throws IOException {
-        Neow3j neow3j = Neow3j.build(new HttpService("http:localhost:40332"));
+        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
         Boolean consensusWalletOpen = neow3j.openWallet("wallet.json", "neo").send().getOpenWallet();
 
         System.out.println("\n####################");
@@ -21,7 +21,7 @@ public class OpenWallets {
         }
 
         // Open wallet of client 1
-        neow3j = Neow3j.build(new HttpService("http:localhost:10332"));
+        neow3j = Neow3j.build(new HttpService("http://localhost:10332"));
         Boolean client1WalletOpen = neow3j.openWallet("wallet.json", "neo").send().getOpenWallet();
         if (client1WalletOpen) {
             System.out.println("Client 1 wallet opened successfully!");
@@ -30,7 +30,7 @@ public class OpenWallets {
         }
 
         // Open wallet of client 2
-        neow3j = Neow3j.build(new HttpService("http:localhost:20332"));
+        neow3j = Neow3j.build(new HttpService("http://localhost:20332"));
         Boolean client2WalletOpen = neow3j.openWallet("wallet.json", "neo").send().getOpenWallet();
         if (client2WalletOpen) {
             System.out.println("Client 2 wallet opened successfully!");

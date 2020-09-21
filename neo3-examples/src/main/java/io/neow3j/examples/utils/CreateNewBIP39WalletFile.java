@@ -16,7 +16,7 @@ public class CreateNewBIP39WalletFile {
 
         Wallet w = Wallet.createWallet();
         Bip39Account a = Bip39Account.createAccount("myPassw0rd!@#");
-        w.addAccount(a);
+        w.addAccounts(a);
         w.encryptAllAccounts("password-to-encrypt");
         w.saveNEP6Wallet(tempFile.toFile());
 

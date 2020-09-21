@@ -7,7 +7,7 @@ import io.neow3j.protocol.http.HttpService;
 public class SubscribeToNewBlocks {
 
     public static void main(String[] args) {
-        Neow3j neow3j = Neow3j.build(new HttpService("http:localhost:40332"));
+        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
         neow3j.catchUpToLatestAndSubscribeToNewBlocksObservable(BlockParameterName.LATEST, true)
                 .subscribe((blockReqResult) -> {
