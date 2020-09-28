@@ -1,7 +1,6 @@
 package io.neow3j.examples.jsonrpc;
 
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.methods.response.NeoBlockCount;
 import io.neow3j.protocol.http.HttpService;
 
 import java.io.IOException;
