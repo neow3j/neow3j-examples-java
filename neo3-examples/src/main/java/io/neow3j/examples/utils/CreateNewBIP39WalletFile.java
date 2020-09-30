@@ -1,6 +1,5 @@
 package io.neow3j.examples.utils;
 
-import io.neow3j.contract.ScriptHash;
 import io.neow3j.crypto.exceptions.CipherException;
 import io.neow3j.wallet.Bip39Account;
 import io.neow3j.wallet.Wallet;
