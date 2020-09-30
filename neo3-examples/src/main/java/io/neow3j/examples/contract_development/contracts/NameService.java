@@ -1,10 +1,9 @@
-package io.neow3j.examples.sc.contracts;
+package io.neow3j.examples.contract_development.contracts;
 
-import io.neow3j.devpack.framework.Runtime;
-import io.neow3j.devpack.framework.Storage;
-import io.neow3j.devpack.framework.annotations.EntryPoint;
-import io.neow3j.devpack.framework.annotations.Features;
-import io.neow3j.devpack.framework.annotations.ManifestExtra;
+import io.neow3j.devpack.annotations.Features;
+import io.neow3j.devpack.annotations.ManifestExtra;
+import io.neow3j.devpack.neo.Runtime;
+import io.neow3j.devpack.neo.Storage;
 
 // A name service contract that allows anyone to register a domain name under her address.
 @ManifestExtra(key = "name", value = "NameService")
@@ -12,7 +11,6 @@ import io.neow3j.devpack.framework.annotations.ManifestExtra;
 @Features(hasStorage = true)
 public class NameService {
 
-    @EntryPoint
     public static byte[] query(String domain) {
         return Storage.get(domain);
     }

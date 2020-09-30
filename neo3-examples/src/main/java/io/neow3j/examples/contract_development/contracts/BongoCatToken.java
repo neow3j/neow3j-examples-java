@@ -1,15 +1,13 @@
-package io.neow3j.examples.sc.contracts;
+package io.neow3j.examples.contract_development.contracts;
 
-import static io.neow3j.devpack.framework.Helper.toInt;
+import static io.neow3j.devpack.Helper.toInt;
 
-import io.neow3j.devpack.framework.Contract;
-import io.neow3j.devpack.framework.ExecutionEngine;
-import io.neow3j.devpack.framework.Helper;
-import io.neow3j.devpack.framework.Runtime;
-import io.neow3j.devpack.framework.Storage;
-import io.neow3j.devpack.framework.annotations.EntryPoint;
-import io.neow3j.devpack.framework.annotations.Features;
-import io.neow3j.devpack.framework.annotations.ManifestExtra;
+import io.neow3j.devpack.annotations.Features;
+import io.neow3j.devpack.annotations.ManifestExtra;
+import io.neow3j.devpack.neo.Contract;
+import io.neow3j.devpack.neo.Runtime;
+import io.neow3j.devpack.neo.Storage;
+import io.neow3j.devpack.system.ExecutionEngine;
 
 // A NEP-5 token contract.
 @ManifestExtra(key = "name", value = "BongoCatToken")
@@ -46,7 +44,6 @@ public class BongoCatToken {
         return totalSupplyGet();
     }
 
-    @EntryPoint
     public static boolean transfer(byte[] from, byte[] to, int amount) {
         if (!isValidAddress(from) || !isValidAddress(to)) {
             return false;
@@ -116,7 +113,7 @@ public class BongoCatToken {
     }
 
     private static boolean isValidAddress(byte[] address) {
-        return address.length == 20 && Helper.toInt(address) != 0;
+        return address.length == 20 && toInt(address) != 0;
     }
 
     private static void totalSupplyIncrease(int value) {
@@ -149,7 +146,7 @@ public class BongoCatToken {
     }
 
     private static int assetGet(byte[] key) {
-        return Helper.toInt(Storage.getStorageContext().createMap(assetMapName).get(key));
+        return toInt(Storage.getStorageContext().createMap(assetMapName).get(key));
     }
 
     private static void assetRemove(byte[] key) {

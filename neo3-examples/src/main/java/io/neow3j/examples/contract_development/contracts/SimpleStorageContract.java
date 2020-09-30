@@ -1,16 +1,14 @@
-package io.neow3j.examples.sc.contracts;
+package io.neow3j.examples.contract_development.contracts;
 
-import io.neow3j.devpack.framework.Storage;
-import io.neow3j.devpack.framework.annotations.EntryPoint;
-import io.neow3j.devpack.framework.annotations.Features;
-import io.neow3j.devpack.framework.annotations.ManifestExtra;
+import io.neow3j.devpack.annotations.Features;
+import io.neow3j.devpack.annotations.ManifestExtra;
+import io.neow3j.devpack.neo.Storage;
 
 // A simple contract that allows putting and getting from it's storage area.
 @ManifestExtra(key = "name", value = "SimpleStorageContract")
 @Features(hasStorage = true)
 public class SimpleStorageContract {
 
-    @EntryPoint
     public static boolean putSomething(String key, String value) {
         Storage.put(key, value);
         return true;

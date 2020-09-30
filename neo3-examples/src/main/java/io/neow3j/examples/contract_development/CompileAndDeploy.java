@@ -1,11 +1,9 @@
-package io.neow3j.examples.sc;
-
-import static java.lang.String.format;
+package io.neow3j.examples.contract_development;
 
 import io.neow3j.compiler.Compiler;
 import io.neow3j.compiler.Compiler.CompilationResult;
 import io.neow3j.contract.SmartContract;
-import io.neow3j.examples.sc.contracts.BongoCatToken;
+import io.neow3j.examples.contract_development.contracts.BongoCatToken;
 import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
@@ -18,7 +16,7 @@ import io.neow3j.wallet.Wallet;
 // Neo blockchain.
 public class CompileAndDeploy {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Throwable {
 
         // Set the magic number according to the Neo network's configuration. It is used when
         // signing transactions.
@@ -36,9 +34,8 @@ public class CompileAndDeploy {
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
         // the neo-node.
         NeoSendRawTransaction response = sc.deploy()
-                .withWallet(w)
-                .withSigners(Signer.calledByEntry(a.getScriptHash()))
-                .build()
+                .wallet(w)
+                .signers(Signer.calledByEntry(a.getScriptHash()))
                 .sign()
                 .send();
 

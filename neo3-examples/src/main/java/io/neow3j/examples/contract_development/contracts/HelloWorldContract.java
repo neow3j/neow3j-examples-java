@@ -1,6 +1,7 @@
-package io.neow3j.examples.sc.contracts;
+package io.neow3j.examples.contract_development.contracts;
 
-import io.neow3j.devpack.framework.annotations.ManifestExtra;
+
+import io.neow3j.devpack.annotations.ManifestExtra;
 
 // A simple smart contract with one method that returns a string and takes no arguments.
 @ManifestExtra(key = "name", value = "HelloWorldContract")
