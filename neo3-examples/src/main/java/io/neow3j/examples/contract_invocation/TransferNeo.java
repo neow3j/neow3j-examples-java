@@ -2,18 +2,13 @@ package io.neow3j.examples.contract_invocation;
 
 import io.neow3j.contract.NeoToken;
 import io.neow3j.contract.ScriptHash;
-import io.neow3j.crypto.ECKeyPair.ECPublicKey;
 import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
 import io.neow3j.protocol.http.HttpService;
-import io.neow3j.utils.Numeric;
 import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.List;
 
 public class TransferNeo {
 

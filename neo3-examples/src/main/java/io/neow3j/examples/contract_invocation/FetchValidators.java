@@ -2,13 +2,11 @@ package io.neow3j.examples.contract_invocation;
 
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
-import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.utils.Numeric;
 import io.neow3j.wallet.Account;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.List;
 
 public class FetchValidators {
