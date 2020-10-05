@@ -9,6 +9,7 @@ import io.neow3j.wallet.Account;
 import java.io.IOException;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class FetchValidators {
 
     public static void main(String[] args) throws IOException {
