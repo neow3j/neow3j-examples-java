@@ -1,35 +1,34 @@
 package io.neow3j.examples.contract_development.contracts;
 
-import static io.neow3j.devpack.Helper.toInt;
-
+import io.neow3j.devpack.Helper;
+import io.neow3j.devpack.StringLiteralHelper;
 import io.neow3j.devpack.annotations.Features;
 import io.neow3j.devpack.annotations.ManifestExtra;
+import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.neo.Contract;
 import io.neow3j.devpack.neo.Runtime;
 import io.neow3j.devpack.neo.Storage;
+import io.neow3j.devpack.neo.StorageContext;
+import io.neow3j.devpack.neo.StorageMap;
 import io.neow3j.devpack.system.ExecutionEngine;
 
-// A NEP-5 token contract.
 @ManifestExtra(key = "name", value = "BongoCatToken")
-@ManifestExtra(key = "author", value = "neow3j")
-@Features(hasStorage = true)
+@ManifestExtra(key = "author", value = "AxLabs")
+@Features(hasStorage = true, payable = false)
+@SupportedStandards("NEP-5")
 public class BongoCatToken {
 
-    // Little-endian script hash "cc45cc8987b0e35371f5685431e3c8eeea306722"
-    static byte[] owner = new byte[]{(byte) 0x22, (byte) 0x67, (byte) 0x30, (byte) 0xea,
-            (byte) 0xee, (byte) 0xc8, (byte) 0xe3, (byte) 0x31, (byte) 0x54, (byte) 0x68,
-            (byte) 0xf5, (byte) 0x71, (byte) 0x53, (byte) 0xe3, (byte) 0xb0, (byte) 0x87,
-            (byte) 0x89, (byte) 0xcc, (byte) 0x45, (byte) 0xcc};
+    static final byte[] owner = StringLiteralHelper.addressToScriptHash(
+            "AJunErzotcQTNWP2qktA7LgkXZVdHea97H");
 
-    static int InitialSupply = 200_000_000;
-
-    // Storage prefixes and keys
-    static String contractMapName = "contract";
-    static String totalSupplyKey = "totalSupply";
-    static String assetMapName = "asset";
+    static final int initialSupply = 200_000_000;
+    static final String assetPrefix = "asset";
+    static final String totalSupplyKey = "totalSupply";
+    static final StorageContext sc = Storage.getStorageContext();
+    static final StorageMap assetMap = sc.createMap(assetPrefix);
 
     public static String name() {
-        return "bongo";
+        return "Bongo";
     }
 
     public static String symbol() {
@@ -41,27 +40,31 @@ public class BongoCatToken {
     }
 
     public static int totalSupply() {
-        return totalSupplyGet();
+        return getTotalSupply();
+    }
+
+    static int getTotalSupply() {
+        return Helper.toInt(Storage.get(sc, totalSupplyKey));
     }
 
     public static boolean transfer(byte[] from, byte[] to, int amount) {
+        if (from == to) {
+            return true;
+        }
         if (!isValidAddress(from) || !isValidAddress(to)) {
             return false;
         }
         if (amount <= 0) {
             return false;
         }
-        if (!Runtime.checkWitness(from) && !(from == ExecutionEngine.getCallingScriptHash())) {
+        if (!Runtime.checkWitness(from) && from != ExecutionEngine.getCallingScriptHash()) {
             return false;
         }
         if (assetGet(from) < amount) {
             return false;
         }
-        if (from == to) {
-            return true;
-        }
-        assetReduce(from, amount);
-        assetIncrease(to, amount);
+        deductFromBalance(from, amount);
+        addToBalance(to, amount);
         return true;
     }
 
@@ -76,16 +79,13 @@ public class BongoCatToken {
         if (!isOwner()) {
             return false;
         }
-        if (toInt(Storage.getStorageContext().createMap(contractMapName).get(totalSupplyKey)) > 0) {
+        if (getTotalSupply() > 0) {
             return false;
         }
-        if (totalSupplyGet() > 0) {
-            return false;
-        }
-        totalSupplyIncrease(InitialSupply);
-        assetIncrease(owner, InitialSupply);
-        Storage.getStorageContext().createMap(contractMapName).put(totalSupplyKey, InitialSupply);
-        Storage.getStorageContext().createMap(assetMapName).put(owner, InitialSupply);
+        // Initialize supply
+        Storage.put(sc, totalSupplyKey, getTotalSupply() + initialSupply);
+        // And allocate all tokens to the contract owner.
+        addToBalance(owner, initialSupply);
         return true;
     }
 
@@ -113,43 +113,24 @@ public class BongoCatToken {
     }
 
     private static boolean isValidAddress(byte[] address) {
-        return address.length == 20 && toInt(address) != 0;
+        return address.length == 20 && Helper.toInt(address) != 0;
     }
 
-    private static void totalSupplyIncrease(int value) {
-        totalSupplyPut(totalSupplyGet() + value);
+    private static void addToBalance(byte[] key, int value) {
+        assetMap.put(key, assetGet(key) + value);
     }
 
-    private static void totalSupplyPut(int value) {
-        Storage.getStorageContext().createMap(contractMapName).put(totalSupplyKey, value);
-    }
-
-    private static int totalSupplyGet() {
-        return toInt(Storage.getStorageContext().createMap(contractMapName).get(totalSupplyKey));
-    }
-
-    private static void assetIncrease(byte[] key, int value) {
-        assetPut(key, assetGet(key) + value);
-    }
-
-    private static void assetReduce(byte[] key, int value) {
+    private static void deductFromBalance(byte[] key, int value) {
         int oldValue = assetGet(key);
         if (oldValue == value) {
-            assetRemove(key);
+            assetMap.delete(key);
         } else {
-            assetPut(key, oldValue - value);
+            assetMap.put(key, oldValue - value);
         }
     }
 
-    private static void assetPut(byte[] key, int value) {
-        Storage.getStorageContext().createMap(assetMapName).put(key, value);
-    }
-
     private static int assetGet(byte[] key) {
-        return toInt(Storage.getStorageContext().createMap(assetMapName).get(key));
+        return Helper.toInt(assetMap.get(key));
     }
 
-    private static void assetRemove(byte[] key) {
-        Storage.getStorageContext().createMap(assetMapName).delete(key);
-    }
 }

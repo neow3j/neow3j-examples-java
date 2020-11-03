@@ -13,9 +13,8 @@ public class CreateNewBIP39WalletFile {
     public static void main(String[] args) throws IOException, CipherException {
         Path tempFile = Files.createTempFile("wallet-dir-prefix-test", ".wallet");
 
-        Wallet w = Wallet.createWallet();
-        Bip39Account a = Bip39Account.createAccount("myPassw0rd!@#");
-        w.addAccounts(a);
+        Bip39Account a = Bip39Account.create("myPassw0rd!@#");
+        Wallet w = Wallet.withAccounts(a);
         w.encryptAllAccounts("password-to-encrypt");
         w.saveNEP6Wallet(tempFile.toFile());
 

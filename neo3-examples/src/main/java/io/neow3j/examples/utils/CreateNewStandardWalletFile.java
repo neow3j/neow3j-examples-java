@@ -12,7 +12,7 @@ public class CreateNewStandardWalletFile {
     public static void main(String[] args) throws IOException, CipherException {
         Path tempFile = Files.createTempFile("wallet-dir-prefix-test", ".wallet");
 
-        Wallet.createWallet("myPassw0rd!@#", tempFile.toFile());
+        Wallet.create("myPassw0rd!@#", tempFile.toFile());
 
         System.out.println("\n####################");
         System.out.println("Wallet file path: " + tempFile.toAbsolutePath());
