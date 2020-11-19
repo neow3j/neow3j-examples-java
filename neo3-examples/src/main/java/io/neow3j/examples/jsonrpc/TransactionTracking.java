@@ -21,7 +21,7 @@ public class TransactionTracking {
         NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
         Neow3j neow = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        Account account = Account.fromWIF("L1WMhxazScMhUrdv34JqQb1HFSQmWeN2Kpc1R9JGKwL7CDNP21uR");
+        Account account = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
         Account multiSigAccount = Account.createMultiSigAccount(
                 Arrays.asList(account.getECKeyPair().getPublicKey()), 1);
 
@@ -36,13 +36,13 @@ public class TransactionTracking {
         send.getSendRawTransaction();
 
         if (send.getError() == null) {
-
+            System.out.println("Transaction sent successfully - starting tracking.");
             // track the transaction and print the application log.
             tx.track().subscribe(blockIndex -> {
                 System.out.println("\n####################");
                 NeoApplicationLog log = tx.getApplicationLog();
-                System.out.println("Found tx on block " + blockIndex + ". Tx exited with state " +
-                        log.getState() + ".");
+                System.out.printf("Found tx on block %s." +
+                        " Tx exited with state %s.", blockIndex, log.getState());
                 System.out.println(log.toString());
                 System.out.println("####################");
                 neow.shutdown();

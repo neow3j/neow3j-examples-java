@@ -13,7 +13,7 @@ public class SendNeoToAddress {
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
         String assetId = NeoToken.SCRIPT_HASH.toString();
-        String toAddress = "Aa1rZbE1k8fXTwzaxxsPRtJYPwhDQjWRFZ";
+        String toAddress = "NLnyLtep7jwyq1qhNPkwXbJpurC4jUT8ke";
 
         Transaction tx = neow3j
                 .sendToAddress(assetId, toAddress, "2400")
