@@ -1,6 +1,6 @@
 # neow3j Examples
 
-This git repo contains four Java projects with some examples on how to use [neow3j](https://github.com/neow3j/neow3j). Three project are using the current release (2.4.0) of neow3j that interacts with Neo2 and the `neo3-examples` uses a snapshot (3.0.1-SNAPSHOT) that interacts with the upcoming Neo3 net.
+This git repo contains four Java projects with some examples on how to use [neow3j](https://github.com/neow3j/neow3j). The neo2-example projects are using the  release 2.4.0 that interacts with Neo2 and the `neo3-examples` uses the latest version 3.4.0 that interacts with the upcoming Neo3 net.
 
 You can run a Neo net locally e.g. Neo2 [here](https://github.com/axlabs/neo2-privatenet-openwallet-docker) or Neo3 [here](https://github.com/axlabs/neo3-privatenet-docker).
 
