@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 public class TransferNeo {
 
     public static void main(String[] args) throws Throwable {
-        NeoConfig.setAddressVersion((byte) 0x35);
         // Set the magic number according to the Neo network's configuration. It is used when
         // signing transactions.
         NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
