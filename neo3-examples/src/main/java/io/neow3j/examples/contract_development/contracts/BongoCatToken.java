@@ -3,9 +3,11 @@ package io.neow3j.examples.contract_development.contracts;
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 import io.neow3j.devpack.Helper;
+import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.Features;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.SupportedStandards;
+import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.neo.Contract;
 import io.neow3j.devpack.neo.Runtime;
 import io.neow3j.devpack.neo.Storage;
@@ -20,6 +22,9 @@ import io.neow3j.devpack.system.ExecutionEngine;
 public class BongoCatToken {
 
     static final byte[] owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
+
+    @DisplayName("transfer")
+    static Event3Args<byte[], byte[], Integer> onTransfer;
 
     static final int initialSupply = 200_000_000;
     static final String assetPrefix = "asset";
@@ -61,14 +66,11 @@ public class BongoCatToken {
         if (assetGet(from) < amount) {
             return false;
         }
-        if (from == to || amount == 0) {
-            // TODO: Fire transfer event, see https://github
-            //  .com/neo-project/proposals/pull/126/files
-            return true;
+        if (from != to && amount != 0) {
+            deductFromBalance(from, amount);
+            addToBalance(to, amount);
         }
-        deductFromBalance(from, amount);
-        addToBalance(to, amount);
-        // TODO: Fire transfer event, see https://github.com/neo-project/proposals/pull/126/files
+        onTransfer.notify(from, to, amount);
         return true;
     }
 
