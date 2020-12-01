@@ -8,7 +8,8 @@ import java.security.NoSuchProviderException;
 
 public class NEOAddressFromKeyPair {
 
-    public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public static void main(String[] args)
+            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         ECKeyPair ecKeyPair = ECKeyPair.createEcKeyPair();
         String address = ecKeyPair.getAddress();
 

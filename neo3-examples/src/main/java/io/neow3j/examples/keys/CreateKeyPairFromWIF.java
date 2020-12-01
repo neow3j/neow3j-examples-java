@@ -9,7 +9,7 @@ import java.math.BigInteger;
 public class CreateKeyPairFromWIF {
 
     public static void main(String[] args) {
-        ECKeyPair ecKeyPair = ECKeyPair.create(WIF.getPrivateKeyFromWIF("Kynd4XoCAgVtAQAUiWoodVrbeDxmZrBq27uSypmn16QojVDjqLhX"));
+        ECKeyPair ecKeyPair = ECKeyPair.create(WIF.getPrivateKeyFromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda"));
 
         System.out.println("\n####################");
         System.out.println("Private Key (BigInteger): " + ecKeyPair.getPrivateKey().getInt());
