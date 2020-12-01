@@ -22,9 +22,11 @@ public class CompileAndDeploy {
         // signing transactions.
         NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
 
-        // Set up the connection to the neo-node and the wallet for signing the transaction.
+        // Set up the connection to the neo-node
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
-        Account a = Account.fromWIF("L1WMhxazScMhUrdv34JqQb1HFSQmWeN2Kpc1R9JGKwL7CDNP21uR");
+        // Setup an account and wallet for signing the transaction. Make sure that the account has a
+        // sufficient GAS balance to pay for the deployment.
+        Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
         Wallet w = Wallet.withAccounts(a);
 
         // Compile the BongotCatToken contract and construct a SmartContract object from it.
@@ -40,8 +42,8 @@ public class CompileAndDeploy {
                 .send();
 
         if (response.hasError()) {
-            System.out.printf("Deployment was not successful. Error message from neo-node "
-                    + "was: '%s'\n", response.getError().getMessage());
+            System.out.printf("Deployment was not successful. Error message from neo-node was: "
+                    + "'%s'\n", response.getError().getMessage());
         }
         System.out.printf("Script hash of the deployd contract: %s\n", sc.getScriptHash());
     }

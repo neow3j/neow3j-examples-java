@@ -14,9 +14,8 @@ public class FetchValidators {
 
     public static void main(String[] args) throws IOException {
 
-        // Set up the connection to the neo-node and the wallet for signing the transaction.
+        // Set up the connection to the neo-node.
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
-        Account a = Account.fromWIF("L1WMhxazScMhUrdv34JqQb1HFSQmWeN2Kpc1R9JGKwL7CDNP21uR");
 
         // Setup the NeoToken class with a node connection for further calls to the contract.
         NeoToken neo = new NeoToken(neow3j);
