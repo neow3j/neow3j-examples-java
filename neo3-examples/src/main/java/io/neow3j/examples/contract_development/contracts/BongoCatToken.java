@@ -19,7 +19,7 @@ import io.neow3j.devpack.system.ExecutionEngine;
 public class BongoCatToken {
 
     static final byte[] owner = StringLiteralHelper.addressToScriptHash(
-            "AJunErzotcQTNWP2qktA7LgkXZVdHea97H");
+            "NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
 
     static final int initialSupply = 200_000_000;
     static final String assetPrefix = "asset";

@@ -10,7 +10,7 @@ public class ValidateNEOAddress {
     public static void main(String[] args) throws IOException {
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        String address = "AVGpjFiocR1BdYhbYWqB6Ls6kcmzx4FWhm";
+        String address = "NWcx4EfYdfqn5jNjDz8AHE6hWtWdUGDdmy";
         Boolean isValid = neow3j.validateAddress(address)
                 .send()
                 .getValidation().isValid();
