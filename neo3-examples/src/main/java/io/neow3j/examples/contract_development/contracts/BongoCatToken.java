@@ -1,10 +1,13 @@
 package io.neow3j.examples.contract_development.contracts;
 
+import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
+
 import io.neow3j.devpack.Helper;
-import io.neow3j.devpack.StringLiteralHelper;
+import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.Features;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.SupportedStandards;
+import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.neo.Contract;
 import io.neow3j.devpack.neo.Runtime;
 import io.neow3j.devpack.neo.Storage;
@@ -18,8 +21,10 @@ import io.neow3j.devpack.system.ExecutionEngine;
 @SupportedStandards("NEP-5")
 public class BongoCatToken {
 
-    static final byte[] owner = StringLiteralHelper.addressToScriptHash(
-            "NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
+    static final byte[] owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
+
+    @DisplayName("transfer")
+    static Event3Args<byte[], byte[], Integer> onTransfer;
 
     static final int initialSupply = 200_000_000;
     static final String assetPrefix = "asset";
@@ -47,65 +52,64 @@ public class BongoCatToken {
         return Helper.toInt(Storage.get(sc, totalSupplyKey));
     }
 
-    public static boolean transfer(byte[] from, byte[] to, int amount) {
-        if (from == to) {
-            return true;
-        }
+    public static boolean transfer(byte[] from, byte[] to, int amount) throws Exception {
         if (!isValidAddress(from) || !isValidAddress(to)) {
-            return false;
+            throw new Exception("From or To address is not a valid address.");
         }
-        if (amount <= 0) {
-            return false;
+        if (amount < 0) {
+            throw new Exception("The transfer amount was negative.");
         }
         if (!Runtime.checkWitness(from) && from != ExecutionEngine.getCallingScriptHash()) {
-            return false;
+            throw new Exception("Invalid sender signature. The sender of the tokens needs to be "
+                    + "the signing account.");
         }
         if (assetGet(from) < amount) {
             return false;
         }
-        deductFromBalance(from, amount);
-        addToBalance(to, amount);
+        if (from != to && amount != 0) {
+            deductFromBalance(from, amount);
+            addToBalance(to, amount);
+        }
+        onTransfer.notify(from, to, amount);
         return true;
     }
 
-    public static int balanceOf(byte[] account) {
+    public static int balanceOf(byte[] account) throws Exception {
         if (!isValidAddress(account)) {
-            return 0;
+            throw new Exception("Argument is not a valid address.");
         }
+        // TODO: Check if this returns 0 for addresses that don't have an entry in the storage.
         return assetGet(account);
     }
 
-    public static boolean deploy() {
+    public static void deploy() throws Exception {
         if (!isOwner()) {
-            return false;
+            throw new Exception("The calling entity is not the owner of this contract.");
         }
         if (getTotalSupply() > 0) {
-            return false;
+            throw new Exception("Contract was already deployed.");
         }
         // Initialize supply
         Storage.put(sc, totalSupplyKey, getTotalSupply() + initialSupply);
         // And allocate all tokens to the contract owner.
         addToBalance(owner, initialSupply);
-        return true;
     }
 
-    public static boolean update(byte[] script, String manifest) {
+    public static void update(byte[] script, String manifest) throws Exception {
         if (!isOwner()) {
-            return false;
+            throw new Exception("The calling entity is not the owner of this contract.");
         }
         if (script.length == 0 && manifest.length() == 0) {
-            return false;
+            throw new Exception("The new contract script and manifest must not be empty.");
         }
         Contract.update(script, manifest);
-        return true;
     }
 
-    public static boolean destroy() {
+    public static void destroy() throws Exception {
         if (!isOwner()) {
-            return false;
+            throw new Exception("The calling entity is not the owner of this contract.");
         }
         Contract.destroy();
-        return true;
     }
 
     private static boolean isOwner() {
