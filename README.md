@@ -1,56 +1,36 @@
 # neow3j Examples
 
-This git repo contains four Java projects with some examples on how to use [neow3j](https://github.com/neow3j/neow3j). The neo2-example projects are using the release 2.4.0 that interacts with Neo2 and the `neo3-examples` uses the latest version 3.4.0 that interacts with the upcoming Neo3 net.
-
-You can run a Neo net locally e.g. Neo2 [here](https://github.com/axlabs/neo2-privatenet-openwallet-docker) or Neo3 [here](https://github.com/axlabs/neo3-privatenet-docker).
+This repository contains examples for [neow3j](https://github.com/neow3j/neow3j). Its goal is to give you as a blockchain developer a better understanding on how to use neow3j to develop dApps and smart contracts for Neo. Each folder in this repository contains a Gradle project. The prefix in the folder name designates if the contained examples are based on neow3j for Neo2 or neow3j for Neo3. 
+The Neo2 examples are based on neow3j 2.4.0 and the Neo3 examples are based on neow3j 3.+ (always the latest version).
 
 ## Requirements
 
 - Java 1.8
-- (local running Neo net)
+- A Neo network, e.g., a privatenet, which you can get [here](https://github.com/axlabs/neo2-privatenet-openwallet-docker) for Neo2 or [here](https://github.com/axlabs/neo3-privatenet-docker) for Neo3.
 
-## Clone the Project
+## Usage Instructions
+
+Clone the repository:
 
 ```
 $ git clone https://github.com/neow3j/neow3j-examples-java.git
 ```
 
-## Open the project in IntelliJ
+Open one of the Gradle projects in your favorite IDE or editor. Each example in the project has its own main method an can be executed independetly. The names of the packages and classes hint what the example is about. The code comments give more information.
 
-Go to `File` -> `New` -> `Project from Existing Sources` -> and select the project you want to use -> e.g. neo3-examples directory, i.e., where a `build.gradle` is located.
-
-In the "Import Project" window, select "Gradle" and press "Next".
-
-Then, in the next window, mark the "Use auto-import" checkbox. Leave the
-radio box "Use default Gradle wrapper (recommended)" selected. The "Gradle JVM"
-option should show your local Java 1.8 JDK. Press "Finish" to finalize the
-project import.
-
-#### For the `neo2-examples` and `neo3-examples` projects:
-
-Once the project is opened in IntelliJ, go to `src/main/java` directory.
-There you can find the `io.neow3j.examples` package with other sub-packages in it.
-That's where the examples are located.
-
-For each example, a `main()` method is found. If you want to run
-the example, you can select the `main()` method, right click on it,
-and select "Run".
-
-**or**
-
-_to run the examples on the command line,_ first, go to the root of the project (e.g. `/neo3-examples`) and build the project:
+You can run the examples either with the built-in funtionality of your IDE or the command line. To run the examples via the command line, first, go to the root of the project (e.g. `/neo3-examples`) and build the project:
 
 ```
 $ ./gradlew clean build
 ```
 
-Then, you can execute single examples with the following command:
+Then, you can execute each example separately with the following command:
 
 ```
 $ java -cp build/libs/examples-1.0-SNAPSHOT.jar <CLASS_NAME>
 ```
 
-where `<CLASS_NAME>` is the package + the class name.
+Where `<CLASS_NAME>` is the fully qualified class name of the example you wish to run.
 
 For example, to run the `CreateKeyPair` class:
 
@@ -58,27 +38,17 @@ For example, to run the `CreateKeyPair` class:
 $ java -cp build/libs/examples-1.0-SNAPSHOT-all.jar io.neow3j.examples.keys.CreateKeyPair
 ```
 
-**Hint:** If you are using the neo3-privatenet-docker from AxLabs for the neo3-examples, first run the `OpenWallet.java` file in the jsonrpc package.
+**Spring Boot Example**
 
-#### For the `neo2-examples-spring-boot` project:
+To run the Spring boot Example in *neo2-examples-spring-boot*, either use the built-in features of your IDE to run Spring Boot applications or use the command line as follows. 
 
-Open the package `io.neow3j.example.springboot`. That's where the demoApplication file is located. Right-click on it and click on `Run 'DemoApplication'` to run the application.
-
-**or**
-
-_to run the springboot application on the command line,_ first, go to the root of the project (`/neo2-examples-spring-boot`) and build the whole project:
-
-```
-./gradlew clean build
-```
-
-Then start the Demo Application
+Run the following command in the root of the *neo2-examples-spring-boot* project.
 
 ```
 ./gradlew bootRun
 ```
 
-Open a new terminal window or tab and there you can make API calls for the two mappings that are implemented in this example project.
+Open a new terminal window or tab and from where you can make two API calls implemented by this demo application.
 
 - Get the balance of an address (i.e. here: AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y):
 
