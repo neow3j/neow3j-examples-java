@@ -44,6 +44,7 @@ public class CompileAndDeploy {
         if (response.hasError()) {
             System.out.printf("Deployment was not successful. Error message from neo-node was: "
                     + "'%s'\n", response.getError().getMessage());
+            return;
         }
         System.out.printf("Script hash of the deployd contract: %s\n", sc.getScriptHash());
     }
