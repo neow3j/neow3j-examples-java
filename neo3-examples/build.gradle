@@ -20,6 +20,6 @@ dependencies {
 
 neow3jCompiler {
     // Set the class name of the contract to compile when running the `neow3jCompiler` Gradle task.
-    className = "io.neow3j.examples.contract_development.contracts.CustomObjectContract"
+    className = "io.neow3j.examples.contract_development.contracts.BongoCatToken"
     debug = true
 }
