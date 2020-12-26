@@ -1,10 +1,7 @@
 package io.neow3j.examples.contract_development;
 
-import io.neow3j.compiler.CompilationUnit;
-import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.SmartContract;
-import io.neow3j.examples.contract_development.contracts.BongoCatToken;
 import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.ObjectMapperFactory;
@@ -16,7 +13,6 @@ import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 
 // Shows how to read a smart contract's files from the disk and deployed it on through a local
 // neo-node.
