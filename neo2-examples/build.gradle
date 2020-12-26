@@ -26,3 +26,12 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
+
+// The following task is *not* required for a neow3j project.
+// This is just a task to provide a convenient way to download
+// all dependencies.
+task downloadDependencies(type: Exec) {
+    configurations.testRuntime.files
+    configurations.runtime.files
+    commandLine 'echo', 'Downloaded all dependencies'
+}

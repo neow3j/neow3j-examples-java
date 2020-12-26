@@ -26,3 +26,12 @@ neow3jCompiler {
     className = "io.neow3j.examples.contract_development.contracts.CustomObjectContract"
     debug = true
 }
+
+// The following task is *not* required for a neow3j project.
+// This is just a task to provide a convenient way to download
+// all dependencies.
+task downloadDependencies(type: Exec) {
+    configurations.testRuntime.files
+    configurations.runtime.files
+    commandLine 'echo', 'Downloaded all dependencies'
+}
