@@ -33,5 +33,6 @@ dependencies {
 task downloadDependencies(type: Exec) {
     configurations.testRuntime.files
     configurations.runtime.files
+    configurations.runtimeClasspath.files
     commandLine 'echo', 'Downloaded all dependencies'
 }
