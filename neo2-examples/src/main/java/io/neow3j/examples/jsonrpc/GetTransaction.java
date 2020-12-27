@@ -9,7 +9,7 @@ import java.io.IOException;
 public class GetTransaction {
 
     public static void main(String[] args) throws IOException {
-        Neow3j neow3j = Neow3j.build(new HttpService("https://seed0.cityofzion.io:443"));
+        Neow3j neow3j = Neow3j.build(new HttpService("http://seed1.ngd.network:10332"));
 
         NeoGetTransaction neoGetTransaction =
                 neow3j.getTransaction("d5a63225e419aca0c10520708c531d36d9912eef0e12cec04e29568930cc4bf9").send();
