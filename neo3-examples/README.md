@@ -1,6 +1,6 @@
 # neow3j Examples for Neo3
 
-This examples project uses the latest version 3.4.0 that interacts with the upcoming Neo3 net.
+This examples project uses the latest version (3.5.0) that interacts with the upcoming Neo3 network.
 
 It contains following examples:
 
