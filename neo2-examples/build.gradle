@@ -24,7 +24,7 @@ repositories {
 dependencies {
     implementation 'io.neow3j:contract:2.+'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation 'junit:junit:4.12'
 }
 
 // The following task is *not* required for a neow3j project.
