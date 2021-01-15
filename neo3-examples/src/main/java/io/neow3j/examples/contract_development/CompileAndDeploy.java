@@ -11,6 +11,8 @@ import io.neow3j.protocol.http.HttpService;
 import io.neow3j.transaction.Signer;
 import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
+import io.neow3j.contract.ManagementContract;
+import io.neow3j.contract.ScriptHash;
 
 // Shows how a smart contract can be compiled programmatically and then deployed on a local
 // Neo blockchain.
@@ -31,11 +33,9 @@ public class CompileAndDeploy {
 
         // Compile the BongotCatToken contract and construct a SmartContract object from it.
         CompilationUnit res = new Compiler().compileClass(BongoCatToken.class.getCanonicalName());
-        SmartContract sc = new SmartContract(res.getNefFile(), res.getManifest(), neow3j);
-
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
         // the neo-node.
-        NeoSendRawTransaction response = sc.deploy()
+        NeoSendRawTransaction response = new ManagementContract(neow3j).deploy(res.getNefFile(), res.getManifest())
                 .wallet(w)
                 .signers(Signer.calledByEntry(a.getScriptHash()))
                 .sign()
@@ -45,7 +45,8 @@ public class CompileAndDeploy {
             System.out.printf("Deployment was not successful. Error message from neo-node was: "
                     + "'%s'\n", response.getError().getMessage());
         }
-        System.out.printf("Script hash of the deployd contract: %s\n", sc.getScriptHash());
+        ScriptHash contractHash = SmartContract.getContractHash(
+            a.getScriptHash(), res.getNefFile().getScript());
+        System.out.printf("Script hash of the deployd contract: %s\n", contractHash);
     }
-
 }

@@ -21,7 +21,7 @@ public class FetchValidators {
         NeoToken neo = new NeoToken(neow3j);
 
         // Get the public keys of nodes that are validators of the network.
-        List<ECPublicKey> validators = neo.getValidators();
+        List<ECPublicKey> validators = neo.getNextBlockValidators();
 
         System.out.println("####################\n");
         System.out.printf("The Neo network has %d validators. Their public keys are:%n",
