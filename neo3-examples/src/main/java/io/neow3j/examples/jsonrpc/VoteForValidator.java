@@ -1,15 +1,15 @@
 package io.neow3j.examples.jsonrpc;
 
 import static io.neow3j.transaction.Signer.calledByEntry;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
+
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.NeoToken;
-import io.neow3j.contract.PolicyContract;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
 import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.utils.Await;
 import io.neow3j.wallet.Account;
