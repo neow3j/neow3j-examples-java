@@ -6,9 +6,11 @@ import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
 import io.neow3j.protocol.http.HttpService;
+import io.neow3j.utils.Await;
 import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 public class TransferNeo {
 
@@ -22,7 +24,9 @@ public class TransferNeo {
         // Setup an account and wallet that are used as the sender and for signing the transaction
         // Make sure that the account has a sufficient GAS and NEO balance for payment and fees.
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
-        Wallet w = Wallet.withAccounts(a);
+        Account multiSigAccount = Account.createMultiSigAccount(
+                Arrays.asList(a.getECKeyPair().getPublicKey()), 1);
+        Wallet w = Wallet.withAccounts(multiSigAccount, a);
         ScriptHash receiver = ScriptHash.fromAddress("NLnyLtep7jwyq1qhNPkwXbJpurC4jUT8ke");
 
         // Setup the NeoToken class with a node connection for further calls to the contract.
@@ -38,9 +42,12 @@ public class TransferNeo {
         if (response.hasError()) {
             System.out.printf("The neo-node responded with the error message '%s'.%n",
                     response.getError());
+        } else {
+            String txHash = response.getSendRawTransaction().getHash();
+            System.out.printf("Successfully transmitted the transaction with hash '%s'.%n", txHash);
+            Await.waitUntilTransactionIsExecuted(txHash, neow3j);
+            System.out.println("Tx: " + neow3j.getTransaction(txHash).send().getTransaction().toString());
+            System.out.println("\n####################");
         }
-        System.out.printf("Successfully transmitted the transaction with hash '%s'.%n",
-                response.getSendRawTransaction().getHash());
-        System.out.println("\n####################");
     }
 }
