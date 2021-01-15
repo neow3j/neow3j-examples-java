@@ -42,7 +42,7 @@ public class TransactionTracking {
                 System.out.println("\n####################");
                 NeoApplicationLog log = tx.getApplicationLog();
                 String state = log.getExecutions().get(0).getState();
-                System.out.printf("Found tx on block %s. Tx exited with state %s.", blockIndex, state);
+                System.out.printf("Found the transaction on block %s. It exited with state %s.\n", blockIndex, state);
                 System.out.println(log.toString());
                 System.out.println("####################");
                 neow.shutdown();

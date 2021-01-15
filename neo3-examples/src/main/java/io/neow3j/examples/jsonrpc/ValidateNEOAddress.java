@@ -18,9 +18,9 @@ public class ValidateNEOAddress {
 
         System.out.println("\n####################");
         if (isValid) {
-            System.out.println("'" + address + "' is a valid Neo address.");
+            System.out.println(address + " is a valid Neo address.");
         } else {
-            System.out.println("'" + address + "' is not a valid Neo address.");
+            System.out.println(address + " is not a valid Neo address.");
         }
         System.out.println("####################");
     }

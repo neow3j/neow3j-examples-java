@@ -12,10 +12,11 @@ public class SubscribeToNewBlocks {
         neow3j.catchUpToLatestAndSubscribeToNewBlocksObservable(BlockParameterName.LATEST, true)
                 .subscribe((blockReqResult) -> {
                     System.out.println("#######################################");
-                    System.out.println("blockIndex: " + blockReqResult.getBlock().getIndex());
-                    System.out.println("hashId: " + blockReqResult.getBlock().getHash());
-                    System.out.println("confirmations: " + blockReqResult.getBlock().getConfirmations());
-                    System.out.println("transactions: " + blockReqResult.getBlock().getTransactions());
+                    System.out.println("Block Index:     " + blockReqResult.getBlock().getIndex());
+                    System.out.println("Block Hash:      " + blockReqResult.getBlock().getHash());
+                    System.out.println("Prev Block Hash: " + blockReqResult.getBlock().getPrevBlockHash());
+                    System.out.println("Next Consensus:  " + blockReqResult.getBlock().getNextConsensus());
+                    System.out.println("Transactions:    " + blockReqResult.getBlock().getTransactions());
                 });
     }
 }

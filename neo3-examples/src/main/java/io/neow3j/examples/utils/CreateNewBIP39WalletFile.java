@@ -21,7 +21,7 @@ public class CreateNewBIP39WalletFile {
         String mnemonicWords = a.getMnemonic();
 
         System.out.println("\n####################");
-        System.out.println("mnemonic words: " + mnemonicWords);
+        System.out.println("Mnemonic words: " + mnemonicWords);
         System.out.println("####################");
     }
 }

@@ -16,7 +16,7 @@ public class GetRawTransaction {
                 .getRawTransaction();
 
         System.out.println("\n####################");
-        System.out.println("raw tx: " + rawTransaction);
+        System.out.println("Raw Tx: " + rawTransaction);
         System.out.println("####################");
     }
 }

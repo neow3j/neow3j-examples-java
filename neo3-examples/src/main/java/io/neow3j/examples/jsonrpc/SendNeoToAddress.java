@@ -4,6 +4,7 @@ import io.neow3j.contract.NeoToken;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.Transaction;
 import io.neow3j.protocol.http.HttpService;
+import io.neow3j.utils.Await;
 
 import java.io.IOException;
 
@@ -19,12 +20,13 @@ public class SendNeoToAddress {
                 .sendToAddress(assetId, toAddress, "2400")
                 .send()
                 .getSendToAddress();
+        Await.waitUntilTransactionIsExecuted(tx.getHash(), neow3j);
 
         System.out.println("\n####################");
-        System.out.println("tx: " + tx.getHash());
-        System.out.println("asset: " + assetId);
-        System.out.println("from: " + tx.getSender());
-        System.out.println("to: " + toAddress);
+        System.out.println("Tx:    " + tx.getHash());
+        System.out.println("Asset: " + assetId);
+        System.out.println("From:  " + tx.getSender());
+        System.out.println("To:    " + toAddress);
         System.out.println("####################");
     }
 }

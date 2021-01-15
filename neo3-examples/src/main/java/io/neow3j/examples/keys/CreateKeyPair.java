@@ -14,10 +14,13 @@ public class CreateKeyPair {
         ECKeyPair ecKeyPair = ECKeyPair.createEcKeyPair();
 
         System.out.println("\n####################");
-        System.out.println("Private Key (BigInteger): " + ecKeyPair.getPrivateKey().getInt());
-        System.out.println("Public Key (BigInteger): " + new BigInteger(1, ecKeyPair.getPublicKey().getEncoded(true)));
-        System.out.println("Private Key (Hex): " + Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey().getInt()));
-        System.out.println("Public Key (Hex): " + Numeric.toHexStringNoPrefix(new BigInteger(1, ecKeyPair.getPublicKey().getEncoded(true))));
+        System.out.println("Private Key");
+        System.out.println("BigInteger: " + ecKeyPair.getPrivateKey().getInt());
+        System.out.println("Hex:        " + Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey().getInt()));
+        System.out.println();
+        System.out.println("Public Key");
+        System.out.println("BigInteger: " + new BigInteger(1, ecKeyPair.getPublicKey().getEncoded(true)));
+        System.out.println("Hex:        " + Numeric.toHexStringNoPrefix(new BigInteger(1, ecKeyPair.getPublicKey().getEncoded(true))));
         System.out.println("####################");
     }
 }

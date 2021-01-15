@@ -22,20 +22,26 @@ public class GetWalletState {
                 .getAddresses();
 
         System.out.println("\n####################");
-        System.out.println("Nr of addresses in your wallet: " + addresses.size());
-        if (!addresses.isEmpty()) {
-            String neoBalance = neow3j.getWalletBalance(NeoToken.SCRIPT_HASH.toString())
-                    .send()
-                    .getWalletBalance().getBalance();
 
-            String gasBalance = neow3j.getWalletBalance(GasToken.SCRIPT_HASH.toString())
-                    .send()
-                    .getWalletBalance().getBalance();
+        if (addresses != null) {
+            System.out.println("Nr of addresses in your wallet: " + addresses.size());
+            if (!addresses.isEmpty()) {
+                String neoBalance = neow3j.getWalletBalance(NeoToken.SCRIPT_HASH.toString())
+                        .send()
+                        .getWalletBalance().getBalance();
 
-            System.out.println("State of your first address: " + addresses.get(0).toString());
-            System.out.println("Neo balance of your wallet: " + neoBalance);
-            System.out.println("Gas balance of your wallet: " + gasBalance);
+                String gasBalance = neow3j.getWalletBalance(GasToken.SCRIPT_HASH.toString())
+                        .send()
+                        .getWalletBalance().getBalance();
+
+                System.out.println("State of your first address: " + addresses.get(0).toString());
+                System.out.println("Neo balance of your wallet: " + neoBalance);
+                System.out.println("Gas balance of your wallet: " + gasBalance);
+            }
+        } else {
+            System.out.println("The wallet access is denied. Open your wallet first with the file 'OpenWallets.java'.");
         }
+
         System.out.println("####################");
     }
 }
