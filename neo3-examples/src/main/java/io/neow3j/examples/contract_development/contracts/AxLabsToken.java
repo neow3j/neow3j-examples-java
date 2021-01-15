@@ -4,9 +4,8 @@ import static io.neow3j.devpack.Helper.toByteString;
 import static io.neow3j.devpack.Helper.toInt;
 
 import io.neow3j.devpack.StringLiteralHelper;
-import io.neow3j.devpack.annotations.Features;
 import io.neow3j.devpack.annotations.ManifestExtra;
-import io.neow3j.devpack.neo.Contract;
+import io.neow3j.devpack.contracts.ManagementContract;
 import io.neow3j.devpack.neo.Runtime;
 import io.neow3j.devpack.neo.Storage;
 import io.neow3j.devpack.neo.StorageContext;
@@ -14,7 +13,6 @@ import io.neow3j.devpack.neo.StorageMap;
 
 @ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
-@Features(hasStorage = true)
 public class AxLabsToken {
 
     static final byte[] contractOwner = StringLiteralHelper.addressToScriptHash(
@@ -187,7 +185,7 @@ public class AxLabsToken {
         if (!isOwner()) {
             return false;
         }
-        Contract.destroy();
+        ManagementContract.destroy();
         return true;
     }
 }

@@ -1,6 +1,5 @@
 package io.neow3j.examples.contract_development.contracts;
 
-import io.neow3j.devpack.annotations.Features;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.neo.Runtime;
 import io.neow3j.devpack.neo.Storage;
@@ -8,7 +7,6 @@ import io.neow3j.devpack.neo.Storage;
 // A name service contract that allows anyone to register a domain name under her address.
 @ManifestExtra(key = "name", value = "NameService")
 @ManifestExtra(key = "author", value = "neow3j")
-@Features(hasStorage = true)
 public class NameService {
 
     public static byte[] query(String domain) {
@@ -54,4 +52,3 @@ public class NameService {
         return true;
     }
 }
-

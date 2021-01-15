@@ -1,7 +1,7 @@
 package io.neow3j.examples.jsonrpc;
 
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.methods.response.NeoGetValidators.Validator;
+import io.neow3j.protocol.core.methods.response.NeoGetNextBlockValidators.Validator;
 import io.neow3j.protocol.http.HttpService;
 
 import java.io.IOException;
@@ -12,9 +12,9 @@ public class GetInfoValidatorNodes {
     public static void main(String[] args) throws IOException {
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        List<Validator> validators = neow3j.getValidators()
+        List<Validator> validators = neow3j.getNextBlockValidators()
                 .send()
-                .getValidators();
+                .getResult();
 
         System.out.println("\n####################");
         System.out.println(validators);

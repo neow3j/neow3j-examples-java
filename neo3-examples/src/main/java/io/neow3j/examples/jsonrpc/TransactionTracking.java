@@ -18,12 +18,12 @@ import java.util.Arrays;
 public class TransactionTracking {
 
     public static void main(String[] args) throws Throwable {
-        NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
+        NeoConfig.setMagicNumber(new byte[] { 0x01, 0x03, 0x00, 0x0 }); // Magic number 769
         Neow3j neow = Neow3j.build(new HttpService("http://localhost:40332"));
 
         Account account = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
-        Account multiSigAccount = Account.createMultiSigAccount(
-                Arrays.asList(account.getECKeyPair().getPublicKey()), 1);
+        Account multiSigAccount = Account.createMultiSigAccount(Arrays.asList(account.getECKeyPair().getPublicKey()),
+                1);
 
         Wallet wallet = Wallet.withAccounts(multiSigAccount, account);
 
@@ -41,8 +41,8 @@ public class TransactionTracking {
             tx.track().subscribe(blockIndex -> {
                 System.out.println("\n####################");
                 NeoApplicationLog log = tx.getApplicationLog();
-                System.out.printf("Found tx on block %s." +
-                        " Tx exited with state %s.", blockIndex, log.getState());
+                String state = log.getExecutions().get(0).getState();
+                System.out.printf("Found tx on block %s. Tx exited with state %s.", blockIndex, state);
                 System.out.println(log.toString());
                 System.out.println("####################");
                 neow.shutdown();

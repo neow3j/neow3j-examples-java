@@ -1,10 +1,9 @@
 package io.neow3j.examples.contract_development;
 
-import io.neow3j.compiler.CompilationUnit;
-import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.NefFile;
+import io.neow3j.contract.ScriptHash;
 import io.neow3j.contract.SmartContract;
-import io.neow3j.examples.contract_development.contracts.BongoCatToken;
+import io.neow3j.contract.ManagementContract;
 import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.ObjectMapperFactory;
@@ -16,7 +15,6 @@ import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 
 // Shows how to read a smart contract's files from the disk and deployed it on through a local
 // neo-node.
@@ -42,11 +40,11 @@ public class DeployFromFiles {
                 "./build/neow3j/CustomObjectContract.manifest.json")) {
             manifest = ObjectMapperFactory.getObjectMapper().readValue(s, ContractManifest.class);
         }
-        SmartContract sc = new SmartContract(nefFile, manifest, neow3j);
+        //SmartContract sc = new SmartContract(nefFile, manifest, neow3j);
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
         // the neo-node.
-        NeoSendRawTransaction response = sc.deploy()
+        NeoSendRawTransaction response = new ManagementContract(neow3j).deploy(nefFile, manifest)
                 .wallet(w)
                 .signers(Signer.calledByEntry(a.getScriptHash()))
                 .sign()
@@ -56,7 +54,9 @@ public class DeployFromFiles {
             System.out.printf("Deployment was not successful. Error message from neo-node "
                     + "was: '%s'\n", response.getError().getMessage());
         }
-        System.out.printf("Script hash of the deployd contract: %s\n", sc.getScriptHash());
+        
+        ScriptHash scriptHash = SmartContract.getContractHash(a.getScriptHash(), nefFile.getScript());
+        System.out.printf("Script hash of the deployd contract: %s\n", scriptHash.toString());
     }
 
 }

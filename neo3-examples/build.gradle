@@ -1,25 +1,39 @@
 plugins {
     id 'java'
-    id 'io.neow3j.gradle-plugin' version "3.5.0"
+    id 'io.neow3j.gradle-plugin' version "3.6.0"
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    implementation 'io.neow3j:contract:3.5.0'
-    implementation 'io.neow3j:devpack:3.5.0'
-    implementation 'io.neow3j:compiler:3.5.0'
+    implementation 'io.neow3j:contract:3.6.0'
+    implementation 'io.neow3j:devpack:3.6.0'
+    implementation 'io.neow3j:compiler:3.6.0'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation 'junit:junit:4.12'
 }
 
 neow3jCompiler {
     // Set the class name of the contract to compile when running the `neow3jCompiler` Gradle task.
     className = "io.neow3j.examples.contract_development.contracts.BongoCatToken"
     debug = true
+}
+
+// The following task is *not* required for a neow3j project.
+// This is just a task to provide a convenient way to download
+// all dependencies.
+task downloadDependencies(type: Exec) {
+    configurations.testRuntime.files
+    configurations.runtime.files
+    configurations.runtimeClasspath.files
+    commandLine 'echo', 'Downloaded all dependencies'
 }

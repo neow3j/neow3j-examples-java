@@ -4,9 +4,9 @@ import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.annotations.DisplayName;
-import io.neow3j.devpack.annotations.Features;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.SupportedStandards;
+import io.neow3j.devpack.contracts.ManagementContract;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.neo.Contract;
 import io.neow3j.devpack.neo.Runtime;
@@ -17,7 +17,6 @@ import io.neow3j.devpack.system.ExecutionEngine;
 
 @ManifestExtra(key = "name", value = "BongoCatToken")
 @ManifestExtra(key = "author", value = "AxLabs")
-@Features(hasStorage = true, payable = false)
 @SupportedStandards("NEP-5")
 public class BongoCatToken {
 
@@ -102,14 +101,14 @@ public class BongoCatToken {
         if (script.length == 0 && manifest.length() == 0) {
             throw new Exception("The new contract script and manifest must not be empty.");
         }
-        Contract.update(script, manifest);
+        ManagementContract.update(script, manifest);
     }
 
     public static void destroy() throws Exception {
         if (!isOwner()) {
             throw new Exception("The calling entity is not the owner of this contract.");
         }
-        Contract.destroy();
+        ManagementContract.destroy();
     }
 
     private static boolean isOwner() {
