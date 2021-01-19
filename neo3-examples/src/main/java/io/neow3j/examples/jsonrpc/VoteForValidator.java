@@ -36,18 +36,21 @@ public class VoteForValidator {
         NeoToken neoToken = new NeoToken(neow3j);
         GasToken gasToken = new GasToken(neow3j);
 
+        // The voting account needs NEO because only NEO holders can participate in governance.
         String txHash = neoToken.transfer(committeeWallet, client1.getAddress(), new BigDecimal("100000"))
             .sign()
             .send()
             .getSendRawTransaction().getHash();
         Await.waitUntilTransactionIsExecuted(txHash, neow3j);
 
+        // The voting account needs GAS to pay for transactions.
         txHash = gasToken.transfer(committeeWallet, client1.getAddress(), new BigDecimal("100000"))
             .sign()
             .send()
             .getSendRawTransaction().getHash();
         Await.waitUntilTransactionIsExecuted(txHash, neow3j);
 
+        // The entity for which we will vote needs to be registered as a candidate to receive votes.
         ECPublicKey candidateKey = defaultAcc.getECKeyPair().getPublicKey();
         txHash = neoToken.registerCandidate(candidateKey)
             .signers(calledByEntry(defaultAcc.getScriptHash()))
