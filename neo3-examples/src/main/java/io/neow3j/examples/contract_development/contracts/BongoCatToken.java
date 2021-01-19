@@ -8,7 +8,6 @@ import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.contracts.ManagementContract;
 import io.neow3j.devpack.events.Event3Args;
-import io.neow3j.devpack.neo.Contract;
 import io.neow3j.devpack.neo.Runtime;
 import io.neow3j.devpack.neo.Storage;
 import io.neow3j.devpack.neo.StorageContext;
