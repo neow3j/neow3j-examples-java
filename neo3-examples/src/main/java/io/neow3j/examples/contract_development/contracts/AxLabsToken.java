@@ -11,7 +11,6 @@ import io.neow3j.devpack.neo.Storage;
 import io.neow3j.devpack.neo.StorageContext;
 import io.neow3j.devpack.neo.StorageMap;
 
-@ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 public class AxLabsToken {
 
@@ -34,16 +33,6 @@ public class AxLabsToken {
      */
     public static byte[] contractOwner() {
         return contractOwner;
-    }
-
-    // TODO: 26.11.20 Michael: move to manifest for preview4 release
-    /**
-     * Gets the name of the token.
-     * 
-     * @return the name.
-     */
-    public static String name() {
-        return "AxLabsToken";
     }
 
     /**
