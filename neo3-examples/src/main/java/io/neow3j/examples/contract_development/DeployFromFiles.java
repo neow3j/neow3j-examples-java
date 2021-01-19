@@ -33,14 +33,12 @@ public class DeployFromFiles {
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
         Wallet w = Wallet.withAccounts(a);
 
-        // Retrieve the BongotCatToken contract files and construct a SmartContract object from it.
-        NefFile nefFile = NefFile.readFromFile(new File("./build/neow3j/CustomObjectContract.nef"));
+        // Retrieve the contract files.
+        NefFile nefFile = NefFile.readFromFile(new File("./build/neow3j/AxLabsToken.nef"));
         ContractManifest manifest;
-        try (FileInputStream s = new FileInputStream(
-                "./build/neow3j/CustomObjectContract.manifest.json")) {
+        try (FileInputStream s = new FileInputStream("./build/neow3j/AxLabsToken.manifest.json")) {
             manifest = ObjectMapperFactory.getObjectMapper().readValue(s, ContractManifest.class);
         }
-        //SmartContract sc = new SmartContract(nefFile, manifest, neow3j);
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
         // the neo-node.
