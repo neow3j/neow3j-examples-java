@@ -1,15 +1,1 @@
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == 'io.neow3j.gradle-plugin') {
-                useModule("io.neow3j:gradle-plugin:${requested.version}")
-            }
-        }
-    }
-}
-
 rootProject.name = 'neo3-examples'

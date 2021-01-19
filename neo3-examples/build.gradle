@@ -3,14 +3,13 @@ plugins {
     id 'io.neow3j.gradle-plugin' version "3.6.0"
 }
 
-group 'org.example'
+group 'io.neow3j'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 

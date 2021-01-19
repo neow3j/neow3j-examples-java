@@ -1,13 +1,13 @@
 # neow3j Examples for Neo3
 
-This project uses the latest version (3.5.0) that interacts with the upcoming Neo3 network.
+This project provides Java examples for the latest version of the neow3j SDK and devpack based on Neo3.
 
-It contains following examples:
+It contains examples for the following use cases:
 
 - Smart Contract Development
 - Smart Contract Compilation and Deployment
 - JSON RPC calls to interact with the Neo node
-- Key and Wallet related examples
+- Credentials and Wallet related examples
 
 ## Contact
 
