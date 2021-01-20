@@ -17,7 +17,7 @@ import io.neow3j.devpack.system.ExecutionEngine;
 
 @ManifestExtra(key = "name", value = "BongoCatToken")
 @ManifestExtra(key = "author", value = "AxLabs")
-@SupportedStandards("NEP-5")
+@SupportedStandards("NEP-17")
 public class BongoCatToken {
 
     static final byte[] owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
