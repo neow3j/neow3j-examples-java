@@ -1,10 +1,11 @@
-package io.neow3j.examples.contract_development.contracts;
+package io.neow3j.examples.contractdev.contracts;
 
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
+import io.neow3j.devpack.annotations.OnDeployment;
 import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.contracts.ManagementContract;
 import io.neow3j.devpack.events.Event3Args;
@@ -16,7 +17,7 @@ import io.neow3j.devpack.system.ExecutionEngine;
 
 @ManifestExtra(key = "name", value = "BongoCatToken")
 @ManifestExtra(key = "author", value = "AxLabs")
-@SupportedStandards("NEP-5")
+@SupportedStandards("NEP-17")
 public class BongoCatToken {
 
     static final byte[] owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
@@ -80,7 +81,11 @@ public class BongoCatToken {
         return assetGet(account);
     }
 
-    public static void deploy() throws Exception {
+    @OnDeployment
+    public static void deploy(boolean update) throws Exception {
+        if (update) {
+            return;
+        }
         if (!isOwner()) {
             throw new Exception("The calling entity is not the owner of this contract.");
         }

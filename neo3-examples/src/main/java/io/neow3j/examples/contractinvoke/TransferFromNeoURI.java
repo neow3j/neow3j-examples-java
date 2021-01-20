@@ -1,7 +1,7 @@
-package io.neow3j.examples.contract_invocation;
+package io.neow3j.examples.contractinvoke;
 
-import io.neow3j.contract.NeoToken;
-import io.neow3j.contract.ScriptHash;
+import io.neow3j.contract.NeoURI;
+import io.neow3j.contract.TransactionBuilder;
 import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
@@ -9,10 +9,10 @@ import io.neow3j.protocol.http.HttpService;
 import io.neow3j.utils.Await;
 import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
-import java.math.BigDecimal;
+
 import java.util.Arrays;
 
-public class TransferNeo {
+public class TransferFromNeoURI {
 
     public static void main(String[] args) throws Throwable {
         // Set the magic number according to the Neo network's configuration. It is used when
@@ -21,22 +21,16 @@ public class TransferNeo {
 
         // Set up the connection to the neo-node
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
-        // Setup an account and wallet that are used as the sender and for signing the transaction
-        // Make sure that the account has a sufficient GAS and NEO balance for payment and fees.
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
         Account multiSigAccount = Account.createMultiSigAccount(
                 Arrays.asList(a.getECKeyPair().getPublicKey()), 1);
         Wallet w = Wallet.withAccounts(multiSigAccount, a);
-        ScriptHash receiver = ScriptHash.fromAddress("NLnyLtep7jwyq1qhNPkwXbJpurC4jUT8ke");
 
-        // Setup the NeoToken class with a node connection for further calls to the contract.
-        NeoToken neo = new NeoToken(neow3j);
-
-        // The transfer method will add the wallets default account as the signer and use that
-        // accounts tokens to cover the transfer amount.
-        NeoSendRawTransaction response = neo.transfer(w, receiver, BigDecimal.ONE)
-                .sign() // Signs the transaction with the account that was configured as the signer.
-                .send(); // Sends the transaction to the neo-node.
+        TransactionBuilder b = NeoURI.fromURI("neo:NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj?asset=neo&amount=1")
+                .neow3j(neow3j)
+                .wallet(w)
+                .buildTransfer();
+        NeoSendRawTransaction response = b.sign().send();
 
         System.out.println("####################\n");
         if (response.hasError()) {

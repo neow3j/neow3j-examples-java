@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'io.neow3j.gradle-plugin' version "3.6.0"
+    id 'io.neow3j.gradle-plugin' version "3.6.1"
 }
 
 group 'io.neow3j'
@@ -10,20 +10,34 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
+    jcenter();
     mavenCentral()
 }
 
 dependencies {
-    implementation 'io.neow3j:contract:3.6.0'
-    implementation 'io.neow3j:devpack:3.6.0'
-    implementation 'io.neow3j:compiler:3.6.0'
+    implementation 'io.neow3j:contract:3.6.1'
+    implementation 'io.neow3j:devpack:3.6.1'
+    implementation 'io.neow3j:compiler:3.6.1'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'junit:junit:4.12'
 }
 
 neow3jCompiler {
+    // Option 1: (easier/preferred)
     // Set the class name of the contract to compile when running the `neow3jCompiler` Gradle task.
-    className = "io.neow3j.examples.contract_development.contracts.BongoCatToken"
+    className = "io.neow3j.examples.contractdev.contracts.BongoCatToken"
+
+    // Option 2:
+    // If you want to set the contract class name as a project property,
+    // and then set the 'className' attribute through the command line,
+    // then you can:
+    // 
+    // className = System.getProperty("className")
+    // 
+    // Then, you can compile your code with:
+    // ./gradlew -q -P className=io.neow3j.examples.contractdev.contracts.BongoCatToken neow3jCompile
+
+    // Set neow3j compiler to generate debug symbols
     debug = true
 }
 

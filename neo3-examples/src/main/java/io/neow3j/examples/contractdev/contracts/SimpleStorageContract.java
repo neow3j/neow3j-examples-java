@@ -1,4 +1,4 @@
-package io.neow3j.examples.contract_development.contracts;
+package io.neow3j.examples.contractdev.contracts;
 
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.neo.Storage;

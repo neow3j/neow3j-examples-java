@@ -43,7 +43,7 @@
         {
           "private-key": "c2b590be636cb7a2377d40bf13d948bed85fe45e155ecf839dba0df45e4a35f0",
           "script-hash": "NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj",
-          "label": null,
+          "label": "CommitteeMember",
           "is-default": true,
           "contract": {
             "script": "0c2102163946a133e3d2e0d987fb90cb01b060ed1780f1718e2da28edf13b965fd2b600b4195440d78",

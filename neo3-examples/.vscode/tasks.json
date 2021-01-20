@@ -1,0 +1,45 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compile-contract",
+            "command": "./gradlew",
+            "type": "shell",
+            "args": [
+                "neow3jCompile"
+            ],
+            "problemMatcher": [
+                "$gradle"
+            ]
+        },
+        {
+            "label": "compile-contract-with-className",
+            "command": "./gradlew",
+            "type": "shell",
+            "args": [
+                // disable warnings, show errors only
+                "--quiet",
+                // specify a system property
+                "-P",
+                { 
+                    "value": "className=${input:className}",
+                    "quoting": "weak"
+                },
+                "neow3jCompile"
+            ],
+            "problemMatcher": [
+                "$gradle"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "className",
+            "description": "Fully qualified class name (e.g., 'io.neow3j.examples.contractdev.contracts.BongoCatToken')",
+            "default": "io.neow3j.examples.contractdev.contracts.BongoCatToken",
+            "type": "promptString"
+        },
+    ]
+}
