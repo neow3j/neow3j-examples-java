@@ -1,4 +1,4 @@
-package io.neow3j.examples.contract_development.contracts;
+package io.neow3j.examples.contractdev.contracts;
 
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 

@@ -1,9 +1,9 @@
-package io.neow3j.examples.contract_development;
+package io.neow3j.examples.contractdev;
 
 import io.neow3j.compiler.CompilationUnit;
 import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.SmartContract;
-import io.neow3j.examples.contract_development.contracts.BongoCatToken;
+import io.neow3j.examples.contractdev.contracts.BongoCatToken;
 import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;

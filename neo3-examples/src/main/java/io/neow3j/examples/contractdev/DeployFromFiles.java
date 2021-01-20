@@ -1,4 +1,4 @@
-package io.neow3j.examples.contract_development;
+package io.neow3j.examples.contractdev;
 
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.ScriptHash;

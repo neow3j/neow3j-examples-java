@@ -1,4 +1,4 @@
-package io.neow3j.examples.contract_invocation;
+package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
