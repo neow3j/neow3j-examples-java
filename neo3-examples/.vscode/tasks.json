@@ -13,6 +13,33 @@
             "problemMatcher": [
                 "$gradle"
             ]
+        },
+        {
+            "label": "compile-contract-with-className",
+            "command": "./gradlew",
+            "type": "shell",
+            "args": [
+                // disable warnings, show errors only
+                "--quiet",
+                // specify a system property
+                "-P",
+                { 
+                    "value": "className=${input:className}",
+                    "quoting": "weak"
+                },
+                "neow3jCompile"
+            ],
+            "problemMatcher": [
+                "$gradle"
+            ]
         }
+    ],
+    "inputs": [
+        {
+            "id": "className",
+            "description": "Fully qualified class name (e.g., 'io.neow3j.examples.contractdev.contracts.BongoCatToken')",
+            "default": "io.neow3j.examples.contractdev.contracts.BongoCatToken",
+            "type": "promptString"
+        },
     ]
 }

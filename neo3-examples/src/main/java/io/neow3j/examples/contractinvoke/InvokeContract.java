@@ -46,5 +46,12 @@ public class InvokeContract {
             .sign()
             .send();
 
+        // Print the transaction hash
+        if (!response.hasError()) {
+            System.out.println("Transaction Hash: " + response.getResult().getHash());
+        } else {
+            System.out.println("Error: " + response.getError().getMessage());
+        }
+
        }
 }
