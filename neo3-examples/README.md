@@ -73,9 +73,14 @@ and the contract will have been deployed. 🥳
 
 ### Invoking the deployed contract 
 
-For invocations you could use the Visual Devtracker, but this repository is about showing how to do
-things with neow3j, therefore we will use the `InvokeContract` class to show invocations done with
-neow3j.
+For contract invocations you could use the Visual Devtracker, but this repository is about showing
+how to do things with neow3j. Therefore, we will use the `InvokeContract` class, which calls methods
+of the `BonogoCatToken`.
+
+The `InvokeContract` class connects to the running Neo blockchain and uses the `main-account` to
+make invocations. Before we can invoke the contract deployed in the previous section, we need to
+know its hash. This is achieved by using the contract's script and the account used for deployment
+(lines 20-21). Then, three invocations are made. Head over to the file and inspect the code.
 
 
 ## Contact

@@ -2,6 +2,7 @@ package io.neow3j.examples.contractinvoke;
 
 import static io.neow3j.contract.ContractParameter.hash160;
 import static io.neow3j.contract.ContractParameter.integer;
+import static io.neow3j.contract.ContractParameter.bool;
 import java.io.File;
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.ScriptHash;
@@ -36,8 +37,22 @@ public class InvokeContract {
         // Invoke by doing an RPC 'invokefunction' call.
         System.out.println("Symbol: " + contract.callFuncReturningString("symbol"));
 
+        // Invoke the contract's deploy method, creating a raw transaction, signing, and sending it. 
+        NeoSendRawTransaction response = contract.invokeFunction("deploy", bool(false))
+            .signers(Signer.calledByEntry(account.getScriptHash()))
+            .wallet(wallet)
+            .sign()
+            .send();
+
+        // Print the transaction hash
+        if (!response.hasError()) {
+            System.out.println("Transaction Hash: " + response.getResult().getHash());
+        } else {
+            System.out.println("Error: " + response.getError().getMessage());
+        }
+
         // Invoke by creating a raw transaction, signing, and sending it. 
-        NeoSendRawTransaction response = contract.invokeFunction("transfer", 
+        response = contract.invokeFunction("transfer", 
                 hash160(account.getScriptHash()),  // from
                 hash160(new ScriptHash("d6c712eb53b1a130f59fd4e5864bdac27458a509")), // to
                 integer(10)) // amount
@@ -53,5 +68,5 @@ public class InvokeContract {
             System.out.println("Error: " + response.getError().getMessage());
         }
 
-       }
+    }
 }

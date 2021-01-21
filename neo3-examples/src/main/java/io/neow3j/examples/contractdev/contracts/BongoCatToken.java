@@ -77,11 +77,9 @@ public class BongoCatToken {
         if (!isValidAddress(account)) {
             throw new Exception("Argument is not a valid address.");
         }
-        // TODO: Check if this returns 0 for addresses that don't have an entry in the storage.
         return assetGet(account);
     }
 
-    @OnDeployment
     public static void deploy(boolean update) throws Exception {
         if (update) {
             return;
