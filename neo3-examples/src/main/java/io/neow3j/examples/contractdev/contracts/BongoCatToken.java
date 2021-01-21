@@ -81,7 +81,6 @@ public class BongoCatToken {
         return assetGet(account);
     }
 
-    @OnDeployment
     public static void deploy(boolean update) throws Exception {
         if (update) {
             return;
