@@ -26,6 +26,7 @@ public class CompileAndDeploy {
 
         // Set up the connection to the neo-node
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
+
         // Setup an account and wallet for signing the transaction. Make sure that the account has a
         // sufficient GAS balance to pay for the deployment.
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
@@ -33,11 +34,13 @@ public class CompileAndDeploy {
 
         // Compile the BongotCatToken contract and construct a SmartContract object from it.
         CompilationUnit res = new Compiler().compileClass(BongoCatToken.class.getCanonicalName());
+
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
         // the neo-node.
-        NeoSendRawTransaction response = new ManagementContract(neow3j).deploy(res.getNefFile(), res.getManifest())
-                .wallet(w)
+        NeoSendRawTransaction response = new ManagementContract(neow3j)
+                .deploy(res.getNefFile(), res.getManifest())
                 .signers(Signer.calledByEntry(a.getScriptHash()))
+                .wallet(w)
                 .sign()
                 .send();
 
@@ -46,8 +49,7 @@ public class CompileAndDeploy {
                     + "'%s'\n", response.getError().getMessage());
             return;
         }
-        ScriptHash contractHash = SmartContract.getContractHash(
-            a.getScriptHash(), res.getNefFile().getScript());
+        ScriptHash contractHash = SmartContract.getContractHash(a.getScriptHash(), res.getNefFile().getScript());
         System.out.printf("Script hash of the deployd contract: %s\n", contractHash);
     }
 }
