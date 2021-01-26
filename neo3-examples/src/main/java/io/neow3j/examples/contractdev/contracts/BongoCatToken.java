@@ -1,12 +1,9 @@
 package io.neow3j.examples.contractdev.contracts;
 
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
-
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
-import io.neow3j.devpack.annotations.OnDeployment;
-import io.neow3j.devpack.annotations.OnVerification;
 import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.contracts.ManagementContract;
 import io.neow3j.devpack.events.Event3Args;
