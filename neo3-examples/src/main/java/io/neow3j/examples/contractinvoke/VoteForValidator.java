@@ -1,4 +1,4 @@
-package io.neow3j.examples.jsonrpc;
+package io.neow3j.examples.contractinvoke;
 
 import static io.neow3j.transaction.Signer.calledByEntry;
 

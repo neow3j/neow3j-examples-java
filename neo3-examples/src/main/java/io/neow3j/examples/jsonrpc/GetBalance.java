@@ -1,4 +1,4 @@
-package io.neow3j.examples.contractinvoke;
+package io.neow3j.examples.jsonrpc;
 
 import io.neow3j.contract.Nep17Token;
 import io.neow3j.contract.ScriptHash;
