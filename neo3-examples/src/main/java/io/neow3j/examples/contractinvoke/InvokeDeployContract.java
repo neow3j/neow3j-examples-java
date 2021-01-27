@@ -1,6 +1,5 @@
 package io.neow3j.examples.contractinvoke;
 
-import java.math.BigDecimal;
 import io.neow3j.contract.Nep17Token;
 import io.neow3j.contract.ScriptHash;
 import io.neow3j.model.NeoConfig;
