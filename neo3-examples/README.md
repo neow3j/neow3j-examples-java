@@ -70,7 +70,6 @@ the Java examples found in this repository. 💪
 After the last step the transaction hash of the deployment transaction should show up in a pop up
 and the contract will have been deployed. 🥳
 
-
 ### Invoking the deployed contract 
 
 For contract invocations you could use the Visual Devtracker, but this repository is about showing
@@ -82,6 +81,18 @@ make invocations. Before we can invoke the contract deployed in the previous sec
 know its hash. This is achieved by using the contract's script and the account used for deployment
 (lines 20-21). Then, three invocations are made. Head over to the file and inspect the code.
 
+## Run the Examples in the Command Line
+
+You can run the examples in the command line if you wish to.
+
+However, you still need to run a Neo3 node and fund your wallet following [these steps](#setup-a-blockchain-and-fund-an-account).
+
+If you wish to run the class file `CompileAndDeploy.java` (`io.neow3j.examples.contractdev.CompileAndDeploy`),
+you should run:
+
+```shell
+./gradlew -q -P mainClass=io.neow3j.examples.contractdev.CompileAndDeploy run
+```
 
 ## Contact
 

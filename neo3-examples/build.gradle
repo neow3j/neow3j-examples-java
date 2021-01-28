@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
     id 'io.neow3j.gradle-plugin' version "3.6.1"
 }
 
@@ -39,6 +40,16 @@ neow3jCompiler {
 
     // Set neow3j compiler to generate debug symbols
     debug = true
+}
+
+// The following configuration is *not* strictly required for a neow3j
+// project.
+// The following configuration enables you to execute any specific
+// class file that contains a main() method, directly in the command line.
+// For example:
+// ./gradlew -q -P mainClass=io.neow3j.examples.contractdev.CompileAndDeploy run
+application {
+    mainClassName = project.hasProperty("mainClass") ? getProperty("mainClass") : null
 }
 
 // The following task is *not* required for a neow3j project.
