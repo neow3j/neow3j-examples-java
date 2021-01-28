@@ -13,13 +13,11 @@ import io.neow3j.utils.Numeric;
 import io.neow3j.wallet.Account;
 
 public class GetScriptHashFromContractFile {
-    public static void main(String[] args) throws DeserializationException, IOException {
-        
-        // Set the magic number according to the Neo network's configuration. It is used when
-        // signing transactions.
-        NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
 
-        // Setup the account that was used to deploy the Contract loaded below. It is required to derive the contract's hash.
+    public static void main(String[] args) throws DeserializationException, IOException {
+
+        // Setup the account that was used to deploy the Contract loaded below.
+        // It is required to derive the contract's hash.
         Account account = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
 
         // Retrieve the contract files.
@@ -32,4 +30,5 @@ public class GetScriptHashFromContractFile {
         System.out.println("Contract Address: " + contractHash.toAddress());
         System.out.println("Contract Script: " + Numeric.toHexString(nefFile.getScript()));
     }
+
 }
