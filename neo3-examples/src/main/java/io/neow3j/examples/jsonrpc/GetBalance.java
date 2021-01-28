@@ -8,10 +8,11 @@ import io.neow3j.protocol.http.HttpService;
 import io.neow3j.wallet.Account;
 
 public class GetBalance {
-    
+
     public static void main(String[] args) throws Throwable {
-        // Set the magic number according to the Neo network's configuration. 
+        // Set the magic number according to the Neo network's configuration.
         NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
+
         // Set up the connection to the neo-node.
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 

@@ -35,11 +35,15 @@ public class DeployFromFiles {
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
         Wallet w = Wallet.withAccounts(a);
 
-        // Retrieve the contract files.
-        NefFile nefFile = NefFile.readFromFile(Paths.get("build", "neow3j", "BongoCatToken.nef").toFile());
+        // Retrieve the contract files:
+
+        // NEF file:
+        File contractNefFile = Paths.get("build", "neow3j", "BongoCatToken.nef").toFile();
+        NefFile nefFile = NefFile.readFromFile(contractNefFile);
+        // Manifest file:
+        File contractManifestFile = Paths.get("build", "neow3j", "BongoCatToken.manifest.json").toFile();
         ContractManifest manifest;
-        File manifestFile = Paths.get("build", "neow3j", "BongoCatToken.manifest.json").toFile();
-        try (FileInputStream s = new FileInputStream(manifestFile)) {
+        try (FileInputStream s = new FileInputStream(contractManifestFile)) {
             manifest = ObjectMapperFactory.getObjectMapper().readValue(s, ContractManifest.class);
         }
 
@@ -56,10 +60,11 @@ public class DeployFromFiles {
             System.out.printf("Deployment was not successful. Error message from neo-node "
                     + "was: '%s'\n", response.getError().getMessage());
         } else {
-            ScriptHash scriptHash = SmartContract.getContractHash(a.getScriptHash(), nefFile.getScript());
+            ScriptHash scriptHash = SmartContract
+                    .getContractHash(a.getScriptHash(), nefFile.getScript());
             System.out.printf("Script hash of the deployed contract: %s\n", scriptHash.toString());
+            System.out.printf("Contract Address: %s\n", scriptHash.toAddress());
         }
-        
     }
 
 }
