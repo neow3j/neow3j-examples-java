@@ -15,6 +15,7 @@ import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Paths;
 
 // Shows how to read a smart contract's files from the disk and deployed it on through a local
 // neo-node.
@@ -33,10 +34,15 @@ public class DeployFromFiles {
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
         Wallet w = Wallet.withAccounts(a);
 
-        // Retrieve the contract files.
-        NefFile nefFile = NefFile.readFromFile(new File("./build/neow3j/AxLabsToken.nef"));
+        // Retrieve the contract files:
+
+        // NEF file:
+        File contractNefFile = Paths.get("build", "neow3j", "BongoCatToken.nef").toFile();
+        NefFile nefFile = NefFile.readFromFile(contractNefFile);
+        // Manifest file:
+        File contractManifestFile = Paths.get("build", "neow3j", "BongoCatToken.manifest.json").toFile();
         ContractManifest manifest;
-        try (FileInputStream s = new FileInputStream("./build/neow3j/AxLabsToken.manifest.json")) {
+        try (FileInputStream s = new FileInputStream(contractManifestFile)) {
             manifest = ObjectMapperFactory.getObjectMapper().readValue(s, ContractManifest.class);
         }
 
@@ -54,7 +60,8 @@ public class DeployFromFiles {
         }
         
         ScriptHash scriptHash = SmartContract.getContractHash(a.getScriptHash(), nefFile.getScript());
-        System.out.printf("Script hash of the deployd contract: %s\n", scriptHash.toString());
+        System.out.printf("Script hash of the deployed contract: %s\n", scriptHash.toString());
+        System.out.printf("Contract Address: %s\n", scriptHash.toAddress());
     }
 
 }

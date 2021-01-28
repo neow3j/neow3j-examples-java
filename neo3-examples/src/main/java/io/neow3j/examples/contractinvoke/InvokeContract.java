@@ -1,9 +1,12 @@
 package io.neow3j.examples.contractinvoke;
 
+import static io.neow3j.contract.ContractParameter.bool;
 import static io.neow3j.contract.ContractParameter.hash160;
 import static io.neow3j.contract.ContractParameter.integer;
-import static io.neow3j.contract.ContractParameter.bool;
+
 import java.io.File;
+import java.nio.file.Paths;
+
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.ScriptHash;
 import io.neow3j.contract.SmartContract;
@@ -28,8 +31,12 @@ public class InvokeContract {
 
         // If you don't know the contract's hash you can produce it by using the contract's script
         // and the script hash of the account that deployed the contract.
-        NefFile nefFile = NefFile.readFromFile(new File("./build/neow3j/BongoCatToken.nef"));
+        File contractNefFile = Paths.get("build", "neow3j", "BongoCatToken.nef").toFile();
+        NefFile nefFile = NefFile.readFromFile(contractNefFile);
+
+        // Get and print the contract hash
         ScriptHash contractHash = SmartContract.getContractHash(account.getScriptHash(), nefFile.getScript());
+        System.out.println("Contract Hash: " + contractHash);
 
         // Setup an wrapper to invoke the contract.
         SmartContract contract = new SmartContract(contractHash, neow3j);
