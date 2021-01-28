@@ -19,8 +19,7 @@ public class GetScriptHashFromContractFile {
         // signing transactions.
         NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
 
-        // Setup an account and wallet for signing the transaction. Make sure that the account has a
-        // sufficient GAS balance to pay for the deployment.
+        // Setup the account that was used to deploy the Contract loaded below. It is required to derive the contract's hash.
         Account account = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
 
         // Retrieve the contract files.
