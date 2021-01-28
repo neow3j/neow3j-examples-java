@@ -6,7 +6,7 @@
       "ws-port": 40334,
       "rpc-port": 40332,
       "wallet": {
-        "name": "node1",
+        "name": "consensus-node1",
         "accounts": [
           {
             "private-key": "c2b590be636cb7a2377d40bf13d948bed85fe45e155ecf839dba0df45e4a35f0",
@@ -38,7 +38,7 @@
   ],
   "wallets": [
     {
-      "name": "main-account",
+      "name": "Alice-account",
       "accounts": [
         {
           "private-key": "c2b590be636cb7a2377d40bf13d948bed85fe45e155ecf839dba0df45e4a35f0",
