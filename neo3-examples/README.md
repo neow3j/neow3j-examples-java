@@ -57,7 +57,7 @@ the Java examples found in this repository. 💪
       task.
    2. Run the following command from the project root.
        ```
-       ./gradlew newo3jCompile
+       ./gradlew neow3jCompile
        ```
    In either way the output should show "Compilation succeeded!" and the paths to the produced
    files.
@@ -75,7 +75,7 @@ and the contract will have been deployed. 🥳
 
 For contract invocations you could use the Visual Devtracker, but this repository is about showing
 how to do things with neow3j. Therefore, we will use the `InvokeContract` class, which calls methods
-of the `BonogoCatToken`.
+of the `BongoCatToken`.
 
 The `InvokeContract` class connects to the running Neo blockchain and uses the `Alice-account` to
 make invocations. Before we can invoke the contract deployed in the previous section, we need to
