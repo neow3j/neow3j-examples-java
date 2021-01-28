@@ -32,15 +32,15 @@ compatible with the Neo3-preview4 release.
    Devtracker in the Activity Bar and start the blockchain named `default.neo-express` by clicking
    on the play button shown when hovering over the name.
 
-4. Transfer some GAS to the `main-account`, which is used in many examples: Right-click on the
+4. Transfer some GAS to the `Alice-account`, which is used in many examples: Right-click on the
    `default.neo-express` entry in the Devtracker and choose "Transfer assets". In the command
    palette choose GAS, the amount of GAS to transfer (e.g. 1000), the sending account (`genesis`)
-   and the receicing account (`main-account`). After the last step, the transaction hash should
+   and the receicing account (`Alice-account`). After the last step, the transaction hash should
    be shown in a pop up message. 
    
-5. Execute the same process of step 4 to transfer some NEO to the `main-account`.
+5. Execute the same process of step 4 to transfer some NEO to the `Alice-account`.
 
-A Neo blockchain is now running and the `main-account` is funded. The environment is ready to run
+A Neo blockchain is now running and the `Alice-account` is funded. The environment is ready to run
 the Java examples found in this repository. 💪
 
 
@@ -64,7 +64,7 @@ the Java examples found in this repository. 💪
    
 3. To deploy the contract switch to the Devtracker view and right click the `default.neo-express`
     blockchain that you started in the last section. Choose "Deploy contract" from the context menu.
-    Choose the `main-account` in the appearing command pallette. Then choose the contract you compiled
+    Choose the `Alice-account` in the appearing command pallette. Then choose the contract you compiled
     in the previous step. Any contract for which a NEF file is found in the project will show up.
 
 After the last step the transaction hash of the deployment transaction should show up in a pop up
@@ -77,7 +77,7 @@ For contract invocations you could use the Visual Devtracker, but this repositor
 how to do things with neow3j. Therefore, we will use the `InvokeContract` class, which calls methods
 of the `BonogoCatToken`.
 
-The `InvokeContract` class connects to the running Neo blockchain and uses the `main-account` to
+The `InvokeContract` class connects to the running Neo blockchain and uses the `Alice-account` to
 make invocations. Before we can invoke the contract deployed in the previous section, we need to
 know its hash. This is achieved by using the contract's script and the account used for deployment
 (lines 20-21). Then, three invocations are made. Head over to the file and inspect the code.
