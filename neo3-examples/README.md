@@ -18,7 +18,7 @@ compatible with the Neo3-preview4 release.
 
 ### Setup a blockchain and fund an account
 
-1. Clone the examples repository and move into it
+1. Clone the examples repository
     ```
     git clone https://github.com/neow3j/neow3j-examples-java.git
     cd neow3j-examples-java/neo3-examples

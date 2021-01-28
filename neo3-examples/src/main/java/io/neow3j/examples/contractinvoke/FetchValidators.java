@@ -8,7 +8,6 @@ import io.neow3j.utils.Numeric;
 import java.io.IOException;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class FetchValidators {
 
     public static void main(String[] args) throws IOException {

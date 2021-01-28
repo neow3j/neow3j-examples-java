@@ -1,13 +1,13 @@
 package io.neow3j.examples.contractdev.contracts;
 
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
-
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.contracts.ManagementContract;
 import io.neow3j.devpack.events.Event3Args;
+import io.neow3j.devpack.neo.Contract;
 import io.neow3j.devpack.neo.Runtime;
 import io.neow3j.devpack.neo.Storage;
 import io.neow3j.devpack.neo.StorageContext;
@@ -30,10 +30,6 @@ public class BongoCatToken {
     static final StorageContext sc = Storage.getStorageContext();
     static final StorageMap assetMap = sc.createMap(assetPrefix);
 
-    public static String name() {
-        return "Bongo";
-    }
-
     public static String symbol() {
         return "BCT";
     }
@@ -50,7 +46,9 @@ public class BongoCatToken {
         return Helper.toInt(Storage.get(sc, totalSupplyKey));
     }
 
-    public static boolean transfer(byte[] from, byte[] to, int amount) throws Exception {
+    public static boolean transfer(byte[] from, byte[] to, int amount, Object[] data) 
+            throws Exception {
+
         if (!isValidAddress(from) || !isValidAddress(to)) {
             throw new Exception("From or To address is not a valid address.");
         }
@@ -68,6 +66,11 @@ public class BongoCatToken {
             deductFromBalance(from, amount);
             addToBalance(to, amount);
         }
+        
+        if (ManagementContract.getContract(to) != null) {
+            Contract.call(to, "onPayment", data);
+        }
+
         onTransfer.notify(from, to, amount);
         return true;
     }
@@ -79,10 +82,7 @@ public class BongoCatToken {
         return assetGet(account);
     }
 
-    public static void deploy(boolean update) throws Exception {
-        if (update) {
-            return;
-        }
+    public static void deploy() throws Exception {
         if (!isOwner()) {
             throw new Exception("The calling entity is not the owner of this contract.");
         }

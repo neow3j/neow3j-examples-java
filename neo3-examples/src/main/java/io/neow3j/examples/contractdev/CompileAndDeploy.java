@@ -6,7 +6,7 @@ import io.neow3j.contract.ContractUtils;
 import io.neow3j.contract.ManagementContract;
 import io.neow3j.contract.ScriptHash;
 import io.neow3j.contract.SmartContract;
-import io.neow3j.examples.contractdev.contracts.OnVerificationContract;
+import io.neow3j.examples.contractdev.contracts.BongoCatToken;
 import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
@@ -29,6 +29,7 @@ public class CompileAndDeploy {
 
         // Set up the connection to the neo-node
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
+
         // Setup an account and wallet for signing the transaction. Make sure that the account has a
         // sufficient GAS balance to pay for the deployment.
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
@@ -36,7 +37,7 @@ public class CompileAndDeploy {
 
         // Compile the BongotCatToken contract and construct a SmartContract object from it.
         CompilationUnit res = new Compiler()
-                .compileClass(OnVerificationContract.class.getCanonicalName());
+                .compileClass(BongoCatToken.class.getCanonicalName());
 
         // Write contract (compiled, NEF) to the disk
         Path buildNeow3jPath = Paths.get("build", "neow3j");
@@ -50,8 +51,8 @@ public class CompileAndDeploy {
         // the neo-node.
         NeoSendRawTransaction response = new ManagementContract(neow3j)
                 .deploy(res.getNefFile(), res.getManifest())
-                .wallet(w)
                 .signers(Signer.calledByEntry(a.getScriptHash()))
+                .wallet(w)
                 .sign()
                 .send();
 

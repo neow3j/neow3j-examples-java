@@ -29,6 +29,7 @@ public class DeployFromFiles {
 
         // Set up the connection to the neo-node
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
+
         // Setup an account and wallet for signing the transaction. Make sure that the account has a
         // sufficient GAS balance to pay for the deployment.
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
@@ -48,20 +49,22 @@ public class DeployFromFiles {
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
         // the neo-node.
-        NeoSendRawTransaction response = new ManagementContract(neow3j).deploy(nefFile, manifest)
-                .wallet(w)
+        NeoSendRawTransaction response = new ManagementContract(neow3j)
+                .deploy(nefFile, manifest)
                 .signers(Signer.calledByEntry(a.getScriptHash()))
+                .wallet(w)
                 .sign()
                 .send();
 
         if (response.hasError()) {
             System.out.printf("Deployment was not successful. Error message from neo-node "
                     + "was: '%s'\n", response.getError().getMessage());
+        } else {
+            ScriptHash scriptHash = SmartContract
+                    .getContractHash(a.getScriptHash(), nefFile.getScript());
+            System.out.printf("Script hash of the deployed contract: %s\n", scriptHash.toString());
+            System.out.printf("Contract Address: %s\n", scriptHash.toAddress());
         }
-        
-        ScriptHash scriptHash = SmartContract.getContractHash(a.getScriptHash(), nefFile.getScript());
-        System.out.printf("Script hash of the deployed contract: %s\n", scriptHash.toString());
-        System.out.printf("Contract Address: %s\n", scriptHash.toAddress());
     }
 
 }
