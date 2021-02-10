@@ -38,22 +38,49 @@
   ],
   "wallets": [
     {
-      "name": "Alice-account",
+      "name": "Alice",
       "accounts": [
         {
-          "private-key": "c2b590be636cb7a2377d40bf13d948bed85fe45e155ecf839dba0df45e4a35f0",
-          "script-hash": "NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj",
-          "label": "CommitteeMember",
-          "is-default": true,
-          "contract": {
-            "script": "0c2102163946a133e3d2e0d987fb90cb01b060ed1780f1718e2da28edf13b965fd2b600b4195440d78",
-            "parameters": [
-              "Signature"
-            ]
-          }
+          "name": "Alice-account",
+          "accounts": [
+            {
+              "private-key": "c2b590be636cb7a2377d40bf13d948bed85fe45e155ecf839dba0df45e4a35f0",
+              "script-hash": "NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj",
+              "label": "CommitteeMember",
+              "is-default": true,
+              "contract": {
+                "script": "0c2102163946a133e3d2e0d987fb90cb01b060ed1780f1718e2da28edf13b965fd2b600b4195440d78",
+                "parameters": [
+                  "Signature"
+                ]
+              }
+            }
+          ]
         }
-      ]
+      ],
+      "contracts": []
+    },
+    {
+      "name": "Bob",
+      "accounts": [
+        {
+          "name": "Bob-account",
+          "accounts": [
+            {
+              "private-key": "0f7d2f77f3229178650b958eb286258f0e6533d0b86ec389b862c440c6511a4b",
+              "script-hash": "NLnyLtep7jwyq1qhNPkwXbJpurC4jUT8ke",
+              "label": "client2",
+              "is-default": true,
+              "contract": {
+                "script": "0c2102249425a06b5a1f8e6133fc79afa2c2b8430bf9327297f176761df79e8d8929c50b4195440d78",
+                "parameters": [
+                  "Signature"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "contracts": []
     }
-  ],
-  "contracts": []
 }
