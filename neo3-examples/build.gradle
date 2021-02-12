@@ -49,7 +49,7 @@ neow3jCompiler {
 // For example:
 // ./gradlew -q -P mainClass=io.neow3j.examples.contractdev.CompileAndDeploy run
 application {
-    mainClassName = project.hasProperty("mainClass") ? getProperty("mainClass") : null
+    mainClassName = project.hasProperty("mainClass") ? getProperty("mainClass") : "null"
 }
 
 // The following task is *not* required for a neow3j project.

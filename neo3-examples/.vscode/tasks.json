@@ -32,6 +32,34 @@
             "problemMatcher": [
                 "$gradle"
             ]
+        },
+        {
+            "label": "transfer-from-Alice-to-Bob",
+            "command": "nxp3",
+            "type": "shell",
+            "args": [
+                "transfer",
+                "NEO",
+                "1000",
+                "Alice-account",
+                "Bob-account"
+            ]
+        },
+        {
+            "label": "nxp3-reset",
+            "command": "nxp3",
+            "type": "shell",
+            "args": [
+                "reset"
+            ]
+        },
+        {
+            "label": "nxp3-stop",
+            "command": "nxp3",
+            "type": "shell",
+            "args": [
+                "stop"
+            ]
         }
     ],
     "inputs": [
@@ -40,6 +68,6 @@
             "description": "Fully qualified class name (e.g., 'io.neow3j.examples.contractdev.contracts.BongoCatToken')",
             "default": "io.neow3j.examples.contractdev.contracts.BongoCatToken",
             "type": "promptString"
-        },
+        }
     ]
 }
