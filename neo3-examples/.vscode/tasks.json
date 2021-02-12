@@ -35,7 +35,7 @@
         },
         {
             "label": "transfer-NEO-from-Alice-to-Bob",
-            "command": "nxp3",
+            "command": "neoxp",
             "type": "shell",
             "args": [
                 "transfer",
@@ -47,7 +47,7 @@
         },
         {
             "label": "transfer-GAS-from-Alice-to-Bob",
-            "command": "nxp3",
+            "command": "neoxp",
             "type": "shell",
             "args": [
                 "transfer",
@@ -58,16 +58,16 @@
             ]
         },
         {
-            "label": "nxp3-reset",
-            "command": "nxp3",
+            "label": "neoxp-reset",
+            "command": "neoxp",
             "type": "shell",
             "args": [
                 "reset"
             ]
         },
         {
-            "label": "nxp3-stop",
-            "command": "nxp3",
+            "label": "neoxp-stop",
+            "command": "neoxp",
             "type": "shell",
             "args": [
                 "stop"
