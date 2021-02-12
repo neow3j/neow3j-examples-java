@@ -34,15 +34,27 @@
             ]
         },
         {
-            "label": "transfer-from-Alice-to-Bob",
+            "label": "transfer-NEO-from-Alice-to-Bob",
             "command": "nxp3",
             "type": "shell",
             "args": [
                 "transfer",
                 "NEO",
                 "1000",
-                "Alice-account",
-                "Bob-account"
+                "Alice",
+                "Bob"
+            ]
+        },
+        {
+            "label": "transfer-GAS-from-Alice-to-Bob",
+            "command": "nxp3",
+            "type": "shell",
+            "args": [
+                "transfer",
+                "GAS",
+                "1000",
+                "Alice",
+                "Bob"
             ]
         },
         {
