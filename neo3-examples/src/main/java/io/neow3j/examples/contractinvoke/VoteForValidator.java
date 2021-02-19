@@ -8,7 +8,6 @@ import java.util.Arrays;
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
-import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.utils.Await;
@@ -18,16 +17,15 @@ import io.neow3j.wallet.Wallet;
 public class VoteForValidator {
 
     public static void main(String[] args) throws Throwable {
-        
-        NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
         // The account client1 is used as the voter.
         Account client1 = Account.fromWIF("KwjpUzqHThukHZqw5zu4QLGJXessUxwcG3GinhJeBmqj4uKM4K5z");
         Wallet voteWallet = Wallet.withAccounts(client1);
 
-        // The account defaultAcc is registered as candidate and then the client1 votes for it to become a validator.
+        // Alice account is registered as candidate and then the client1 votes for it to become a validator.
         Account defaultAcc = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
+
         // The account committeeAcc is the multi-sig account derived from the defaultAcc account.
         // It holds the initial funds of Neo and Gas and is needed to fund the client1 account.
         Account committeeAcc = Account.createMultiSigAccount(Arrays.asList(defaultAcc.getECKeyPair().getPublicKey()), 1);

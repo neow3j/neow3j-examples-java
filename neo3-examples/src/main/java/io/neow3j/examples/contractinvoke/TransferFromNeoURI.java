@@ -2,7 +2,6 @@ package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.NeoURI;
 import io.neow3j.contract.TransactionBuilder;
-import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
 import io.neow3j.protocol.http.HttpService;
@@ -15,10 +14,6 @@ import java.util.Arrays;
 public class TransferFromNeoURI {
 
     public static void main(String[] args) throws Throwable {
-        // Set the magic number according to the Neo network's configuration. It is used when
-        // signing transactions.
-        NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
-
         // Set up the connection to the neo-node
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
         Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");

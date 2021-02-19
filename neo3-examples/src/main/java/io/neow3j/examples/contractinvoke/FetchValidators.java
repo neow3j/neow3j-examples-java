@@ -22,7 +22,7 @@ public class FetchValidators {
         List<ECPublicKey> validators = neo.getNextBlockValidators();
 
         System.out.println("####################\n");
-        System.out.printf("The Neo network has %d validators. Their public keys are:%n",
+        System.out.printf("The Neo network has %d validators. Their public keys are: %n",
                 validators.size());
         for (ECPublicKey validator : validators) {
             System.out.println(" - " + Numeric.toHexStringNoPrefix(validator.getEncoded(true)));
