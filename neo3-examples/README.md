@@ -13,8 +13,7 @@ It contains examples for the following use cases:
 
 These instructions assume that you have installed Virtual Studio Code, the [Visual
 Devtracker](https://github.com/ngdenterprise/neo3-visual-tracker/releases) extension and
-[neo-express](https://github.com/neo-project/neo-express/releases). The latter two need to be
-compatible with the Neo3-preview4 release.
+[neo-express](https://github.com/neo-project/neo-express/releases).
 
 ### Setup a blockchain and fund an account
 
@@ -27,22 +26,13 @@ compatible with the Neo3-preview4 release.
     ```
     code .
     ```
-3. The project contains a neo-express configuration file that allows you to start a preconfigured
-   Neo blockchain with the Neo Visual Devtracker VSCode extension: Switch to the Visual
-   Devtracker in the Activity Bar and start the blockchain named `default.neo-express` by clicking
-   on the play button shown when hovering over the name.
+3. The project contains a `neo-express` configuration file that allows you to start a preconfigured Neo blockchain with the Neo Visual Devtracker VSCode extension: Switch to the Visual Devtracker in the Activity Bar and start the blockchain named `default.neo-express` by clicking on the play button shown when hovering over the name.
 
-4. Transfer some GAS to the `Alice-account`, which is used in many examples: Right-click on the
-   `default.neo-express` entry in the Devtracker and choose "Transfer assets". In the command
-   palette choose GAS, the amount of GAS to transfer (e.g. 1000), the sending account (`genesis`)
-   and the receicing account (`Alice-account`). After the last step, the transaction hash should
-   be shown in a pop up message. 
+4. Transfer some GAS to the `Alice-account`, which is used in many examples: Right-click on the `default.neo-express` entry in the Devtracker and choose "Transfer assets". In the command palette choose GAS, the amount of GAS to transfer (e.g. 1000), the sending account (`genesis`) and the receicing account (`Alice-account`). After the last step, the transaction hash should be shown in a pop up message.
    
 5. Execute the same process of step 4 to transfer some NEO to the `Alice-account`.
 
-A Neo blockchain is now running and the `Alice-account` is funded. The environment is ready to run
-the Java examples found in this repository. 💪
-
+A Neo blockchain is now running and the `Alice-account` is funded. The environment is ready to run the Java examples found in this repository. 💪
 
 ### Compile and deploy a smart contract
 
@@ -64,22 +54,18 @@ the Java examples found in this repository. 💪
    
 3. To deploy the contract switch to the Devtracker view and right click the `default.neo-express`
     blockchain that you started in the last section. Choose "Deploy contract" from the context menu.
-    Choose the `Alice-account` in the appearing command pallette. Then choose the contract you compiled
-    in the previous step. Any contract for which a NEF file is found in the project will show up.
+    Choose the `Alice-account` in the appearing command pallette. Then choose the contract you compiled in the previous step. Any contract for which a NEF file is found in the project will show up.
 
 After the last step the transaction hash of the deployment transaction should show up in a pop up
 and the contract will have been deployed. 🥳
 
 ### Invoking the deployed contract 
 
-For contract invocations you could use the Visual Devtracker, but this repository is about showing
-how to do things with neow3j. Therefore, we will use the `InvokeContract` class, which calls methods
-of the `BongoCatToken`.
+For contract invocations you could use the Visual Devtracker, but this repository is about showing how to do things with neow3j. Therefore, we will use the `InvokeContract` class, which calls methods of the `BongoCatToken`.
 
 The `InvokeContract` class connects to the running Neo blockchain and uses the `Alice-account` to
 make invocations. Before we can invoke the contract deployed in the previous section, we need to
-know its hash. This is achieved by using the contract's script and the account used for deployment
-(lines 20-21). Then, three invocations are made. Head over to the file and inspect the code.
+know its hash. This is achieved by using the contract's script and the account used for deployment (lines `20-21`). Then, three invocations are made. Head over to the file and inspect the code.
 
 ## Run the Examples in the Command Line
 
@@ -87,8 +73,7 @@ You can run the examples in the command line if you wish to.
 
 However, you still need to run a Neo3 node and fund your wallet following [these steps](#setup-a-blockchain-and-fund-an-account).
 
-If you wish to run the class file `CompileAndDeploy.java` (`io.neow3j.examples.contractdev.CompileAndDeploy`),
-you should run:
+If you wish to run the class file `CompileAndDeploy.java` (`io.neow3j.examples.contractdev.CompileAndDeploy`), you should run:
 
 ```shell
 ./gradlew -q -P mainClass=io.neow3j.examples.contractdev.CompileAndDeploy run
