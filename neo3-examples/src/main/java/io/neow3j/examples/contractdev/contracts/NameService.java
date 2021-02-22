@@ -1,8 +1,9 @@
 package io.neow3j.examples.contractdev.contracts;
 
+import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.annotations.ManifestExtra;
-import io.neow3j.devpack.neo.Runtime;
-import io.neow3j.devpack.neo.Storage;
+import io.neow3j.devpack.Runtime;
+import io.neow3j.devpack.Storage;
 
 // A name service contract that allows anyone to register a domain name under her address.
 @ManifestExtra(key = "name", value = "NameService")
@@ -14,7 +15,11 @@ public class NameService {
     }
 
     public static boolean register(String domain, byte[] owner) {
-        if (!Runtime.checkWitness(owner)) {
+        if (owner == null) {
+            return false;
+        }
+        Hash160 ownerAddrHash = new Hash160(owner);
+        if (!Runtime.checkWitness(ownerAddrHash)) {
             return false;
         }
         byte[] value = Storage.get(domain);
@@ -25,7 +30,7 @@ public class NameService {
         return true;
     }
 
-    public static boolean transfer(String domain, byte[] to) {
+    public static boolean transfer(String domain, Hash160 to) {
         if (!Runtime.checkWitness(to)) {
             return false;
         }
@@ -33,10 +38,11 @@ public class NameService {
         if (from == null) {
             return false;
         }
-        if (!Runtime.checkWitness(from)) {
+        Hash160 fromAddrHash = new Hash160(from);
+        if (!Runtime.checkWitness(fromAddrHash)) {
             return false;
         }
-        Storage.put(domain, to);
+        Storage.put(domain, to.toByteArray());
         return true;
     }
 
@@ -45,7 +51,8 @@ public class NameService {
         if (owner == null) {
             return false;
         }
-        if (!Runtime.checkWitness(owner)) {
+        Hash160 ownerAddrHash = new Hash160(owner);
+        if (!Runtime.checkWitness(ownerAddrHash)) {
             return false;
         }
         Storage.delete(domain);

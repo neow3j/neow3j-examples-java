@@ -1,28 +1,41 @@
 package io.neow3j.examples.contractdev.contracts;
 
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
+
+import io.neow3j.devpack.CallFlags;
+import io.neow3j.devpack.Contract;
+import io.neow3j.devpack.ExecutionEngine;
+import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Helper;
+import io.neow3j.devpack.Runtime;
+import io.neow3j.devpack.Storage;
+import io.neow3j.devpack.StorageContext;
+import io.neow3j.devpack.StorageMap;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
+import io.neow3j.devpack.annotations.OnDeployment;
+import io.neow3j.devpack.annotations.OnNEP17Payment;
+import io.neow3j.devpack.annotations.OnVerification;
 import io.neow3j.devpack.annotations.SupportedStandards;
-import io.neow3j.devpack.contracts.ManagementContract;
+import io.neow3j.devpack.contracts.ContractManagement;
+import io.neow3j.devpack.events.Event1Arg;
 import io.neow3j.devpack.events.Event3Args;
-import io.neow3j.devpack.neo.Contract;
-import io.neow3j.devpack.neo.Runtime;
-import io.neow3j.devpack.neo.Storage;
-import io.neow3j.devpack.neo.StorageContext;
-import io.neow3j.devpack.neo.StorageMap;
-import io.neow3j.devpack.system.ExecutionEngine;
 
 @ManifestExtra(key = "name", value = "BongoCatToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandards("NEP-17")
 public class BongoCatToken {
 
-    static final byte[] owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
+    static final Hash160 owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
 
     @DisplayName("transfer")
-    static Event3Args<byte[], byte[], Integer> onTransfer;
+    static Event3Args<Hash160, Hash160, Integer> onTransfer;
+
+    @DisplayName("onPayment")
+    static Event3Args<Hash160, Integer, Object> onPayment;
+
+    @DisplayName("onVerification")
+    static Event1Arg<String> onVerification;
 
     static final int initialSupply = 200_000_000;
     static final String assetPrefix = "asset";
@@ -46,10 +59,10 @@ public class BongoCatToken {
         return Helper.toInt(Storage.get(sc, totalSupplyKey));
     }
 
-    public static boolean transfer(byte[] from, byte[] to, int amount, Object[] data) 
+    public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data)
             throws Exception {
 
-        if (!isValidAddress(from) || !isValidAddress(to)) {
+        if (!from.isValid() || !to.isValid()) {
             throw new Exception("From or To address is not a valid address.");
         }
         if (amount < 0) {
@@ -66,33 +79,36 @@ public class BongoCatToken {
             deductFromBalance(from, amount);
             addToBalance(to, amount);
         }
-        
-        if (ManagementContract.getContract(to) != null) {
-            Contract.call(to, "onPayment", data);
+
+        if (ContractManagement.getContract(to) != null) {
+            Contract.call(to, "onPayment", CallFlags.ALL, data);
         }
 
         onTransfer.notify(from, to, amount);
         return true;
     }
 
-    public static int balanceOf(byte[] account) throws Exception {
-        if (!isValidAddress(account)) {
+    public static int balanceOf(Hash160 account) throws Exception {
+        if (!account.isValid()) {
             throw new Exception("Argument is not a valid address.");
         }
         return assetGet(account);
     }
 
-    public static void deploy() throws Exception {
+    @OnDeployment
+    public static void deploy(Object data, boolean update) throws Exception {
         if (!isOwner()) {
             throw new Exception("The calling entity is not the owner of this contract.");
         }
         if (getTotalSupply() > 0) {
             throw new Exception("Contract was already deployed.");
         }
-        // Initialize supply
-        Storage.put(sc, totalSupplyKey, getTotalSupply() + initialSupply);
-        // And allocate all tokens to the contract owner.
-        addToBalance(owner, initialSupply);
+        if (!update) {
+            // Initialize supply
+            Storage.put(sc, totalSupplyKey, getTotalSupply() + initialSupply);
+            // And allocate all tokens to the contract owner.
+            addToBalance(owner, initialSupply);
+        }
     }
 
     public static void update(byte[] script, String manifest) throws Exception {
@@ -102,39 +118,58 @@ public class BongoCatToken {
         if (script.length == 0 && manifest.length() == 0) {
             throw new Exception("The new contract script and manifest must not be empty.");
         }
-        ManagementContract.update(script, manifest);
+        ContractManagement.update(script, manifest);
     }
 
     public static void destroy() throws Exception {
         if (!isOwner()) {
             throw new Exception("The calling entity is not the owner of this contract.");
         }
-        ManagementContract.destroy();
+        ContractManagement.destroy();
+    }
+
+    @OnVerification
+    public static boolean verify() throws Exception {
+        if (!isOwner()) {
+            throw new Exception("The calling entity is not the owner of this contract.");
+        }
+        onVerification.notify("It's the owner!");
+        return true;
+    }
+
+    @OnNEP17Payment
+    public static void onPayment(Hash160 from, int amount, Object data) {
+        onPayment.notify(from, amount, data);
+    }
+
+    /**
+     * Gets the address of the contract owner.
+     *
+     * @return the address of the contract owner.
+     */
+    public static Hash160 contractOwner() {
+        return owner;
     }
 
     private static boolean isOwner() {
         return Runtime.checkWitness(owner);
     }
 
-    private static boolean isValidAddress(byte[] address) {
-        return address.length == 20 && Helper.toInt(address) != 0;
+    private static void addToBalance(Hash160 key, int value) {
+        assetMap.put(key.toByteArray(), assetGet(key) + value);
     }
 
-    private static void addToBalance(byte[] key, int value) {
-        assetMap.put(key, assetGet(key) + value);
-    }
-
-    private static void deductFromBalance(byte[] key, int value) {
+    private static void deductFromBalance(Hash160 key, int value) {
         int oldValue = assetGet(key);
         if (oldValue == value) {
-            assetMap.delete(key);
+            assetMap.delete(key.toByteArray());
         } else {
-            assetMap.put(key, oldValue - value);
+            assetMap.put(key.toByteArray(), oldValue - value);
         }
     }
 
-    private static int assetGet(byte[] key) {
-        return Helper.toInt(assetMap.get(key));
+    private static int assetGet(Hash160 key) {
+        return Helper.toInt(assetMap.get(key.toByteArray()));
     }
 
 }

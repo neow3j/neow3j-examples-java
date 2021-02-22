@@ -2,12 +2,11 @@ package io.neow3j.examples.contractdev;
 
 import io.neow3j.compiler.CompilationUnit;
 import io.neow3j.compiler.Compiler;
+import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.ContractUtils;
-import io.neow3j.contract.ManagementContract;
 import io.neow3j.contract.ScriptHash;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.examples.contractdev.contracts.BongoCatToken;
-import io.neow3j.model.NeoConfig;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
 import io.neow3j.protocol.http.HttpService;
@@ -21,11 +20,9 @@ import java.nio.file.Paths;
 // Neo blockchain.
 public class CompileAndDeploy {
 
+    // 43be3eea1aaf7973df08f2ee289bf1930c5963f4
+    // NiCB5NXvaAqJfsZKXNdi3yenRcYJKezjwU
     public static void main(String[] args) throws Throwable {
-
-        // Set the magic number according to the Neo network's configuration. It is used when
-        // signing transactions.
-        NeoConfig.setMagicNumber(new byte[]{0x01, 0x03, 0x00, 0x0}); // Magic number 769
 
         // Set up the connection to the neo-node
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
@@ -49,9 +46,9 @@ public class CompileAndDeploy {
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
         // the neo-node.
-        NeoSendRawTransaction response = new ManagementContract(neow3j)
+        NeoSendRawTransaction response = new ContractManagement(neow3j)
                 .deploy(res.getNefFile(), res.getManifest())
-                .signers(Signer.calledByEntry(a.getScriptHash()))
+                .signers(Signer.global(a.getScriptHash()))
                 .wallet(w)
                 .sign()
                 .send();
@@ -62,7 +59,8 @@ public class CompileAndDeploy {
             return;
         }
         ScriptHash contractHash = SmartContract.getContractHash(
-                a.getScriptHash(), res.getNefFile().getScript());
+                a.getScriptHash(), res.getNefFile().getCheckSumAsInteger(),
+                res.getManifest().getName());
         System.out.println("Script hash of the deployed contract: " + contractHash);
         System.out.println("Contract Address: " + contractHash.toAddress());
     }

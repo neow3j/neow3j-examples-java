@@ -2,19 +2,20 @@ package io.neow3j.examples.contractdev.contracts;
 
 import static io.neow3j.devpack.Helper.toByteString;
 import static io.neow3j.devpack.Helper.toInt;
+import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
-import io.neow3j.devpack.StringLiteralHelper;
+import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.annotations.ManifestExtra;
-import io.neow3j.devpack.contracts.ManagementContract;
-import io.neow3j.devpack.neo.Runtime;
-import io.neow3j.devpack.neo.Storage;
-import io.neow3j.devpack.neo.StorageContext;
-import io.neow3j.devpack.neo.StorageMap;
+import io.neow3j.devpack.contracts.ContractManagement;
+import io.neow3j.devpack.Runtime;
+import io.neow3j.devpack.Storage;
+import io.neow3j.devpack.StorageContext;
+import io.neow3j.devpack.StorageMap;
 
 @ManifestExtra(key = "author", value = "AxLabs")
 public class AxLabsToken {
 
-    static final byte[] contractOwner = StringLiteralHelper.addressToScriptHash(
+    static final Hash160 contractOwner = addressToScriptHash(
             "NX8GreRFGFK5wpGMWetpX93HmtrezGogzk");
 
     static final StorageContext ctx = Storage.getStorageContext();
@@ -31,7 +32,7 @@ public class AxLabsToken {
      *
      * @return the address of the contract owner.
      */
-    public static byte[] contractOwner() {
+    public static Hash160 contractOwner() {
         return contractOwner;
     }
 
@@ -69,12 +70,13 @@ public class AxLabsToken {
     /**
      * Transfers a token.
      *
-     * @param tokenid the id of the token.
+     * @param from the id of the token.
      * @param to the new owner of the token.
+     * @param tokenid the id of the token.
      * @return whether the transfer was successful.
      */
-    public static boolean transfer(byte[] from, byte[] to, byte[] tokenid) {
-        if (!isValidAddress(to)) {
+    public static boolean transfer(Hash160 from, Hash160 to, byte[] tokenid) {
+        if (!to.isValid()) {
             return false;
         }
         // Only the token owner may transfer the token
@@ -84,7 +86,7 @@ public class AxLabsToken {
         if (tokenOwnerGet(tokenid) != from) {
             return false;
         }
-        tokenOwnerMap.put(tokenid, to);
+        tokenOwnerMap.put(tokenid, to.toByteArray());
         increaseBalanceOfOwner(to);
         decreaseBalanceOfOwner(from);
         return true;
@@ -100,12 +102,13 @@ public class AxLabsToken {
      * @param tokenid the id of the token.
      * @return the owner of the token.
      */
-    public static byte[] ownerOf(byte[] tokenid) {
+    public static Hash160 ownerOf(byte[] tokenid) {
         return tokenOwnerGet(tokenid);
     }
 
-    private static byte[] tokenOwnerGet(byte[] tokenid) {
-        return tokenOwnerMap.get(tokenid);
+    private static Hash160 tokenOwnerGet(byte[] tokenid) {
+        byte[] owner = tokenOwnerMap.get(tokenid);
+        return new Hash160(owner);
     }
 
     // TODO: 26.11.20 Michael: include properties enforcing the NFT Json schema of the standard.
@@ -116,11 +119,11 @@ public class AxLabsToken {
      * @param tokenid    the tokenid.
      * @return whether the token could be created.
      */
-    public static boolean mintToken(byte[] owner, byte[] tokenid) {
-        if (!isValidAddress(owner) || !isOwner() || tokenOwnerGet(tokenid) != null) {
+    public static boolean mintToken(Hash160 owner, byte[] tokenid) {
+        if (!owner.isValid() || !isOwner() || tokenOwnerGet(tokenid) != null) {
             return false;
         }
-        tokenOwnerMap.put(tokenid, owner);
+        tokenOwnerMap.put(tokenid, owner.toByteArray());
         increaseTotalSupplyByOne();
         increaseBalanceOfOwner(owner);
         return true;
@@ -132,7 +135,7 @@ public class AxLabsToken {
      * @param owner the owner of the tokens.
      * @return the balance.
      */
-    public static int balanceOf(byte[] owner) {
+    public static int balanceOf(Hash160 owner) {
         return balanceOfOwnerGet(owner);
     }
 
@@ -140,27 +143,23 @@ public class AxLabsToken {
         return toByteString(propertiesMap.get(tokenid));
     }
 
-    private static void increaseBalanceOfOwner(byte[] owner) {
-        balanceMap.put(owner, balanceOfOwnerGet(owner) + 1);
+    private static void increaseBalanceOfOwner(Hash160 owner) {
+        balanceMap.put(owner.toByteArray(), balanceOfOwnerGet(owner) + 1);
     }
 
-    private static void decreaseBalanceOfOwner(byte[] owner) {
-        balanceMap.put(owner, balanceOfOwnerGet(owner) - 1);
+    private static void decreaseBalanceOfOwner(Hash160 owner) {
+        balanceMap.put(owner.toByteArray(), balanceOfOwnerGet(owner) - 1);
     }
 
     private static void increaseTotalSupplyByOne() {
         contractMap.put(totalSupplyKey, totalSupplyGet() + 1);
     }
 
-    private static boolean isValidAddress(byte[] address) {
-        return address.length == 20 && toInt(address) != 0;
-    }
-
-    private static int balanceOfOwnerGet(byte[] owner) {
-        if (balanceMap.get(owner) == null) {
+    private static int balanceOfOwnerGet(Hash160 owner) {
+        if (balanceMap.get(owner.toByteArray()) == null) {
             return 0;
         }
-        return toInt(balanceMap.get(owner));
+        return toInt(balanceMap.get(owner.toByteArray()));
     }
 
     /**
@@ -174,7 +173,7 @@ public class AxLabsToken {
         if (!isOwner()) {
             return false;
         }
-        ManagementContract.destroy();
+        ContractManagement.destroy();
         return true;
     }
 }

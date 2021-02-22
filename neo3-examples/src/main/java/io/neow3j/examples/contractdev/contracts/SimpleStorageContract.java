@@ -1,7 +1,7 @@
 package io.neow3j.examples.contractdev.contracts;
 
+import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.annotations.ManifestExtra;
-import io.neow3j.devpack.neo.Storage;
 
 // A simple contract that allows putting and getting from it's storage area.
 @ManifestExtra(key = "name", value = "SimpleStorageContract")

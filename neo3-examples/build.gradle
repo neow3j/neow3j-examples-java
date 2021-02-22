@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'io.neow3j.gradle-plugin' version "3.6.1"
+    id 'io.neow3j.gradle-plugin' version "3.7.0"
 }
 
 group 'io.neow3j'
@@ -11,14 +11,15 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    jcenter();
+    mavenLocal()
+    jcenter()
     mavenCentral()
 }
 
 dependencies {
-    implementation 'io.neow3j:contract:3.6.1'
-    implementation 'io.neow3j:devpack:3.6.1'
-    implementation 'io.neow3j:compiler:3.6.1'
+    implementation 'io.neow3j:contract:3.7.0'
+    implementation 'io.neow3j:devpack:3.7.0'
+    implementation 'io.neow3j:compiler:3.7.0'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'junit:junit:4.12'
 }

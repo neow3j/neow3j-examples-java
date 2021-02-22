@@ -1,6 +1,6 @@
 package io.neow3j.examples.contractinvoke;
 
-import io.neow3j.contract.NeoToken;
+import io.neow3j.contract.GasToken;
 import io.neow3j.contract.ScriptHash;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
@@ -11,9 +11,10 @@ import io.neow3j.wallet.Wallet;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-public class TransferNeo {
+public class TransferGas {
 
     public static void main(String[] args) throws Throwable {
+
         // Set up the connection to the neo-node
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
@@ -27,12 +28,12 @@ public class TransferNeo {
         // Receiver
         ScriptHash receiver = ScriptHash.fromAddress("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
 
-        // Setup the NeoToken class with a node connection for further calls to the contract.
-        NeoToken neo = new NeoToken(neow3j);
+        // Setup the GasToken class with a node connection for further calls to the contract.
+        GasToken gas = new GasToken(neow3j);
 
         // The transfer method will add the wallets default account as the signer and use that
         // accounts tokens to cover the transfer amount.
-        NeoSendRawTransaction response = neo.transfer(w, receiver, BigDecimal.ONE)
+        NeoSendRawTransaction response = gas.transfer(w, receiver, BigDecimal.valueOf(10000L))
                 .sign() // Signs the transaction with the account that was configured as the signer.
                 .send(); // Sends the transaction to the neo-node.
 
