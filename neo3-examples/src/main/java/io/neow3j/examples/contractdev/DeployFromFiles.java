@@ -32,11 +32,12 @@ public class DeployFromFiles {
 
         // Retrieve the contract files:
 
+        String contractName = "BongoCatToken";
         // NEF file:
-        File contractNefFile = Paths.get("build", "neow3j", "BongoCatToken.nef").toFile();
+        File contractNefFile = Paths.get("build", "neow3j", contractName + ".nef").toFile();
         NefFile nefFile = NefFile.readFromFile(contractNefFile);
         // Manifest file:
-        File contractManifestFile = Paths.get("build", "neow3j", "BongoCatToken.manifest.json").toFile();
+        File contractManifestFile = Paths.get("build", "neow3j", contractName + ".manifest.json").toFile();
         ContractManifest manifest;
         try (FileInputStream s = new FileInputStream(contractManifestFile)) {
             manifest = ObjectMapperFactory.getObjectMapper().readValue(s, ContractManifest.class);
@@ -46,7 +47,7 @@ public class DeployFromFiles {
         // the neo-node.
         NeoSendRawTransaction response = new ContractManagement(neow3j)
                 .deploy(nefFile, manifest)
-                .signers(Signer.calledByEntry(a.getScriptHash()))
+                .signers(Signer.global(a.getScriptHash()))
                 .wallet(w)
                 .sign()
                 .send();
@@ -55,9 +56,10 @@ public class DeployFromFiles {
             System.out.printf("Deployment was not successful. Error message from neo-node "
                     + "was: '%s'\n", response.getError().getMessage());
         } else {
+            System.out.printf("The contract was deployed in transaction %s\n", 
+                    response.getSendRawTransaction().getHash());
             ScriptHash contractHash = SmartContract.getContractHash(
-                    a.getScriptHash(), nefFile.getCheckSumAsInteger(),
-                    manifest.getName());
+                    a.getScriptHash(), nefFile.getCheckSumAsInteger(), manifest.getName());
             System.out.printf("Script hash of the deployed contract: %s\n", contractHash.toString());
             System.out.printf("Contract Address: %s\n", contractHash.toAddress());
         }
