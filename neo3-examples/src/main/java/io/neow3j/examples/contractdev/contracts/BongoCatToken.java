@@ -28,7 +28,7 @@ public class BongoCatToken {
 
     static final Hash160 owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
 
-    @DisplayName("transfer")
+    @DisplayName("Transfer")
     static Event3Args<Hash160, Hash160, Integer> onTransfer;
 
     @DisplayName("onPayment")
@@ -81,7 +81,7 @@ public class BongoCatToken {
         }
 
         if (ContractManagement.getContract(to) != null) {
-            Contract.call(to, "onPayment", CallFlags.ALL, data);
+            Contract.call(to, "onNEP17Payment", CallFlags.ALL, data);
         }
 
         onTransfer.notify(from, to, amount);
