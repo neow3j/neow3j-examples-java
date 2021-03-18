@@ -26,7 +26,7 @@ import io.neow3j.devpack.events.Event3Args;
 @SupportedStandards("NEP-17")
 public class BongoCatToken {
 
-    static final Hash160 owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
+    static final Hash160 owner = addressToScriptHash("NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K");
 
     @DisplayName("Transfer")
     static Event3Args<Hash160, Hash160, Integer> onTransfer;

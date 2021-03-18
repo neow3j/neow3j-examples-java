@@ -8,22 +8,22 @@
     },
     {
       "file": "default.neo-express",
-      "description": "# Neo Express: Genesis\n\nFirst of all, here in the `default.neo-express` you find the pre-configured wallets and accounts for the genesis.\n\nThe genesis account is a multi-signature address, in this case `NX8GreRFGFK5wpGMWetpX93HmtrezGogzk`, which will hold all initial `NEO` and `GAS` assets.",
+      "description": "# Neo Express: Genesis\n\nFirst of all, here in the `default.neo-express` you find the pre-configured wallets and accounts for the genesis.\n\nThe genesis account is a multi-signature address, in this case `NKvR5WeczCQMcVWQD9aaMqegfEoCBXGWpW`, which will hold all initial `NEO` and `GAS` assets.",
       "line": 34,
       "selection": {
         "start": {
-          "line": 23,
-          "character": 1
+          "line": 25,
+          "character": 29
         },
         "end": {
-          "line": 34,
-          "character": 12
+          "line": 25,
+          "character": 63
         }
       }
     },
     {
       "file": "default.neo-express",
-      "description": "# Neo Express: Genesis' Private Key\n\nThe multi-signature address `NX8GreRFGFK5wpGMWetpX93HmtrezGogzk` is composed of a **single** keypair. It means that it's a 1 out of 1 multi-sig address.\n\nThe single-signature address `NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj` is composed from the same private key as the 'genesis' address `NX8GreRFGFK5wpGMWetpX93HmtrezGogzk`.",
+      "description": "# Neo Express: Genesis' Private Key\n\nThe multi-signature address `NKvR5WeczCQMcVWQD9aaMqegfEoCBXGWpW` is composed of a **single** keypair. It means that it's a 1 out of 1 multi-sig address.\n\nThe single-signature address `NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K` is composed from the same private key as the 'genesis' address `NKvR5WeczCQMcVWQD9aaMqegfEoCBXGWpW`.",
       "line": 22,
       "selection": {
         "start": {
@@ -137,7 +137,7 @@
     },
     {
       "file": "src/main/java/io/neow3j/examples/contractdev/contracts/BongoCatToken.java",
-      "description": "## Owner\n\nIn this example, `Alice` is the smart contract owner (`NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj` address).",
+      "description": "## Owner\n\nIn this example, `Alice` is the smart contract owner (`NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K` address).",
       "line": 29,
       "selection": {
         "start": {
