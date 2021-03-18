@@ -8,11 +8,11 @@ import io.neow3j.devpack.annotations.ManifestExtra;
 public class SimpleStorageContract {
 
     public static boolean putSomething(String key, String value) {
-        Storage.put(key, value);
+//        Storage.put(key, value);
         return true;
     }
 
-    public static byte[] getSomething(String key) {
-        return Storage.get(key);
-    }
+//    public static byte[] getSomething(String key) {
+//        return Storage.get(key);
+//    }
 }

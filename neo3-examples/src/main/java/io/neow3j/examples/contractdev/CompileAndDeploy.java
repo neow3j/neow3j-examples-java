@@ -4,7 +4,7 @@ import io.neow3j.compiler.CompilationUnit;
 import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.ContractUtils;
-import io.neow3j.contract.ScriptHash;
+import io.neow3j.contract.Hash160;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.examples.contractdev.contracts.BongoCatToken;
 import io.neow3j.protocol.Neow3j;
@@ -58,7 +58,7 @@ public class CompileAndDeploy {
                     + "'%s'\n", response.getError().getMessage());
             return;
         }
-        ScriptHash contractHash = SmartContract.getContractHash(
+        Hash160 contractHash = SmartContract.getContractHash(
                 a.getScriptHash(), res.getNefFile().getCheckSumAsInteger(),
                 res.getManifest().getName());
         System.out.println("Script hash of the deployed contract: " + contractHash);

@@ -5,6 +5,7 @@ import io.neow3j.crypto.ECKeyPair.ECPublicKey;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.utils.Numeric;
+
 import java.io.IOException;
 import java.util.List;
 

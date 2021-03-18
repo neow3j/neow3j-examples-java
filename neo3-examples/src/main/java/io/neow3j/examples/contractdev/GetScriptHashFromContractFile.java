@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import io.neow3j.contract.NefFile;
-import io.neow3j.contract.ScriptHash;
+import io.neow3j.contract.Hash160;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.io.exceptions.DeserializationException;
 import io.neow3j.utils.Numeric;
@@ -38,7 +38,7 @@ public class GetScriptHashFromContractFile {
 
 
         // Get and print the contract hash
-        ScriptHash contractHash = SmartContract.getContractHash(account.getScriptHash(),
+        Hash160 contractHash = SmartContract.getContractHash(account.getScriptHash(),
                 nefFile.getCheckSumAsInteger(), manifest.getName());
         System.out.println("Contract Hash: " + contractHash);
         System.out.println("Contract Address: " + contractHash.toAddress());

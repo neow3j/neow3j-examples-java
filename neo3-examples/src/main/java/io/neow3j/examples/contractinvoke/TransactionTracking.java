@@ -1,7 +1,10 @@
 package io.neow3j.examples.contractinvoke;
 
+import static io.neow3j.wallet.Account.createMultiSigAccount;
+import static java.util.Collections.singletonList;
+
 import io.neow3j.contract.NeoToken;
-import io.neow3j.contract.ScriptHash;
+import io.neow3j.contract.Hash160;
 import io.neow3j.contract.TransactionBuilder;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoApplicationLog;
@@ -12,28 +15,25 @@ import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 public class TransactionTracking {
 
     public static void main(String[] args) throws Throwable {
         Neow3j neow = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        Account account = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
-        Account multiSigAccount = Account.createMultiSigAccount(
-                Arrays.asList(account.getECKeyPair().getPublicKey()), 1);
+        Account account = Account.fromWIF("L24Qst64zASL2aLEKdJtRLnbnTbqpcRNWkWJ3yhDh2CLUtLdwYK2");
+        Account multiSigAccount = createMultiSigAccount(singletonList(account.getECKeyPair().getPublicKey()), 1);
 
         Wallet wallet = Wallet.withAccounts(multiSigAccount, account);
 
-        // ScriptHash: d6c712eb53b1a130f59fd4e5864bdac27458a509
-        // Address: NLnyLtep7jwyq1qhNPkwXbJpurC4jUT8ke
-        ScriptHash to = new ScriptHash("d6c712eb53b1a130f59fd4e5864bdac27458a509");
+        // ScriptHash: fb2b60c9ea35be51abf741981e7c4954eedf50c3
+        // Address: NdihqSLYTf1B1WYuzhM52MNqvCNPJKLZaz
+        Hash160 to = new Hash160("fb2b60c9ea35be51abf741981e7c4954eedf50c3");
         BigDecimal amount = new BigDecimal("1");
 
         TransactionBuilder b = new NeoToken(neow).transferFromDefaultAccount(wallet, to, amount);
         Transaction tx = b.sign();
         NeoSendRawTransaction send = tx.send();
-        send.getSendRawTransaction();
 
         if (send.getError() == null) {
             System.out.println("Transaction sent successfully - starting tracking.");

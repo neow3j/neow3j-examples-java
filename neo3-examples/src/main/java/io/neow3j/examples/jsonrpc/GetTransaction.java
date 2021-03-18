@@ -1,5 +1,6 @@
 package io.neow3j.examples.jsonrpc;
 
+import io.neow3j.contract.Hash256;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.Transaction;
 import io.neow3j.protocol.http.HttpService;
@@ -11,7 +12,7 @@ public class GetTransaction {
     public static void main(String[] args) throws IOException {
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        String txId = "0x57ef06710f1a96aea8742e4dcb78d4800ac21fd086a34bb6b53bb444653a4d31";
+        Hash256 txId = new Hash256("b76bcfd718b2099a43e09b72e624a1e0d789958d7c8ea86c75912ba379fe21a9");
         Transaction tx = neow3j.getTransaction(txId)
                 .send()
                 .getTransaction();

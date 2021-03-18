@@ -97,7 +97,7 @@ public class AxLabsToken {
     }
 
     /**
-     * Gets the owner of the token with id {@tokenid}.
+     * Gets the owner of the token with id {@code tokenid}.
      *
      * @param tokenid the id of the token.
      * @return the owner of the token.
@@ -111,6 +111,11 @@ public class AxLabsToken {
         return new Hash160(owner);
     }
 
+    private static boolean tokenIsFreeForMint(byte[] tokenid) {
+        byte[] owner = tokenOwnerMap.get(tokenid);
+        return owner == null;
+    }
+
     // TODO: 26.11.20 Michael: include properties enforcing the NFT Json schema of the standard.
     /**
      * Creates a new token and assigns it to an account.
@@ -120,13 +125,13 @@ public class AxLabsToken {
      * @return whether the token could be created.
      */
     public static boolean mintToken(Hash160 owner, byte[] tokenid) {
-        if (!owner.isValid() || !isOwner() || tokenOwnerGet(tokenid) != null) {
-            return false;
+        if (owner.isValid() && isOwner() && tokenIsFreeForMint(tokenid)) {
+            tokenOwnerMap.put(tokenid, owner.toByteArray());
+            increaseTotalSupplyByOne();
+            increaseBalanceOfOwner(owner);
+            return true;
         }
-        tokenOwnerMap.put(tokenid, owner.toByteArray());
-        increaseTotalSupplyByOne();
-        increaseBalanceOfOwner(owner);
-        return true;
+        return false;
     }
 
     /**

@@ -1,11 +1,10 @@
 package io.neow3j.examples.contractinvoke;
 
 import static io.neow3j.transaction.Signer.calledByEntry;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
+import static java.util.Collections.singletonList;
 
 import io.neow3j.contract.GasToken;
+import io.neow3j.contract.Hash256;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
 import io.neow3j.protocol.Neow3j;
@@ -14,45 +13,51 @@ import io.neow3j.utils.Await;
 import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
 
+import java.math.BigDecimal;
+
 public class VoteForValidator {
 
     public static void main(String[] args) throws Throwable {
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
         // The account client1 is used as the voter.
-        Account client1 = Account.fromWIF("KwjpUzqHThukHZqw5zu4QLGJXessUxwcG3GinhJeBmqj4uKM4K5z");
+        Account client1 = Account.fromWIF("L3gSLs2CSRYss1zoTmSB9hYAxqimn7Br5yDomH8FDb6NDsupeRVK");
         Wallet voteWallet = Wallet.withAccounts(client1);
 
         // Alice account is registered as candidate and then the client1 votes for it to become a validator.
-        Account defaultAcc = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
+        Account defaultAccount = Account.fromWIF("L24Qst64zASL2aLEKdJtRLnbnTbqpcRNWkWJ3yhDh2CLUtLdwYK2");
 
-        // The account committeeAcc is the multi-sig account derived from the defaultAcc account.
+        // The account committee is the multi-sig account derived from the defaultAccount account.
         // It holds the initial funds of Neo and Gas and is needed to fund the client1 account.
-        Account committeeAcc = Account.createMultiSigAccount(Arrays.asList(defaultAcc.getECKeyPair().getPublicKey()), 1);
-        Wallet committeeWallet = Wallet.withAccounts(committeeAcc, defaultAcc);
+        Account committee = Account.createMultiSigAccount(singletonList(defaultAccount.getECKeyPair().getPublicKey()), 1);
+        Wallet wallet = Wallet.withAccounts(committee, defaultAccount);
 
         NeoToken neoToken = new NeoToken(neow3j);
         GasToken gasToken = new GasToken(neow3j);
 
         // The voting account needs NEO because only NEO holders can participate in governance.
-        String txHash = neoToken.transfer(committeeWallet, client1.getAddress(), new BigDecimal("100000"))
+        Hash256 txHash = neoToken.transfer(wallet, client1.getAddress(), new BigDecimal("100000"))
             .sign()
             .send()
             .getSendRawTransaction().getHash();
         Await.waitUntilTransactionIsExecuted(txHash, neow3j);
+
+        System.out.println("Voting account funded with Neo.");
 
         // The voting account needs GAS to pay for transactions.
-        txHash = gasToken.transfer(committeeWallet, client1.getAddress(), new BigDecimal("100000"))
+        txHash = gasToken.transfer(wallet, client1.getAddress(), new BigDecimal("100000"))
             .sign()
             .send()
             .getSendRawTransaction().getHash();
         Await.waitUntilTransactionIsExecuted(txHash, neow3j);
 
+        System.out.println("Voting account funded with Gas.");
+
         // The entity for which we will vote needs to be registered as a candidate to receive votes.
-        ECPublicKey candidateKey = defaultAcc.getECKeyPair().getPublicKey();
+        ECPublicKey candidateKey = defaultAccount.getECKeyPair().getPublicKey();
         txHash = neoToken.registerCandidate(candidateKey)
-            .signers(calledByEntry(defaultAcc.getScriptHash()))
-            .wallet(committeeWallet)
+            .signers(calledByEntry(defaultAccount.getScriptHash()))
+            .wallet(wallet)
             .sign()
             .send()
             .getSendRawTransaction().getHash();

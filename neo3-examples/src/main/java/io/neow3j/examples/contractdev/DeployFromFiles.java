@@ -2,7 +2,7 @@ package io.neow3j.examples.contractdev;
 
 import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.NefFile;
-import io.neow3j.contract.ScriptHash;
+import io.neow3j.contract.Hash160;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.ObjectMapperFactory;
@@ -58,7 +58,7 @@ public class DeployFromFiles {
         } else {
             System.out.printf("The contract was deployed in transaction %s\n", 
                     response.getSendRawTransaction().getHash());
-            ScriptHash contractHash = SmartContract.getContractHash(
+            Hash160 contractHash = SmartContract.getContractHash(
                     a.getScriptHash(), nefFile.getCheckSumAsInteger(), manifest.getName());
             System.out.printf("Script hash of the deployed contract: %s\n", contractHash.toString());
             System.out.printf("Contract Address: %s\n", contractHash.toAddress());

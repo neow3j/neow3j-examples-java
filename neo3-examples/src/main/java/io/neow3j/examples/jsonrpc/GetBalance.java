@@ -1,7 +1,9 @@
 package io.neow3j.examples.jsonrpc;
 
+import static java.util.Collections.singletonList;
+
 import io.neow3j.contract.FungibleToken;
-import io.neow3j.contract.ScriptHash;
+import io.neow3j.contract.Hash160;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.wallet.Account;
@@ -14,14 +16,15 @@ public class GetBalance {
 
         // Setup a wrapper to invoke the contract.
         FungibleToken contract = new FungibleToken(
-            new ScriptHash("3e1c7c20b1ddbb998b1048061e7665c426b85b14"), neow3j);
+            new Hash160("0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"), neow3j);
 
-        Account account = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
+        Account a = Account.fromWIF("L24Qst64zASL2aLEKdJtRLnbnTbqpcRNWkWJ3yhDh2CLUtLdwYK2");
+        Account committee = Account.createMultiSigAccount(singletonList(a.getECKeyPair().getPublicKey()), 1);
         System.out.println("\n####################");
-        System.out.println("BCT balance of main-account is " + contract.getBalanceOf(account.getScriptHash()).intValue());
+        System.out.println("NEO balance of the default account is " + contract.getBalanceOf(committee.getScriptHash()).intValue());
 
-        ScriptHash receiver = new ScriptHash("d6c712eb53b1a130f59fd4e5864bdac27458a509");
-        System.out.println("BCT balance of receiver account is " + contract.getBalanceOf(receiver).intValue());
+        Hash160 receiver = new Hash160("d6c712eb53b1a130f59fd4e5864bdac27458a509");
+        System.out.println("NEO balance of the receiver account is " + contract.getBalanceOf(receiver).intValue());
         System.out.println("####################");
     }
 }

@@ -4,7 +4,8 @@ import static io.neow3j.contract.ContractParameter.hash160;
 import static io.neow3j.contract.ContractParameter.integer;
 import static io.neow3j.contract.ContractParameter.string;
 import io.neow3j.contract.GasToken;
-import io.neow3j.contract.ScriptHash;
+import io.neow3j.contract.Hash160;
+import io.neow3j.contract.Hash256;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
 import io.neow3j.protocol.http.HttpService;
@@ -36,7 +37,7 @@ public class TransferFromContract {
         Wallet w = Wallet.withAccounts(a);
 
         // GAS holding contract (`OnVerificationContract`).
-        ScriptHash contract = new ScriptHash("5dca8617f3db7ee6b65788e2941c9bd9ff1a2ef2");
+        Hash160 contract = new Hash160("5dca8617f3db7ee6b65788e2941c9bd9ff1a2ef2");
 
         GasToken gas = new GasToken(neow3j);
         Transaction tx = gas
@@ -59,7 +60,7 @@ public class TransferFromContract {
             System.out.printf("The neo-node responded with the error message '%s'.%n",
                     response.getError());
         } else {
-            String txHash = response.getSendRawTransaction().getHash();
+            Hash256 txHash = response.getSendRawTransaction().getHash();
             System.out.printf("Successfully transmitted the transaction with hash '%s'.%n", txHash);
             Await.waitUntilTransactionIsExecuted(txHash, neow3j);
             System.out.println("Tx: " + neow3j.getTransaction(txHash).send().getTransaction().toString());

@@ -1,4 +1,4 @@
-package io.neow3j.examples.contractdev.contracts;
+/*package io.neow3j.examples.contractdev.contracts;
 
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.annotations.ManifestExtra;
@@ -59,3 +59,4 @@ public class NameService {
         return true;
     }
 }
+*/
