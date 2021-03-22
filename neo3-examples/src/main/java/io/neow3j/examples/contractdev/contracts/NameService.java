@@ -1,17 +1,20 @@
-/*package io.neow3j.examples.contractdev.contracts;
+package io.neow3j.examples.contractdev.contracts;
 
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
+import io.neow3j.devpack.StorageContext;
 
 // A name service contract that allows anyone to register a domain name under her address.
 @ManifestExtra(key = "name", value = "NameService")
 @ManifestExtra(key = "author", value = "neow3j")
 public class NameService {
 
+    static StorageContext ctx = Storage.getStorageContext();
+
     public static byte[] query(String domain) {
-        return Storage.get(domain);
+        return Storage.get(ctx, domain);
     }
 
     public static boolean register(String domain, byte[] owner) {
@@ -22,11 +25,11 @@ public class NameService {
         if (!Runtime.checkWitness(ownerAddrHash)) {
             return false;
         }
-        byte[] value = Storage.get(domain);
+        byte[] value = Storage.get(ctx, domain);
         if (value != null) {
             return false;
         }
-        Storage.put(domain, owner);
+        Storage.put(ctx, domain, owner);
         return true;
     }
 
@@ -34,7 +37,7 @@ public class NameService {
         if (!Runtime.checkWitness(to)) {
             return false;
         }
-        byte[] from = Storage.get(domain);
+        byte[] from = Storage.get(ctx, domain);
         if (from == null) {
             return false;
         }
@@ -42,12 +45,12 @@ public class NameService {
         if (!Runtime.checkWitness(fromAddrHash)) {
             return false;
         }
-        Storage.put(domain, to.toByteArray());
+        Storage.put(ctx, domain, to.toByteArray());
         return true;
     }
 
     public static boolean delete(String domain) {
-        byte[] owner = Storage.get(domain);
+        byte[] owner = Storage.get(ctx, domain);
         if (owner == null) {
             return false;
         }
@@ -55,8 +58,7 @@ public class NameService {
         if (!Runtime.checkWitness(ownerAddrHash)) {
             return false;
         }
-        Storage.delete(domain);
+        Storage.delete(ctx, domain);
         return true;
     }
 }
-*/

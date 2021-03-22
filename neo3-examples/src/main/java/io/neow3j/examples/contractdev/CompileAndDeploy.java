@@ -6,7 +6,7 @@ import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.ContractUtils;
 import io.neow3j.contract.Hash160;
 import io.neow3j.contract.SmartContract;
-import io.neow3j.examples.contractdev.contracts.BongoCatToken;
+import io.neow3j.examples.contractdev.contracts.FungibleToken;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
 import io.neow3j.protocol.http.HttpService;
@@ -34,7 +34,7 @@ public class CompileAndDeploy {
 
         // Compile the BongotCatToken contract and construct a SmartContract object from it.
         CompilationUnit res = new Compiler()
-                .compileClass(BongoCatToken.class.getCanonicalName());
+                .compileClass(FungibleToken.class.getCanonicalName());
 
         // Write contract (compiled, NEF) to the disk
         Path buildNeow3jPath = Paths.get("build", "neow3j");

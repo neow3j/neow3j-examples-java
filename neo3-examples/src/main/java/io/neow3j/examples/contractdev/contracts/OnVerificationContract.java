@@ -28,13 +28,13 @@ public class OnVerificationContract {
         if (!Runtime.checkWitness(owner)) {
             throw new Exception("The calling entity is not the owner of this contract.");
         }
-        onVerification.notify("It's the owner!");
+        onVerification.fire("It's the owner!");
         return true;
     }
 
     @OnNEP17Payment
     public static void onPayment(Hash160 from, int amount, Object data) {
-        onPayment.notify(from, amount, data);
+        onPayment.fire(from, amount, data);
     }
 
 }

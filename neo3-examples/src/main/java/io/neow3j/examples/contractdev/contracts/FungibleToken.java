@@ -1,7 +1,6 @@
 package io.neow3j.examples.contractdev.contracts;
 
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
-
 import io.neow3j.devpack.CallFlags;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.ExecutionEngine;
@@ -14,28 +13,20 @@ import io.neow3j.devpack.StorageMap;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
-import io.neow3j.devpack.annotations.OnNEP17Payment;
 import io.neow3j.devpack.annotations.OnVerification;
 import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.contracts.ContractManagement;
-import io.neow3j.devpack.events.Event1Arg;
 import io.neow3j.devpack.events.Event3Args;
 
 @ManifestExtra(key = "name", value = "BongoCatToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandards("NEP-17")
-public class BongoCatToken {
+public class FungibleToken {
 
     static final Hash160 owner = addressToScriptHash("NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K");
 
     @DisplayName("Transfer")
     static Event3Args<Hash160, Hash160, Integer> onTransfer;
-
-    @DisplayName("onPayment")
-    static Event3Args<Hash160, Integer, Object> onPayment;
-
-    @DisplayName("onVerification")
-    static Event1Arg<String> onVerification;
 
     static final int initialSupply = 200_000_000;
     static final String assetPrefix = "asset";
@@ -44,7 +35,7 @@ public class BongoCatToken {
     static final StorageMap assetMap = sc.createMap(assetPrefix);
 
     public static String symbol() {
-        return "BCT";
+        return "FGT";
     }
 
     public static int decimals() {
@@ -72,7 +63,7 @@ public class BongoCatToken {
             throw new Exception("Invalid sender signature. The sender of the tokens needs to be "
                     + "the signing account.");
         }
-        if (assetGet(from) < amount) {
+        if (getBalance(from) < amount) {
             return false;
         }
         if (from != to && amount != 0) {
@@ -80,11 +71,11 @@ public class BongoCatToken {
             addToBalance(to, amount);
         }
 
+        onTransfer.fire(from, to, amount);
         if (ContractManagement.getContract(to) != null) {
             Contract.call(to, "onNEP17Payment", CallFlags.ALL, data);
         }
 
-        onTransfer.notify(from, to, amount);
         return true;
     }
 
@@ -92,29 +83,25 @@ public class BongoCatToken {
         if (!account.isValid()) {
             throw new Exception("Argument is not a valid address.");
         }
-        return assetGet(account);
+        return getBalance(account);
     }
 
     @OnDeployment
     public static void deploy(Object data, boolean update) throws Exception {
-        if (!isOwner()) {
-            throw new Exception("The calling entity is not the owner of this contract.");
-        }
-        if (getTotalSupply() > 0) {
-            throw new Exception("Contract was already deployed.");
-        }
+        throwIfSignerIsNotOwner();
         if (!update) {
+            if (getTotalSupply() > 0) {
+                throw new Exception("Contract was already deployed.");
+            }
             // Initialize supply
-            Storage.put(sc, totalSupplyKey, getTotalSupply() + initialSupply);
+            Storage.put(sc, totalSupplyKey, initialSupply);
             // And allocate all tokens to the contract owner.
-            addToBalance(owner, initialSupply);
+            assetMap.put(owner.toString(), initialSupply);
         }
     }
 
     public static void update(byte[] script, String manifest) throws Exception {
-        if (!isOwner()) {
-            throw new Exception("The calling entity is not the owner of this contract.");
-        }
+        throwIfSignerIsNotOwner();
         if (script.length == 0 && manifest.length() == 0) {
             throw new Exception("The new contract script and manifest must not be empty.");
         }
@@ -122,24 +109,14 @@ public class BongoCatToken {
     }
 
     public static void destroy() throws Exception {
-        if (!isOwner()) {
-            throw new Exception("The calling entity is not the owner of this contract.");
-        }
+        throwIfSignerIsNotOwner();
         ContractManagement.destroy();
     }
 
     @OnVerification
     public static boolean verify() throws Exception {
-        if (!isOwner()) {
-            throw new Exception("The calling entity is not the owner of this contract.");
-        }
-        onVerification.notify("It's the owner!");
+        throwIfSignerIsNotOwner();
         return true;
-    }
-
-    @OnNEP17Payment
-    public static void onPayment(Hash160 from, int amount, Object data) {
-        onPayment.notify(from, amount, data);
     }
 
     /**
@@ -151,16 +128,18 @@ public class BongoCatToken {
         return owner;
     }
 
-    private static boolean isOwner() {
-        return Runtime.checkWitness(owner);
+    private static void throwIfSignerIsNotOwner() throws Exception {
+        if (!Runtime.checkWitness(owner)) {
+            throw new Exception("The calling entity is not the owner of this contract.");
+        }
     }
 
     private static void addToBalance(Hash160 key, int value) {
-        assetMap.put(key.toByteArray(), assetGet(key) + value);
+        assetMap.put(key.toByteArray(), getBalance(key) + value);
     }
 
     private static void deductFromBalance(Hash160 key, int value) {
-        int oldValue = assetGet(key);
+        int oldValue = getBalance(key);
         if (oldValue == value) {
             assetMap.delete(key.toByteArray());
         } else {
@@ -168,7 +147,7 @@ public class BongoCatToken {
         }
     }
 
-    private static int assetGet(Hash160 key) {
+    private static int getBalance(Hash160 key) {
         return Helper.toInt(assetMap.get(key.toByteArray()));
     }
 
