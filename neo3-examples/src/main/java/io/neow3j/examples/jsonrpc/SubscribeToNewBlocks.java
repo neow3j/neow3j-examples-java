@@ -1,15 +1,15 @@
 package io.neow3j.examples.jsonrpc;
 
+import java.io.IOException;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.BlockParameterName;
 import io.neow3j.protocol.http.HttpService;
 
 public class SubscribeToNewBlocks {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        neow3j.catchUpToLatestAndSubscribeToNewBlocksObservable(BlockParameterName.LATEST, true)
+        neow3j.subscribeToNewBlocksObservable(true)
                 .subscribe((blockReqResult) -> {
                     System.out.println("#######################################");
                     System.out.println("Block Index:     " + blockReqResult.getBlock().getIndex());
