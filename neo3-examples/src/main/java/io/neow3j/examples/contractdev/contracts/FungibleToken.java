@@ -18,7 +18,7 @@ import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 
-@ManifestExtra(key = "name", value = "BongoCatToken")
+@ManifestExtra(key = "name", value = "FungibleToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandards("NEP-17")
 public class FungibleToken {
@@ -29,6 +29,7 @@ public class FungibleToken {
     static Event3Args<Hash160, Hash160, Integer> onTransfer;
 
     static final int initialSupply = 200_000_000;
+    static final int decimals = 8;
     static final String assetPrefix = "asset";
     static final String totalSupplyKey = "totalSupply";
     static final StorageContext sc = Storage.getStorageContext();
@@ -39,7 +40,7 @@ public class FungibleToken {
     }
 
     public static int decimals() {
-        return 8;
+        return decimals;
     }
 
     public static int totalSupply() {
@@ -94,9 +95,9 @@ public class FungibleToken {
                 throw new Exception("Contract was already deployed.");
             }
             // Initialize supply
-            Storage.put(sc, totalSupplyKey, initialSupply);
+            Storage.put(sc, totalSupplyKey, initialSupply * decimals);
             // And allocate all tokens to the contract owner.
-            assetMap.put(owner.toString(), initialSupply);
+            assetMap.put(owner.toString(), initialSupply * decimals);
         }
     }
 

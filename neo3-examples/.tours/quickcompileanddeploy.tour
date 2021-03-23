@@ -1,15 +1,16 @@
 {
   "$schema": "https://aka.ms/codetour-schema",
-  "title": "QuickCompileAndDeploy",
+  "title": "Compile and Deploy Smart Contracts",
   "steps": [
     {
       "directory": "",
-      "description": "# Your first Smart Contract with neow3j!\n\nIn the next steps you will go through a guided tour to compile and deploy your **FIRST** neow3j smart contract in Neo3!\n\n## Requirements\n\nThis tour assumes that you have installed the [Visual\nDevtracker](https://github.com/ngdenterprise/neo3-visual-tracker/releases) extension and\n[neo-express](https://github.com/neo-project/neo-express/releases).\n\n**IMPORTANT:** if you're using Neo Playground, you can simply just skip this step."
+      "description": "## Your first Smart Contract with neow3j!\n\nThis tour will guide you through the process of compiling and deploying your **first** neow3j smart contract to Neo!\n\nThe tour uses the [*Neo Visual Devtracker*](https://marketplace.visualstudio.com/items?itemName=ngd-seattle.neo-visual-devtracker) VSCode extenstion to spin up and manage a local Neo blockchain. Make sure you have the latest version installed.  \n**Neo Playground:** If you are using *Neo Playground*, the *Neo Visual Devtracker* is already installed. ",
+      "title": "Introduction"
     },
     {
       "file": "default.neo-express",
-      "description": "# Neo Express: Genesis\n\nFirst of all, here in the `default.neo-express` you find the pre-configured wallets and accounts for the genesis.\n\nThe genesis account is a multi-signature address, in this case `NKvR5WeczCQMcVWQD9aaMqegfEoCBXGWpW`, which will hold all initial `NEO` and `GAS` assets.",
-      "line": 34,
+      "description": "## Configuring Neo Visual Devtracker\n\nTo work with the devtracker we need to setup a blockchain configuration. The configuration we use for this tour is contained in this file (`default.neo-express`). The configuration defines consensus nodes, wallets and a few other settings. For this tour we configure one consensus node and two accounts with the names *Alice* and *Bob* (see `wallets` after the consensus node definition). The consensus node uses the private and public key of the *Alice* account.\n\nIn the Neo blockchain, all participating consensus nodes together form a multi-sig account from their public keys that serves as the *genesis* account. This is the account that holds all NEO and GAS at the beginning of the blockchain. Since we only configured one consensus node the *genesis* account is made up only from the public key of this single node. Nevertheless, we will need it to distributed NEO and GAS to *Alice* or *Bob*.\n\n\nBut first, let's start the configured blockchain network, i.e. a single node:\n  * [Click here](command:neo3-visual-devtracker.express.run) to run it.\n  * Wait a bit until a terminal tab is opened with outputs of the running node.\n  * You should see a new block being output every 15 seconds.\n\nOnce the node is running, execute the following commands to transfer NEO and GAS from the *genesis* account to *Alice*.\n\n* [Click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22NEO%22%2C%20%22amount%22%3A%201000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to issue a transaction to transfer 1000 NEO from 'genesis' to \"Alice\" account. You will see a balloon with the submitted transaction.\n* [Click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22GAS%22%2C%20%22amount%22%3A%20100000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to transfer 100000 GAS from 'genesis' to \"Alice\" account. ",
+      "line": 2,
       "selection": {
         "start": {
           "line": 25,
@@ -22,43 +23,8 @@
       }
     },
     {
-      "file": "default.neo-express",
-      "description": "# Neo Express: Genesis' Private Key\n\nThe multi-signature address `NKvR5WeczCQMcVWQD9aaMqegfEoCBXGWpW` is composed of a **single** keypair. It means that it's a 1 out of 1 multi-sig address.\n\nThe single-signature address `NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K` is composed from the same private key as the 'genesis' address `NKvR5WeczCQMcVWQD9aaMqegfEoCBXGWpW`.",
-      "line": 22,
-      "selection": {
-        "start": {
-          "line": 11,
-          "character": 1
-        },
-        "end": {
-          "line": 22,
-          "character": 13
-        }
-      }
-    },
-    {
-      "file": "default.neo-express",
-      "description": "# Test Wallets: Alice and Bob\n\nWe give the name of `Alice` and `Bob` for two test wallets. \n\nBoth are single-signature addresses, and `Alice` uses the same private key as the committe member (consensus).\n\n* Let's start the neo-express (Neo3 node) to have a private blockchain for testing up and running.\n  * [Click here](command:neo3-visual-devtracker.express.run) to start the neo-express.\n  * Wait a bit and you will see a terminal opening.\n  * A new block is generated every 15 seconds.",
-      "line": 39
-    },
-    {
-      "file": "default.neo-express",
-      "description": "# Alice\n\n* Let's pre-fund `Alice` account with some GAS and NEO. This is necessary to deploy smart contracts and issue transactions.\n  * [Click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22NEO%22%2C%20%22amount%22%3A%201000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to issue a transaction to transfer 1000 NEO from 'genesis' to \"Alice\" account. You will see a balloon with the submitted transaction.\n  * [Click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22GAS%22%2C%20%22amount%22%3A%20100000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to transfer 100000 GAS from 'genesis' to \"Alice\" account. ",
-      "line": 57,
-      "selection": {
-        "start": {
-          "line": 40,
-          "character": 1
-        },
-        "end": {
-          "line": 57,
-          "character": 7
-        }
-      }
-    },
-    {
       "file": "build.gradle",
-      "description": "## neow3j Gradle Plugin\n\nIn this project, we imported the `io.neow3j.gradle-plugin` Gradle plugin. This would support your Java project to smoothly compile Smart Contracts.",
+      "description": "## neow3j Gradle Plugin\n\nTo compile smart contracts written in Java, one option is to use the Gradle Plugin that neow3j provides.\nThis `build.gradle` shows how to import the plugin. ",
       "line": 4,
       "selection": {
         "start": {
@@ -73,8 +39,8 @@
     },
     {
       "file": "build.gradle",
-      "description": "## neow3j Dependencies\n\nWe also added the `contract`, `devpack`, and `compiler` dependencies to the Gradle project.\n\nMore info about each module can be found in the [neow3j website](https://neow3j.io).\n",
-      "line": 22,
+      "description": "## neow3j Dependencies\n\nWe also added the `contract`, `devpack`, and `compiler` dependencies to the Gradle project. \nFor a Java project that is only concerned with smart contract development the `devpack` would suffice (plus the `compiler` if programmatic compilation is desired). The `contract` package is only added because there are other examples in this Java project that depend on it.\n\nMore info about each module can be found on [neow3j.io](https://neow3j.io).\n",
+      "line": 21,
       "selection": {
         "start": {
           "line": 27,
@@ -88,8 +54,8 @@
     },
     {
       "file": "build.gradle",
-      "description": "## neow3j Compiler\n\nWhen the `io.neow3j.gradle-plugin` is applied to this Gradle project, the `neow3jCompiler` clause is enabled. Moreover, the Gradle task `neow3jCompile` is added to the project.\n\nThere are some options that can be configured, and we'll describe in the next steps.",
-      "line": 27,
+      "description": "## neow3j Compiler\n\nWhen the `io.neow3j.gradle-plugin` is applied to a Gradle project, the `neow3jCompiler` clause is enabled. Moreover, the Gradle task `neow3jCompile` is added to the project.\n\nThere are some options that can be configured here. They are describe in the next steps.",
+      "line": 26,
       "selection": {
         "start": {
           "line": 4,
@@ -103,8 +69,8 @@
     },
     {
       "file": "build.gradle",
-      "description": "## Specifying the Smart Contract class\n\nIn the `neow3jCompiler` clause you can set the `className`, in which you specify the fully qualified name of the class that neow3j should compile (as a smart contract).\n\nWe will be focusing on the `BongoCatToken` class for this tour.\n\nThe goal is to quickly compile the smart contract, deploy, and invoke a method on-chain.",
-      "line": 30,
+      "description": "## Specifying the Smart Contract class\n\nIn the `neow3jCompiler` clause you can set the `className`, in which you specify the fully qualified name of the class that neow3j should compile to a smart contract.\n\nThere are several example contracts in the package `io.neow3j.examples.contractdev.contracts`. If you want to compile one of them you can insert its name here. But, we will be focusing on the `FungibleToken` class for this tour.\n\nThe goal is to quickly compile the smart contract, deploy, and invoke a method on-chain.",
+      "line": 29,
       "selection": {
         "start": {
           "line": 30,
@@ -117,13 +83,9 @@
       }
     },
     {
-      "directory": "src/main/java/io/neow3j/examples/contractdev",
-      "description": "## Smart Contract Folders\n\nThe folder `contractdev` within `src/main/java/io/neow3j/examples` contains some examples and code related to the development of smart contracts with [neow3j](https://neow3j.io)."
-    },
-    {
-      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/BongoCatToken.java",
-      "description": "# Smart Contract: BongoCatToken\n\nThe [neow3j](https://neow3j.io) cat usually plays in [bongo drums](https://en.wikipedia.org/wiki/Bongo_drum) with a very special format. His bongo drums were carefully crafted through the years, having the Neo logo format. With that customization the Neo-bongo drum plays special [high-pitched](https://en.wikipedia.org/wiki/Pitch_(music)) sounds and makes the whole developing experience so much more fun!\n\nIt seems that [neow3j](https://neow3j.io) cat is getting a lot of attention and would like to tokenize his special bongo drums.\n\nThat's why `BongoCatToken` smart contract was created. The `BongoCatToken` smart contract follows the [NEP-17 standard](https://github.com/neo-project/proposals), which is the token standard in Neo.\n\nThis smart contract is entirely writen in Java, and provides most of the constructions supported by the `neow3j` compiler.\n\nIn the next steps we'll go through the contract details and the deployment process.",
-      "line": 27,
+      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/FungibleToken.java",
+      "description": "## Fungible Token Contract\n\nThe `FungibleToken` smart contract is a simple token contract that follows the [NEP-17 standard](https://github.com/neo-project/proposals), which is the fungible token standard in Neo.\n\nThis smart contract is entirely writen in Java, and provides most of the constructions supported by the `neow3j` compiler.\n\nIn the next steps we'll go through the contract details.",
+      "line": 24,
       "selection": {
         "start": {
           "line": 27,
@@ -136,38 +98,38 @@
       }
     },
     {
-      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/BongoCatToken.java",
-      "description": "## Owner\n\nIn this example, `Alice` is the smart contract owner (`NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K` address).",
-      "line": 29,
+      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/FungibleToken.java",
+      "description": "## Owner\n\nIn this example, `Alice` is set to be the smart contract owner (`NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K` address).\n\nWe are using a method from the `StringLiteralHelper`, which is used for such occasions where you need to define a global variable from a string literal.",
+      "line": 26,
       "selection": {
         "start": {
-          "line": 29,
+          "line": 26,
           "character": 55
         },
         "end": {
-          "line": 29,
+          "line": 26,
           "character": 89
         }
       }
     },
     {
-      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/BongoCatToken.java",
-      "description": "## Initial Supply\n\nThe smart contract will have the initial supply of 200 million tokens.",
-      "line": 40,
+      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/FungibleToken.java",
+      "description": "## Initial Supply\n\nThe smart contract will have the initial supply of 200 million tokens.\n\nRight below we define the number of decimals the token will have. Because Neo does not support floating point numbers, token amounts will be saved as `amount * 10^8`. The intial supply in fractions would therefore be 2^16.",
+      "line": 31,
       "selection": {
         "start": {
-          "line": 40,
+          "line": 31,
           "character": 1
         },
         "end": {
-          "line": 40,
+          "line": 31,
           "character": 50
         }
       }
     },
     {
-      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/BongoCatToken.java",
-      "description": "## Annotation: @OnDeployment\n\nThe `@OnDeployment` method annotation makes such a method to be executed upon smart contract deployment. Using the annotation doesn't require that the method to be named `deploy()`. It can be named anything the developer would like to call.",
+      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/FungibleToken.java",
+      "description": "## @OnDeployment Annotation\n\nThe `@OnDeployment` annotation makes marks the annotated method such that it will be executed automatically on smart contract deployment. \n\nThe annotated method doesn't need to have the name `deploy()` but can have any name of your choice.",
       "selection": {
         "start": {
           "line": 98,
@@ -178,12 +140,12 @@
           "character": 78
         }
       },
-      "line": 99
+      "line": 89
     },
     {
-      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/BongoCatToken.java",
-      "description": "## Initial Supply to contract Owner\n\nIf the contract is not being updated (i.e., in the first deployment), then the whole initial supply is assigned to the contract owner.",
-      "line": 111,
+      "file": "src/main/java/io/neow3j/examples/contractdev/contracts/FungibleToken.java",
+      "description": "##  Allocate the initial supply to the contract owner\n\nHere, the whole initial supply is allocated to the owner of the contract, but only if it's the first deployment, i.e., the `update` argument is not true.\n\nThe initial amount is multiplied by the token's number of decimals to get the amount of token fractions (i.e., 2^16).",
+      "line": 100,
       "selection": {
         "start": {
           "line": 106,
@@ -197,8 +159,8 @@
     },
     {
       "file": "build.gradle",
-      "description": "# Compile\n\nLet's compile the smart contract class specified by the `className` attribute:\n\n>> ./gradlew neow3jCompile\n\n(click on the command above to execute)\n\nThe following files are generated from the compilation (as shown in the output):\n* `BongoCatToken.nef`: The smart contract binary.\n* `BongoCatToken.manifest.json`: The metadata about the smart contract.\n* `BongoCatToken.nefdbgnfo`: The symbols for smart contract debugging.\n\nNow it's time to deploy.",
-      "line": 30,
+      "description": "# Compile\n\nNow we will compile the FungibleToken contract. We already have it set in the `className` attribute.\n\nTo kickoff the compilation run the following command in the projects root folder.\n\n>> ./gradlew neow3jCompile\n\n(click on the command above to execute)\n\nThe following files are generated from the compilation (as shown in the output):\n* `FungibleToken.nef`: The smart contract binary.\n* `FungibleToken.manifest.json`: The metadata about the smart contract.\n* `FungibleToken.nefdbgnfo`: The symbols for smart contract debugging.\n\nNow it's time to deploy.",
+      "line": 29,
       "selection": {
         "start": {
           "line": 30,
@@ -212,7 +174,7 @@
     },
     {
       "file": "src/main/java/io/neow3j/examples/contractdev/DeployFromFiles.java",
-      "description": "## Options for Deploying Smart Contracts\n\nThere are two ways for deploying a smart contract:\n\n1. Use the [Neo Visual DevTracker](command:neo-playground.focus.neo-visual-devtracker) function to manually deploy the smart contract, specifying the NEF file and the manifest;\n2. Or, use the `DeployFromFiles` class, which is a util just to demonstrate how developers can **programatically** deploy smart contracts.\n\nIn this code tour we will proceed with option (2), since that developers usually need to programatically deploy smart contracts for testing purposes.",
+      "description": "## Options for Deploying Smart Contracts\n\nThere are two ways for deploying a smart contract:\n\n1. Use the *Neo Visual DevTracker* function to manually deploy the smart contract, specifying the NEF file and the manifest;\n2. Or, use the `DeployFromFiles` class, which is a util just to demonstrate how developers can **programatically** deploy smart contracts with neow3j.\n\nIn this code tour we will proceed with option (2), since that allows us to automate the deployment process, e.g., for testing purposes.",
       "line": 21,
       "selection": {
         "start": {
@@ -227,30 +189,29 @@
     },
     {
       "file": "src/main/java/io/neow3j/examples/contractdev/DeployFromFiles.java",
-      "description": "## Specify the NEF and Manifest files\n\nHere, both NEF and manifest are programmatically instantiated in two vars, `nefFile` and `manifest`, respectively.\n\n\n",
-      "line": 43,
+      "description": "## Specify the NEF and Manifest files\n\nHere, the NEF and manifest are loaded from the files that where produced by the compilation.\n\n\n",
       "selection": {
         "start": {
           "line": 35,
           "character": 1
         },
         "end": {
-          "line": 43,
+          "line": 44,
           "character": 10
         }
       }
     },
     {
       "file": "src/main/java/io/neow3j/examples/contractdev/DeployFromFiles.java",
-      "description": "## Build the Transaction to Deploy\n\nBased on the instantiated `nefFile` and `manifest`, a transaction is built, signed, and sent to the `neo-express` Neo node instance.",
-      "line": 52,
+      "description": "## Build the Transaction to Deploy\n\nBased on the `nefFile` and `manifest`, a transaction is built. The transaction makes a call to the `deploy` method of the `ContractManagement` contract. This is a native contract on Neo and handles contract deployment.\n\nThe transaction is signed and send to the Neo node.",
+      "line": 53,
       "selection": {
         "start": {
-          "line": 45,
+          "line": 48,
           "character": 1
         },
         "end": {
-          "line": 52,
+          "line": 53,
           "character": 25
         }
       }
@@ -267,7 +228,7 @@
           "character": 43
         }
       },
-      "description": "# Deploy the Smart Contract\n\nNow, let's run the class to effectily deploy the smart contract.\n\n[Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/contractdev/DeployFromFiles.java\") to run.\n\n**Troubleshooting:**\n\n* In case of \"Insufficient GAS\", [click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22GAS%22%2C%20%22amount%22%3A%20100000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to transfer GAS to `Alice` wallet.\n* In case of \"Failed to connect\" or \"Connection refused\", [click here](command:neo3-visual-devtracker.express.run) to start he `neo-express` Neo node.",
+      "description": "# Deploy the Smart Contract\n\nNow, let's run the class to effectively deploy the smart contract.\n\n[Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/contractdev/DeployFromFiles.java\") to run.\n\nYou will see the hash of the transaction in which the deployment was issued and the hash/address of the deployed contract.\n\n**Troubleshooting:**\n\n* In case of \"Insufficient GAS\", [click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22GAS%22%2C%20%22amount%22%3A%20100000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to transfer GAS to `Alice` wallet.\n* In case of \"Failed to connect\" or \"Connection refused\", [click here](command:neo3-visual-devtracker.express.run) to start the Neo node.",
       "line": 23
     }
   ]

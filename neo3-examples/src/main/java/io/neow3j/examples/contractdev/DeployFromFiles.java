@@ -27,12 +27,12 @@ public class DeployFromFiles {
 
         // Setup an account and wallet for signing the transaction. Make sure that the account has a
         // sufficient GAS balance to pay for the deployment.
-        Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
+        Account a = Account.fromWIF("L24Qst64zASL2aLEKdJtRLnbnTbqpcRNWkWJ3yhDh2CLUtLdwYK2");
         Wallet w = Wallet.withAccounts(a);
 
         // Retrieve the contract files:
 
-        String contractName = "BongoCatToken";
+        String contractName = "FungibleToken";
         // NEF file:
         File contractNefFile = Paths.get("build", "neow3j", contractName + ".nef").toFile();
         NefFile nefFile = NefFile.readFromFile(contractNefFile);
