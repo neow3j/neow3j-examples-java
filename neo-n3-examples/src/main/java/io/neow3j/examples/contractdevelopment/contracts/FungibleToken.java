@@ -95,9 +95,9 @@ public class FungibleToken {
                 throw new Exception("Contract was already deployed.");
             }
             // Initialize supply
-            Storage.put(sc, totalSupplyKey, initialSupply * decimals);
+            Storage.put(sc, totalSupplyKey, initialSupply);
             // And allocate all tokens to the contract owner.
-            assetMap.put(owner.toString(), initialSupply * decimals);
+            assetMap.put(owner.toString(), initialSupply);
         }
     }
 
