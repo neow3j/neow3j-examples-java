@@ -9,13 +9,16 @@ import java.util.List;
 
 import static io.neow3j.examples.Constants.NEOW3J;
 
-// Note that this example does not work with the Neo Visual Devtracker and Neo Express because there
-// is no wallet that can be opened on Neo Express nodes.
 public class GetWalletState {
 
     public static void main(String[] args) throws IOException {
 
-        NeoOpenWallet resp = NEOW3J.openWallet("wallet.json", "neo").send();
+        // Note: Before you can run this example successful with the Neo Devtracker and Neo Express,
+        // you will have to export Alice' wallet with the following commmand:
+        // `neoxp wallet export Alice`
+        // When prompted, input the password "neo".
+        
+        NeoOpenWallet resp = NEOW3J.openWallet("Alice.wallet.json", "neo").send();
         if (resp.hasError()) {
             System.out.println("Couldn't open wallet.");
             return;
