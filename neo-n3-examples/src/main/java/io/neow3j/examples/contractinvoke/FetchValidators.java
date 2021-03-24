@@ -1,23 +1,18 @@
 package io.neow3j.examples.contractinvoke;
 
-import io.neow3j.contract.NeoToken;
-import io.neow3j.crypto.ECKeyPair.ECPublicKey;
-import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.http.HttpService;
-import io.neow3j.utils.Numeric;
-
+import static io.neow3j.examples.Constants.NEOW3J;
 import java.io.IOException;
 import java.util.List;
+import io.neow3j.contract.NeoToken;
+import io.neow3j.crypto.ECKeyPair.ECPublicKey;
+import io.neow3j.utils.Numeric;
 
 public class FetchValidators {
 
     public static void main(String[] args) throws IOException {
 
-        // Set up the connection to the neo-node.
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
-
         // Setup the NeoToken class with a node connection for further calls to the contract.
-        NeoToken neo = new NeoToken(neow3j);
+        NeoToken neo = new NeoToken(NEOW3J);
 
         // Get the public keys of nodes that are validators of the network.
         List<ECPublicKey> validators = neo.getNextBlockValidators();

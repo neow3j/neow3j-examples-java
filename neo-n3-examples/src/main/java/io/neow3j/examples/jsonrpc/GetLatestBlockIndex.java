@@ -1,17 +1,15 @@
 package io.neow3j.examples.jsonrpc;
 
-import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.http.HttpService;
-
 import java.io.IOException;
 import java.math.BigInteger;
+
+import static io.neow3j.examples.Constants.NEOW3J;
 
 public class GetLatestBlockIndex {
 
     public static void main(String[] args) throws IOException {
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        BigInteger blockCount = neow3j.getBlockCount()
+        BigInteger blockCount = NEOW3J.getBlockCount()
                 .send()
                 .getBlockIndex();
 
