@@ -62,15 +62,8 @@
             "command": "neoxp",
             "type": "shell",
             "args": [
-                "reset"
-            ]
-        },
-        {
-            "label": "neoxp-stop",
-            "command": "neoxp",
-            "type": "shell",
-            "args": [
-                "stop"
+                "reset",
+                "-f"
             ]
         }
     ],
