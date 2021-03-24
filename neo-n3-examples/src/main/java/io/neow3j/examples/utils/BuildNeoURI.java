@@ -1,4 +1,4 @@
-package io.neow3j.examples.contractinvoke;
+package io.neow3j.examples.utils;
 
 import io.neow3j.contract.Hash160;
 import io.neow3j.contract.NeoToken;
