@@ -1,0 +1,17 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Using the RPC API of a Neo node",
+  "steps": [
+    {
+      "title": "Introduction",
+      "description": "## Using the RPC API to interact with a neo-node\n\nIn this tour you will be guided through several examples that show how to fetch Neo blockchain information from a Neo node.\n\nThe tour uses the [*Neo Visual Devtracker*](https://marketplace.visualstudio.com/items?itemName=ngd-seattle.neo-visual-devtracker) VSCode extenstion to spin up and manage a local Neo blockchain. Make sure you have the latest version installed.  \n**Neo Playground:** If you are using *Neo Playground*, the *Neo Visual Devtracker* is already installed. \n\n"
+    },
+    {
+      "file": "default.neo-express",
+      "description": "## Configuring Neo Visual Devtracker\n\nTo work with the devtracker we need to setup a blockchain configuration. The configuration we use for this tour is contained in this file (`default.neo-express`). The configuration defines consensus nodes, wallets and a few other settings. For this tour we configure one consensus node and two accounts with the names *Alice* and *Bob* (see `wallets` after the consensus node definition). The consensus node uses the private and public key of the *Alice* account.\n\nIn the Neo blockchain, all participating consensus nodes together form a multi-sig account from their public keys that serves as the *genesis* account. This is the account that holds all NEO and GAS at the beginning of the blockchain. Since we only configured one consensus node the *genesis* account is made up only from the public key of this single node. Nevertheless, we will need it to distributed NEO and GAS to *Alice* or *Bob*.\n\n\nBut first, let's start the configured blockchain network, i.e. a single node:\n  * [Click here](command:neo3-visual-devtracker.express.run) to run it.\n  * Wait a bit until a terminal tab is opened with outputs of the running node.\n  * You should see a new block being output every 15 seconds.\n\nOnce the node is running, execute the following commands to transfer NEO and GAS from the *genesis* account to *Alice*.\n\n* [Click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22NEO%22%2C%20%22amount%22%3A%201000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to issue a transaction to transfer 1000 NEO from 'genesis' to \"Alice\" account. You will see a balloon with the submitted transaction.\n* [Click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22GAS%22%2C%20%22amount%22%3A%20100000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to transfer 100000 GAS from 'genesis' to \"Alice\" account. ",
+      "line": 2,
+      "title": "Configuring Neo Visual Devtracker"
+    }
+  ],
+  "description": "In this tour you will be guide through several examples that show how to fetch infromation from a neo-node by using the remote procedure calls (RPC) API."
+}
