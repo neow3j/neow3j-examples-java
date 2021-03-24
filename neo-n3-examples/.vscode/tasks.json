@@ -46,6 +46,18 @@
             ]
         },
         {
+            "label": "transfer-NEO-from-genesis-to-Alice",
+            "command": "neoxp",
+            "type": "shell",
+            "args": [
+                "transfer",
+                "1000",
+                "NEO",
+                "genesis",
+                "Alice"
+            ]
+        },
+        {
             "label": "transfer-GAS-from-Alice-to-Bob",
             "command": "neoxp",
             "type": "shell",
@@ -55,6 +67,18 @@
                 "GAS",
                 "Alice",
                 "Bob"
+            ]
+        },
+        {
+            "label": "transfer-GAS-from-genesis-to-Alice",
+            "command": "neoxp",
+            "type": "shell",
+            "args": [
+                "transfer",
+                "1000",
+                "GAS",
+                "genesis",
+                "Alice"
             ]
         },
         {
