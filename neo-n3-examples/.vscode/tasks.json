@@ -39,8 +39,8 @@
             "type": "shell",
             "args": [
                 "transfer",
-                "NEO",
                 "1000",
+                "NEO",
                 "Alice",
                 "Bob"
             ]
@@ -51,8 +51,8 @@
             "type": "shell",
             "args": [
                 "transfer",
-                "GAS",
                 "1000",
+                "GAS",
                 "Alice",
                 "Bob"
             ]
