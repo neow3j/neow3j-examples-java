@@ -1,18 +1,15 @@
 package io.neow3j.examples.jsonrpc;
 
-import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.methods.response.NeoBlock;
-import io.neow3j.protocol.http.HttpService;
-
+import static io.neow3j.examples.Constants.NEOW3J;
 import java.io.IOException;
 import java.math.BigInteger;
+import io.neow3j.protocol.core.methods.response.NeoBlock;
 
 public class GetBlock {
 
     public static void main(String[] args) throws IOException {
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        NeoBlock block = neow3j.getBlock(new BigInteger("2"), true)
+        NeoBlock block = NEOW3J.getBlock(new BigInteger("2"), true)
                 .send()
                 .getBlock();
 

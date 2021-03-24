@@ -1,36 +1,25 @@
-package io.neow3j.examples.contractdev;
+package io.neow3j.examples.contractdevelopment;
 
-import io.neow3j.contract.ContractManagement;
-import io.neow3j.contract.NefFile;
-import io.neow3j.contract.Hash160;
-import io.neow3j.contract.SmartContract;
-import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.ObjectMapperFactory;
-import io.neow3j.protocol.core.methods.response.ContractManifest;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
-import io.neow3j.protocol.http.HttpService;
-import io.neow3j.transaction.Signer;
-import io.neow3j.wallet.Account;
-import io.neow3j.wallet.Wallet;
+import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.WALLET;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Paths;
+import io.neow3j.contract.ContractManagement;
+import io.neow3j.contract.Hash160;
+import io.neow3j.contract.NefFile;
+import io.neow3j.contract.SmartContract;
+import io.neow3j.protocol.ObjectMapperFactory;
+import io.neow3j.protocol.core.methods.response.ContractManifest;
+import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.transaction.Signer;
 
 // Shows how to read a smart contract's files from the disk and deployed it on through a local
 // neo-node.
 public class DeployFromFiles {
 
     public static void main(String[] args) throws Throwable {
-
-        // Set up the connection to the neo-node
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
-
-        // Setup an account and wallet for signing the transaction. Make sure that the account has a
-        // sufficient GAS balance to pay for the deployment.
-        Account a = Account.fromWIF("L24Qst64zASL2aLEKdJtRLnbnTbqpcRNWkWJ3yhDh2CLUtLdwYK2");
-        Wallet w = Wallet.withAccounts(a);
-
-        // Retrieve the contract files:
 
         String contractName = "FungibleToken";
         // NEF file:
@@ -45,10 +34,10 @@ public class DeployFromFiles {
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
         // the neo-node.
-        NeoSendRawTransaction response = new ContractManagement(neow3j)
+        NeoSendRawTransaction response = new ContractManagement(NEOW3J)
                 .deploy(nefFile, manifest)
-                .signers(Signer.global(a.getScriptHash()))
-                .wallet(w)
+                .signers(Signer.global(ALICE.getScriptHash()))
+                .wallet(WALLET)
                 .sign()
                 .send();
 
@@ -59,7 +48,7 @@ public class DeployFromFiles {
             System.out.printf("The contract was deployed in transaction %s\n", 
                     response.getSendRawTransaction().getHash());
             Hash160 contractHash = SmartContract.getContractHash(
-                    a.getScriptHash(), nefFile.getCheckSumAsInteger(), manifest.getName());
+                    ALICE.getScriptHash(), nefFile.getCheckSumAsInteger(), manifest.getName());
             System.out.printf("Script hash of the deployed contract: %s\n", contractHash.toString());
             System.out.printf("Contract Address: %s\n", contractHash.toAddress());
         }

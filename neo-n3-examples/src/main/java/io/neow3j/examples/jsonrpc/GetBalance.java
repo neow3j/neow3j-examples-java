@@ -1,22 +1,18 @@
 package io.neow3j.examples.jsonrpc;
 
+import static io.neow3j.examples.Constants.NEOW3J;
 import static java.util.Collections.singletonList;
-
 import io.neow3j.contract.FungibleToken;
 import io.neow3j.contract.Hash160;
-import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.http.HttpService;
 import io.neow3j.wallet.Account;
 
 public class GetBalance {
 
     public static void main(String[] args) throws Throwable {
-        // Set up the connection to the neo-node.
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
         // Setup a wrapper to invoke the contract.
         FungibleToken contract = new FungibleToken(
-            new Hash160("0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"), neow3j);
+            new Hash160("0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"), NEOW3J);
 
         Account a = Account.fromWIF("L24Qst64zASL2aLEKdJtRLnbnTbqpcRNWkWJ3yhDh2CLUtLdwYK2");
         Account committee = Account.createMultiSigAccount(singletonList(a.getECKeyPair().getPublicKey()), 1);

@@ -2,22 +2,26 @@ package io.neow3j.examples.jsonrpc;
 
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.NeoToken;
-import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoAddress;
-import io.neow3j.protocol.http.HttpService;
-
+import io.neow3j.protocol.core.methods.response.NeoOpenWallet;
 import java.io.IOException;
 import java.util.List;
 
+import static io.neow3j.examples.Constants.NEOW3J;
+
+// Note that this example does not work with the Neo Visual Devtracker and Neo Express because there
+// is no wallet that can be opened on Neo Express nodes.
 public class GetWalletState {
 
     public static void main(String[] args) throws IOException {
-        // The consensus node runs on port 40332
-        // To display the client 1 wallet state, change the port to 10332
-        // To display the client 2 wallet state, change the port to 20332
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        List<NeoAddress> addresses = neow3j.listAddress()
+        NeoOpenWallet resp = NEOW3J.openWallet("wallet.json", "neo").send();
+        if (resp.hasError()) {
+            System.out.println("Couldn't open wallet.");
+            return;
+        }
+
+        List<NeoAddress> addresses = NEOW3J.listAddress()
                 .send()
                 .getAddresses();
 
@@ -26,11 +30,11 @@ public class GetWalletState {
         if (addresses != null) {
             System.out.println("Nr of addresses in your wallet: " + addresses.size());
             if (!addresses.isEmpty()) {
-                String neoBalance = neow3j.getWalletBalance(NeoToken.SCRIPT_HASH.toString())
+                String neoBalance = NEOW3J.getWalletBalance(NeoToken.SCRIPT_HASH.toString())
                         .send()
                         .getWalletBalance().getBalance();
 
-                String gasBalance = neow3j.getWalletBalance(GasToken.SCRIPT_HASH.toString())
+                String gasBalance = NEOW3J.getWalletBalance(GasToken.SCRIPT_HASH.toString())
                         .send()
                         .getWalletBalance().getBalance();
 
@@ -39,7 +43,7 @@ public class GetWalletState {
                 System.out.println("Gas balance of your wallet: " + gasBalance);
             }
         } else {
-            System.out.println("The wallet access is denied. Open your wallet first with the file 'OpenWallets.java'.");
+            System.out.println("Wallet access is denied.");
         }
 
         System.out.println("####################");

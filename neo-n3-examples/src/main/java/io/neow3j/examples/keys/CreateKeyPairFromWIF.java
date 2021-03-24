@@ -1,18 +1,24 @@
 package io.neow3j.examples.keys;
 
 import io.neow3j.crypto.ECKeyPair;
-import io.neow3j.crypto.WIF;
 import io.neow3j.utils.Numeric;
+import io.neow3j.wallet.Account;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+
+import static io.neow3j.examples.Constants.ALICE;
 
 public class CreateKeyPairFromWIF {
 
     public static void main(String[] args) {
-        ECKeyPair ecKeyPair = ECKeyPair.create(WIF.getPrivateKeyFromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda"));
+        ECKeyPair ecKeyPair = ALICE.getECKeyPair();
         BigInteger privKeyBigInt = ecKeyPair.getPrivateKey().getInt();
         BigInteger pubKeyBigInt = new BigInteger(1, ecKeyPair.getPublicKey().getEncoded(true));
 
+        Account multiSigAcc = Account.createMultiSigAccount(Arrays.asList(ecKeyPair.getPublicKey()), 1);
+        System.out.println(Numeric.toHexStringNoPrefix(multiSigAcc.getVerificationScript().getScript()));
+        System.out.println(multiSigAcc.getAddress());
         System.out.println("\n####################");
         System.out.println("Private Key");
         System.out.println("BigInteger: " + privKeyBigInt);

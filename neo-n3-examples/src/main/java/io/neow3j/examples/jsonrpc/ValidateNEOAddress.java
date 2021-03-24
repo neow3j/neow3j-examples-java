@@ -1,18 +1,15 @@
 package io.neow3j.examples.jsonrpc;
 
-import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.http.HttpService;
-
+import static io.neow3j.examples.Constants.NEOW3J;
 import java.io.IOException;
 
 public class ValidateNEOAddress {
 
     public static void main(String[] args) throws IOException {
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
         String address = "NWcx4EfYdfqn5jNjDz8AHE6hWtWdUGDdmy";
 
-        Boolean isValid = neow3j.validateAddress(address)
+        Boolean isValid = NEOW3J.validateAddress(address)
                 .send()
                 .getValidation().isValid();
 

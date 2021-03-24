@@ -1,4 +1,4 @@
-package io.neow3j.examples.contractdev.contracts;
+package io.neow3j.examples.contractdevelopment.contracts;
 
 import static io.neow3j.devpack.Helper.toByteString;
 import static io.neow3j.devpack.Helper.toInt;

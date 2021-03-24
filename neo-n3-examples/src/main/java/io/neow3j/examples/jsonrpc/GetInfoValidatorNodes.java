@@ -1,18 +1,17 @@
 package io.neow3j.examples.jsonrpc;
 
-import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoGetNextBlockValidators.Validator;
-import io.neow3j.protocol.http.HttpService;
 
 import java.io.IOException;
 import java.util.List;
 
+import static io.neow3j.examples.Constants.NEOW3J;
+
 public class GetInfoValidatorNodes {
 
     public static void main(String[] args) throws IOException {
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
 
-        List<Validator> validators = neow3j.getNextBlockValidators()
+        List<Validator> validators = NEOW3J.getNextBlockValidators()
                 .send()
                 .getResult();
 

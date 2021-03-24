@@ -1,30 +1,20 @@
 package io.neow3j.examples.contractinvoke;
 
+import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.WALLET;
 import io.neow3j.contract.Hash256;
 import io.neow3j.contract.NeoURI;
 import io.neow3j.contract.TransactionBuilder;
-import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
-import io.neow3j.protocol.http.HttpService;
 import io.neow3j.utils.Await;
-import io.neow3j.wallet.Account;
-import io.neow3j.wallet.Wallet;
-
-import static java.util.Collections.singletonList;
 
 public class TransferFromNeoURI {
 
     public static void main(String[] args) throws Throwable {
-        // Set up the connection to the neo-node
-        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:40332"));
-        Account a = Account.fromWIF("L3kCZj6QbFPwbsVhxnB8nUERDy4mhCSrWJew4u5Qh5QmGMfnCTda");
-        Account multiSigAccount = Account.createMultiSigAccount(
-                singletonList(a.getECKeyPair().getPublicKey()), 1);
-        Wallet w = Wallet.withAccounts(multiSigAccount, a);
 
-        TransactionBuilder b = NeoURI.fromURI("neo:NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj?asset=neo&amount=1")
-                .neow3j(neow3j)
-                .wallet(w)
+        TransactionBuilder b = NeoURI.fromURI("neo:NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K?asset=neo&amount=1")
+                .neow3j(NEOW3J)
+                .wallet(WALLET)
                 .buildTransfer();
         NeoSendRawTransaction response = b.sign().send();
 
@@ -34,8 +24,8 @@ public class TransferFromNeoURI {
         } else {
             Hash256 txHash = response.getSendRawTransaction().getHash();
             System.out.printf("Successfully transmitted the transaction with hash '%s'.%n", txHash);
-            Await.waitUntilTransactionIsExecuted(txHash, neow3j);
-            System.out.println("Tx: " + neow3j.getTransaction(txHash).send().getTransaction().toString());
+            Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
+            System.out.println("Tx: " + NEOW3J.getTransaction(txHash).send().getTransaction().toString());
             System.out.println("\n####################");
         }
     }
