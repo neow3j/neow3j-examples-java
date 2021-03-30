@@ -1,8 +1,6 @@
 package io.neow3j.examples.jsonrpc;
 
 import io.neow3j.contract.NeoToken;
-import io.neow3j.protocol.core.methods.response.Transaction;
-import io.neow3j.utils.Await;
 
 import java.io.IOException;
 
