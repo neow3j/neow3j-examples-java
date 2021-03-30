@@ -3,6 +3,7 @@ package io.neow3j.examples.contractdevelopment;
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Paths;

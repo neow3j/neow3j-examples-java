@@ -4,6 +4,7 @@ import io.neow3j.contract.GasToken;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.protocol.core.methods.response.NeoAddress;
 import io.neow3j.protocol.core.methods.response.NeoOpenWallet;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -13,14 +14,10 @@ public class GetWalletState {
 
     public static void main(String[] args) throws IOException {
 
-        // Note: Before you can run this example successful with the Neo Devtracker and Neo Express,
-        // you will have to export Alice' wallet with the following commmand:
-        // `neoxp wallet export Alice`
-        // When prompted, input the password "neo".
-        
         NeoOpenWallet resp = NEOW3J.openWallet("Alice.wallet.json", "neo").send();
         if (resp.hasError()) {
-            System.out.println("Couldn't open wallet.");
+            System.out.println("Couldn't open wallet. Error message was: '"
+                    + resp.getError().getMessage() + "'");
             return;
         }
 

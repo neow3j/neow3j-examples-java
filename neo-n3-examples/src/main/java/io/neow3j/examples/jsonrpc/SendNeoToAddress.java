@@ -6,6 +6,7 @@ import io.neow3j.utils.Await;
 
 import java.io.IOException;
 
+import static io.neow3j.examples.Constants.BOB;
 import static io.neow3j.examples.Constants.NEOW3J;
 
 public class SendNeoToAddress {
@@ -13,19 +14,14 @@ public class SendNeoToAddress {
     public static void main(String[] args) throws IOException {
 
         String assetId = NeoToken.SCRIPT_HASH.toString();
-        String toAddress = "NWcx4EfYdfqn5jNjDz8AHE6hWtWdUGDdmy";
+        String toAddress = BOB.getAddress();
 
-        Transaction tx = NEOW3J
-                .sendToAddress(assetId, toAddress, "2400")
+        NEOW3J.sendToAddress(assetId, toAddress, "2")
                 .send()
                 .getSendToAddress();
-        Await.waitUntilTransactionIsExecuted(tx.getHash(), NEOW3J);
 
         System.out.println("\n####################");
-        System.out.println("Tx:    " + tx.getHash());
-        System.out.println("Asset: " + assetId);
-        System.out.println("From:  " + tx.getSender());
-        System.out.println("To:    " + toAddress);
+        System.out.println("Transaction issued.");
         System.out.println("####################");
     }
 }
