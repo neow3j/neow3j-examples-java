@@ -192,14 +192,15 @@
       "description": "## Specify the NEF and Manifest files\n\nHere, the NEF and manifest are loaded from the files that where produced by the compilation.\n\n\n",
       "selection": {
         "start": {
-          "line": 35,
+          "line": 25,
           "character": 1
         },
         "end": {
-          "line": 43,
+          "line": 34,
           "character": 10
         }
-      }
+      },
+      "line": null
     },
     {
       "file": "src/main/java/io/neow3j/examples/contractdevelopment/DeployFromFiles.java",
@@ -228,7 +229,7 @@
         }
       },
       "description": "# Deploy the Smart Contract\n\nNow, let's run the class to effectively deploy the smart contract.\n\n[Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/contractdevelopment/DeployFromFiles.java\") to run.\n\nYou will see the hash of the transaction in which the deployment was issued and the hash/address of the deployed contract.\n\n**Troubleshooting:**\n\n* In case of \"Insufficient GAS\", [click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22GAS%22%2C%20%22amount%22%3A%20100000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to transfer GAS to `Alice` wallet.\n* In case of \"Failed to connect\" or \"Connection refused\", [click here](command:neo3-visual-devtracker.express.run) to start the Neo node.",
-      "line": 22
+      "line": 23
     }
   ]
 }
