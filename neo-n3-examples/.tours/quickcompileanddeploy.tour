@@ -129,7 +129,7 @@
     },
     {
       "file": "src/main/java/io/neow3j/examples/contractdevelopment/contracts/FungibleToken.java",
-      "description": "## @OnDeployment Annotation\n\nThe `@OnDeployment` annotation makes marks the annotated method such that it will be executed automatically on smart contract deployment. \n\nThe annotated method doesn't need to have the name `deploy()` but can have any name of your choice.",
+      "description": "## @OnDeployment Annotation\n\nThe `@OnDeployment` annotation marks the annotated method such that it will be executed automatically on smart contract deployment. \n\nThe annotated method doesn't need to have the name `deploy()` but can have any name of your choice.",
       "selection": {
         "start": {
           "line": 98,
