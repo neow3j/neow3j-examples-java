@@ -4,7 +4,7 @@
   "steps": [
     {
       "directory": "",
-      "description": "## Your first Smart Contract with neow3j!\n\nThis tour will guide you through the process of compiling and deploying your **first** neow3j smart contract to Neo!\n\nThe tour uses the [*Neo Visual Devtracker*](https://marketplace.visualstudio.com/items?itemName=ngd-seattle.neo-visual-devtracker) VSCode extenstion to spin up and manage a local Neo blockchain. Make sure you have the latest version installed.  \n**Neo Playground:** If you are using *Neo Playground*, the *Neo Visual Devtracker* is already installed. ",
+      "description": "## Your first Smart Contract with neow3j!\n\nThis tour will guide you through the process of compiling and deploying your **first** neow3j smart contract to Neo!\n\nThe tour uses the [*Neo Visual Devtracker*](https://marketplace.visualstudio.com/items?itemName=ngd-seattle.neo3-visual-tracker) VSCode extenstion to spin up and manage a local Neo blockchain. Make sure you have the latest version installed.  \n**Neo Playground:** If you are using *Neo Playground*, the *Neo Visual Devtracker* is already installed. ",
       "title": "Introduction"
     },
     {
