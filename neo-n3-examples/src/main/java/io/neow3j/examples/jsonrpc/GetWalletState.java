@@ -30,11 +30,11 @@ public class GetWalletState {
         if (addresses != null) {
             System.out.println("Nr of addresses in your wallet: " + addresses.size());
             if (!addresses.isEmpty()) {
-                String neoBalance = NEOW3J.getWalletBalance(NeoToken.SCRIPT_HASH.toString())
+                String neoBalance = NEOW3J.getWalletBalance(NeoToken.SCRIPT_HASH)
                         .send()
                         .getWalletBalance().getBalance();
 
-                String gasBalance = NEOW3J.getWalletBalance(GasToken.SCRIPT_HASH.toString())
+                String gasBalance = NEOW3J.getWalletBalance(GasToken.SCRIPT_HASH)
                         .send()
                         .getWalletBalance().getBalance();
 

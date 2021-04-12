@@ -1,5 +1,6 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
+import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.Runtime;
@@ -13,7 +14,7 @@ public class NameService {
 
     static StorageContext ctx = Storage.getStorageContext();
 
-    public static byte[] query(String domain) {
+    public static ByteString query(String domain) {
         return Storage.get(ctx, domain);
     }
 
@@ -25,7 +26,7 @@ public class NameService {
         if (!Runtime.checkWitness(ownerAddrHash)) {
             return false;
         }
-        byte[] value = Storage.get(ctx, domain);
+        ByteString value = Storage.get(ctx, domain);
         if (value != null) {
             return false;
         }
@@ -37,7 +38,7 @@ public class NameService {
         if (!Runtime.checkWitness(to)) {
             return false;
         }
-        byte[] from = Storage.get(ctx, domain);
+        ByteString from = Storage.get(ctx, domain);
         if (from == null) {
             return false;
         }
@@ -50,7 +51,7 @@ public class NameService {
     }
 
     public static boolean delete(String domain) {
-        byte[] owner = Storage.get(ctx, domain);
+        ByteString owner = Storage.get(ctx, domain);
         if (owner == null) {
             return false;
         }

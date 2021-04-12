@@ -13,7 +13,7 @@ public class BuildNeoURI {
         NeoURI uri = new NeoURI()
                 .amount(22)
                 .asset(NeoToken.SCRIPT_HASH)
-                .toAddress(receiver);
+                .to(receiver);
 
         String uriAsString = uri.buildURI().getURIAsString();
 

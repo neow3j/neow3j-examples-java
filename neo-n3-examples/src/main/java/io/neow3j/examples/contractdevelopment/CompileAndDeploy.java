@@ -20,8 +20,7 @@ public class CompileAndDeploy {
     public static void main(String[] args) throws Throwable {
 
         // Compile the BongotCatToken contract and construct a SmartContract object from it.
-        CompilationUnit res = new Compiler()
-                .compileClass(FungibleToken.class.getCanonicalName());
+        CompilationUnit res = new Compiler().compile(FungibleToken.class.getCanonicalName());
 
         // Write contract (compiled, NEF) to the disk
         Path buildNeow3jPath = Paths.get("build", "neow3j");

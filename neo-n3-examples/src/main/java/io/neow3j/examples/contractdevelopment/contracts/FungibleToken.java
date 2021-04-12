@@ -48,7 +48,7 @@ public class FungibleToken {
     }
 
     static int getTotalSupply() {
-        return Helper.toInt(Storage.get(sc, totalSupplyKey));
+        return Storage.get(sc, totalSupplyKey).toInteger();
     }
 
     public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data)
@@ -101,9 +101,9 @@ public class FungibleToken {
         }
     }
 
-    public static void update(byte[] script, String manifest) throws Exception {
+    public static void update(ByteString script, String manifest) throws Exception {
         throwIfSignerIsNotOwner();
-        if (script.length == 0 && manifest.length() == 0) {
+        if (script.length() == 0 && manifest.length() == 0) {
             throw new Exception("The new contract script and manifest must not be empty.");
         }
         ContractManagement.update(script, manifest);
@@ -149,7 +149,7 @@ public class FungibleToken {
     }
 
     private static int getBalance(Hash160 key) {
-        return Helper.toInt(assetMap.get(key.toByteArray()));
+        return assetMap.get(key.toByteArray()).toInteger();
     }
 
 }

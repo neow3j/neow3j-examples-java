@@ -1,20 +1,20 @@
 package io.neow3j.examples.jsonrpc;
 
-import io.neow3j.contract.NeoToken;
-
-import java.io.IOException;
-
 import static io.neow3j.examples.Constants.BOB;
 import static io.neow3j.examples.Constants.NEOW3J;
+import java.io.IOException;
+import java.math.BigInteger;
+import io.neow3j.contract.Hash160;
+import io.neow3j.contract.NeoToken;
 
 public class SendNeoToAddress {
 
     public static void main(String[] args) throws IOException {
 
-        String assetId = NeoToken.SCRIPT_HASH.toString();
-        String toAddress = BOB.getAddress();
+        Hash160 neoToken = NeoToken.SCRIPT_HASH;
+        Hash160 receiver = BOB.getScriptHash();
 
-        NEOW3J.sendToAddress(assetId, toAddress, "2")
+        NEOW3J.sendToAddress(neoToken, receiver, new BigInteger("2"))
                 .send()
                 .getSendToAddress();
 
