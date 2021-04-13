@@ -5,6 +5,8 @@ import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.transaction.Signer.calledByEntry;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.Hash256;
 import io.neow3j.contract.NeoToken;
@@ -19,7 +21,7 @@ public class VoteForValidator {
         GasToken gasToken = new GasToken(NEOW3J);
 
         // The voting account needs NEO because only NEO holders can participate in governance.
-        Hash256 txHash = neoToken.transfer(WALLET, ALICE.getAddress(), new BigDecimal("100000"))
+        Hash256 txHash = neoToken.transfer(WALLET, ALICE.getScriptHash(), new BigInteger("100000"))
             .sign()
             .send()
             .getSendRawTransaction().getHash();
@@ -28,7 +30,7 @@ public class VoteForValidator {
         System.out.println("Voting account funded with Neo.");
 
         // The voting account needs GAS to pay for transactions.
-        txHash = gasToken.transfer(WALLET, ALICE.getAddress(), new BigDecimal("100000"))
+        txHash = gasToken.transfer(WALLET, ALICE.getScriptHash(), new BigInteger("100000"))
             .sign()
             .send()
             .getSendRawTransaction().getHash();
