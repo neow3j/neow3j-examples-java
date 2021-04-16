@@ -8,13 +8,13 @@ import io.neow3j.devpack.StorageContext;
 
 // A name service contract that allows anyone to register a domain name under her address.
 @ManifestExtra(key = "name", value = "NameService")
-@ManifestExtra(key = "author", value = "neow3j")
-public class NameService {
+@ManifestExtra(key = "author", value = "AxLabs")
+public class NNS {
 
     static StorageContext ctx = Storage.getStorageContext();
 
     public static byte[] query(String domain) {
-        return Storage.get(ctx, domain);
+        return Storage.get(ctx, domain).toByteArray();
     }
 
     public static boolean register(String domain, byte[] owner) {
@@ -25,7 +25,7 @@ public class NameService {
         if (!Runtime.checkWitness(ownerAddrHash)) {
             return false;
         }
-        byte[] value = Storage.get(ctx, domain);
+        byte[] value = Storage.get(ctx, domain).toByteArray();
         if (value != null) {
             return false;
         }
@@ -37,7 +37,7 @@ public class NameService {
         if (!Runtime.checkWitness(to)) {
             return false;
         }
-        byte[] from = Storage.get(ctx, domain);
+        byte[] from = Storage.get(ctx, domain).toByteArray();
         if (from == null) {
             return false;
         }
@@ -50,7 +50,7 @@ public class NameService {
     }
 
     public static boolean delete(String domain) {
-        byte[] owner = Storage.get(ctx, domain);
+        byte[] owner = Storage.get(ctx, domain).toByteArray();
         if (owner == null) {
             return false;
         }
