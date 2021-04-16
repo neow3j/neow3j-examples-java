@@ -1,8 +1,8 @@
 # neow3j Examples
 
-This repository contains Jaav examples for [neow3j](https://github.com/neow3j/neow3j). Its goal is
+This repository contains Java examples for [neow3j](https://github.com/neow3j/neow3j). Its goal is
 to give you a better understanding on how to use neow3j to develop dApps and smart contracts for 
-Neo.
+[Neo](https://neo.org/).
 
 The directory *neo-n3-examples* contains examples for Neo N3 and *neo-legacy-examples* contains
 examples for Neo Legacy. More information about the examples can be found inside the directories.
