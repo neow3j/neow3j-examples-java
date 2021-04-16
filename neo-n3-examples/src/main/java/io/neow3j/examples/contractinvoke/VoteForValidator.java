@@ -4,14 +4,14 @@ import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.transaction.Signer.calledByEntry;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.Hash256;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
 import io.neow3j.utils.Await;
+
+import java.math.BigInteger;
 
 public class VoteForValidator {
 
@@ -21,19 +21,25 @@ public class VoteForValidator {
         GasToken gasToken = new GasToken(NEOW3J);
 
         // The voting account needs NEO because only NEO holders can participate in governance.
-        Hash256 txHash = neoToken.transfer(WALLET, ALICE.getScriptHash(), new BigInteger("100000"))
-            .sign()
-            .send()
-            .getSendRawTransaction().getHash();
+        Hash256 txHash = neoToken
+                .transfer(
+                        WALLET,
+                        ALICE.getScriptHash(),
+                        new BigInteger("100000")
+                )
+                .sign()
+                .send()
+                .getSendRawTransaction()
+                .getHash();
         Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
 
         System.out.println("Voting account funded with Neo.");
 
         // The voting account needs GAS to pay for transactions.
         txHash = gasToken.transfer(WALLET, ALICE.getScriptHash(), new BigInteger("100000"))
-            .sign()
-            .send()
-            .getSendRawTransaction().getHash();
+                .sign()
+                .send()
+                .getSendRawTransaction().getHash();
         Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
 
         System.out.println("Voting account funded with Gas.");
@@ -41,28 +47,28 @@ public class VoteForValidator {
         // The entity for which we will vote needs to be registered as a candidate to receive votes.
         ECPublicKey candidateKey = ALICE.getECKeyPair().getPublicKey();
         txHash = neoToken.registerCandidate(candidateKey)
-            .signers(calledByEntry(ALICE.getScriptHash()))
-            .wallet(WALLET)
-            .sign()
-            .send()
-            .getSendRawTransaction().getHash();
+                .signers(calledByEntry(ALICE.getScriptHash()))
+                .wallet(WALLET)
+                .sign()
+                .send()
+                .getSendRawTransaction().getHash();
         Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
 
         System.out.println("Candidate registered!");
 
         txHash = neoToken.vote(ALICE, candidateKey)
-            .signers(calledByEntry(ALICE.getScriptHash()))
-            .wallet(WALLET)
-            .sign()
-            .send()
-            .getSendRawTransaction().getHash();
+                .signers(calledByEntry(ALICE.getScriptHash()))
+                .wallet(WALLET)
+                .sign()
+                .send()
+                .getSendRawTransaction().getHash();
         Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
 
         System.out.println("Voted!");
         System.out.println("Voted validators are:");
 
         NEOW3J.getNextBlockValidators().send().getResult().forEach(v -> System.out.println(
-                    "Pubkey: " + v.getPublicKey() + ", votes: " + v.getVotes()));
+                "Pubkey: " + v.getPublicKey() + ", votes: " + v.getVotes()));
 
     }
 }
