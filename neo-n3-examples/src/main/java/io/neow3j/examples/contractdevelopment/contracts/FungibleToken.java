@@ -1,11 +1,12 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
+
+import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.CallFlags;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.ExecutionEngine;
 import io.neow3j.devpack.Hash160;
-import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
@@ -48,7 +49,7 @@ public class FungibleToken {
     }
 
     static int getTotalSupply() {
-        return Helper.toInt(Storage.get(sc, totalSupplyKey));
+        return Storage.get(sc, totalSupplyKey).toInteger();
     }
 
     public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data)
@@ -106,7 +107,7 @@ public class FungibleToken {
         if (script.length == 0 && manifest.length() == 0) {
             throw new Exception("The new contract script and manifest must not be empty.");
         }
-        ContractManagement.update(script, manifest);
+        ContractManagement.update(new ByteString(script), manifest);
     }
 
     public static void destroy() throws Exception {
@@ -149,7 +150,7 @@ public class FungibleToken {
     }
 
     private static int getBalance(Hash160 key) {
-        return Helper.toInt(assetMap.get(key.toByteArray()));
+        return assetMap.get(key.toByteArray()).toInteger();
     }
 
 }

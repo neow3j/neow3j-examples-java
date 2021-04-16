@@ -1,14 +1,12 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
-import static io.neow3j.devpack.Helper.toByteString;
-import static io.neow3j.devpack.Helper.toInt;
 import static io.neow3j.devpack.Runtime.checkWitness;
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
+
 import io.neow3j.devpack.CallFlags;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.ExecutionEngine;
 import io.neow3j.devpack.Hash160;
-import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
@@ -18,6 +16,8 @@ import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event4Args;
 
+import java.util.Arrays;
+
 @ManifestExtra(key = "author", value = "AxLabs")
 public class NonDivisibleNFToken {
 
@@ -26,11 +26,11 @@ public class NonDivisibleNFToken {
 
     static final StorageContext ctx = Storage.getStorageContext();
     // Storage space to keep track of the total token supply.
-    static final StorageMap totalSupplyMap = ctx.createMap("contract");
+    static final StorageMap totalSupplyMap = ctx.createMap((byte) 1);
     // Maps tokens IDs to owner hashes.
-    static final StorageMap tokens = ctx.createMap("tokens");
-    static final StorageMap balanceMap = ctx.createMap("balance");
-    static final StorageMap propertiesMap = ctx.createMap("props");
+    static final StorageMap tokens = ctx.createMap((byte) 2);
+    static final StorageMap balanceMap = ctx.createMap((byte) 3);
+    static final StorageMap propertiesMap = ctx.createMap((byte) 4);
 
     @DisplayName("Transfer")
     static Event4Args<Hash160, Hash160, Integer, byte[]> onTransfer;
@@ -46,7 +46,7 @@ public class NonDivisibleNFToken {
 
     /**
      * Gets the symbol of the token.
-     * 
+     *
      * @return the symbol.
      */
     public static String symbol() {
@@ -63,12 +63,12 @@ public class NonDivisibleNFToken {
     }
 
     private static int totalSupplyGet() {
-        return toInt(totalSupplyMap.get(totalSupplyKey));
+        return totalSupplyMap.get(totalSupplyKey).toInteger();
     }
 
     /**
      * Gets the decimals of the token.
-     * 
+     *
      * @return the decimals.
      */
     public static int decimals() {
@@ -78,22 +78,22 @@ public class NonDivisibleNFToken {
     /**
      * Transfers a token.
      *
-     * @param to the new owner of the token.
-     * @param tokenid the id of the token.
+     * @param to      the new owner of the token.
+     * @param tokenId the id of the token.
      * @return whether the transfer was successful.
      */
     public static boolean transfer(Hash160 to, byte[] tokenId) throws Exception {
         if (!to.isValid()) {
             throw new Exception("Recipient hash is invalid, i.e. not 20 bytes long.");
         }
-        byte[] tokenOwnerBytes = tokens.get(tokenId);
+        byte[] tokenOwnerBytes = tokens.get(tokenId).toByteArray();
         if (tokenOwnerBytes == null) {
-            throw new Exception("The tooken with ID " + Helper.toByteString(tokenId) + 
-                " does not exist.");
+            throw new Exception("The tooken with ID " + Arrays.toString(tokenId) +
+                    " does not exist.");
         }
         Hash160 tokenOwner = new Hash160(tokenOwnerBytes);
         // Only the token owner may transfer the token
-        if (ExecutionEngine.getCallingScriptHash() != tokenOwner 
+        if (!ExecutionEngine.getCallingScriptHash().equals(tokenOwner)
                 && !Runtime.checkWitness(tokenOwner)) {
             return false;
         }
@@ -105,7 +105,8 @@ public class NonDivisibleNFToken {
         // Fire event and call onNEP11Payment if the receiver is a contract.
         onTransfer.fire(tokenOwner, to, 1, tokenId);
         if (ContractManagement.getContract(to) != null) {
-            Contract.call(to, "onNEP11Payment", CallFlags.ALL, new Object[]{tokenOwner, 1, tokenId});
+            Contract.call(to, "onNEP11Payment", CallFlags.ALL, new Object[]{tokenOwner, 1,
+                    tokenId});
         }
         return true;
     }
@@ -121,7 +122,7 @@ public class NonDivisibleNFToken {
     }
 
     private static Hash160 getTokenOwner(byte[] tokenid) {
-        byte[] owner = tokens.get(tokenid);
+        byte[] owner = tokens.get(tokenid).toByteArray();
         if (owner == null) {
             return null;
         }
@@ -130,14 +131,14 @@ public class NonDivisibleNFToken {
 
     /**
      * Creates a new token and assigns it to an account.
-     * 
-     * @param owner      the owner of the new token.
-     * @param tokenid    the tokenid.
+     *
+     * @param owner   the owner of the new token.
+     * @param tokenId the token id.
      * @return whether the token could be created.
      */
-    public static boolean mintToken(Hash160 owner, byte[] tokenid) {
-        if (owner.isValid() && checkWitness(contractOwner) && getTokenOwner(tokenid) == null) {
-            tokens.put(tokenid, owner.toByteArray());
+    public static boolean mintToken(Hash160 owner, byte[] tokenId) {
+        if (owner.isValid() && checkWitness(contractOwner) && getTokenOwner(tokenId) == null) {
+            tokens.put(tokenId, owner.toByteArray());
             totalSupplyMap.put(totalSupplyKey, totalSupplyGet() + 1);
             incrementBalance(owner);
             return true;
@@ -156,7 +157,7 @@ public class NonDivisibleNFToken {
     }
 
     public static String properties(byte[] tokenid) {
-        return toByteString(propertiesMap.get(tokenid));
+        return propertiesMap.get(tokenid).asString();
     }
 
     private static void incrementBalance(Hash160 owner) {
@@ -171,7 +172,7 @@ public class NonDivisibleNFToken {
         if (balanceMap.get(owner.toByteArray()) == null) {
             return 0;
         }
-        return toInt(balanceMap.get(owner.toByteArray()));
+        return balanceMap.get(owner.toByteArray()).toInteger();
     }
 
     /**
