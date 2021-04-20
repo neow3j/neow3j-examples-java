@@ -200,7 +200,7 @@ public class NonFungibleToken {
             throw new Exception("No authorization.");
         }
 
-        if (from.equals(to)) {
+        if (from == to) {
             onTransfer.fire(from, to, amount, tokenId);
             return true;
         }

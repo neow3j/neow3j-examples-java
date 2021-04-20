@@ -93,7 +93,7 @@ public class NonDivisibleNFToken {
         }
         Hash160 tokenOwner = new Hash160(tokenOwnerBytes);
         // Only the token owner may transfer the token
-        if (!ExecutionEngine.getCallingScriptHash().equals(tokenOwner)
+        if (!(ExecutionEngine.getCallingScriptHash() == tokenOwner)
                 && !Runtime.checkWitness(tokenOwner)) {
             return false;
         }
@@ -112,17 +112,17 @@ public class NonDivisibleNFToken {
     }
 
     /**
-     * Gets the owner of the token with id {@code tokenid}.
+     * Gets the owner of the token with id {@code tokenId}.
      *
-     * @param tokenid the id of the token.
+     * @param tokenId the id of the token.
      * @return the owner of the token.
      */
-    public static Hash160 ownerOf(byte[] tokenid) {
-        return getTokenOwner(tokenid);
+    public static Hash160 ownerOf(byte[] tokenId) {
+        return getTokenOwner(tokenId);
     }
 
-    private static Hash160 getTokenOwner(byte[] tokenid) {
-        byte[] owner = tokens.get(tokenid).toByteArray();
+    private static Hash160 getTokenOwner(byte[] tokenId) {
+        byte[] owner = tokens.get(tokenId).toByteArray();
         if (owner == null) {
             return null;
         }
@@ -156,8 +156,8 @@ public class NonDivisibleNFToken {
         return getBalanceOf(owner);
     }
 
-    public static String properties(byte[] tokenid) {
-        return propertiesMap.get(tokenid).asString();
+    public static String properties(byte[] tokenId) {
+        return propertiesMap.get(tokenId).asString();
     }
 
     private static void incrementBalance(Hash160 owner) {
