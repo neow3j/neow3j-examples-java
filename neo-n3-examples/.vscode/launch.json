@@ -32,6 +32,61 @@
                     "check-result": true
                 }
             }
+        },
+        {
+            "name": "NonFungibleTokenContract",
+            "type": "neo-contract",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/neow3j/NonFungibleToken.nef",
+            "invocation": {
+                "operation": "burn",
+                "args": [
+                    "0xfb2b",
+                    "0xfb2b60c9ea35be51abf741981e7c4954eedf50c3",
+                    10
+                ]
+            },
+            "signers": [
+                "NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K"
+            ],
+            "storage": [
+                {
+                    "key": "0x0cfb2b60c9ea35be51abf741981e7c4954eedf50c3fb2b",
+                    "value": 10
+                },
+                {
+                    "key": "0x0cfb2b60c9ea35be51abf741981e7c4954eedf50c3fb2c",
+                    "value": 20
+                },
+                {
+                    "key": "0x0efb2b60c9ea35be51abf741981e7c4954eedf50c3fb2b",
+                    "value": "0xfb2b"
+                },
+                {
+                    "key": "0x0efb2b60c9ea35be51abf741981e7c4954eedf50c3fb2c",
+                    "value": "0xfb2c"
+                },
+                {
+                    "key": "0x0bfb2b60c9ea35be51abf741981e7c4954eedf50c3fb2b",
+                    "value": "0xfb2b"
+                },
+                {
+                    "key": "0x0bfb2b60c9ea35be51abf741981e7c4954eedf50c3fb2c",
+                    "value": "0xfb2c"
+                },
+                {
+                    "key": "0x0a",
+                    "value": 1000
+                }
+            ],
+            "return-types": [
+                "bool"
+            ],
+            "runtime": {
+                "witnesses": {
+                    "check-result": true
+                }
+            }
         }
     ]
 }

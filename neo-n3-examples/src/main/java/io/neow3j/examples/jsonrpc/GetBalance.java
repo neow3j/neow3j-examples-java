@@ -3,24 +3,27 @@ package io.neow3j.examples.jsonrpc;
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
 
+import java.math.BigInteger;
+
 import io.neow3j.contract.FungibleToken;
+import io.neow3j.contract.GasToken;
 import io.neow3j.contract.Hash160;
 
 public class GetBalance {
 
     public static void main(String[] args) throws Throwable {
+        Hash160 contractHash = GasToken.SCRIPT_HASH;
 
         // Setup a wrapper to invoke the contract.
-        FungibleToken token = new FungibleToken(
-            new Hash160("0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"), NEOW3J);
+        FungibleToken token = new FungibleToken(contractHash, NEOW3J);
 
         System.out.println("\n####################");
 
-        int balance = token.getBalanceOf(ALICE.getScriptHash()).intValue();
+        BigInteger balance = token.getBalanceOf(ALICE.getScriptHash());
 
         String symbol = token.getSymbol();
 
-        System.out.println(symbol + " balance of the Alice's account is " + balance);
+        System.out.println(symbol + " balance of the Alice's account is " + balance.toString());
         System.out.println("####################");
     }
 }

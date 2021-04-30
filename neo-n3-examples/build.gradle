@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'io.neow3j.gradle-plugin' version "3.8.0"
+    id 'io.neow3j.gradle-plugin' version "3.9.0"
 }
 
 group 'io.neow3j'
@@ -15,9 +15,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.neow3j:contract:3.8.0'
-    implementation 'io.neow3j:devpack:3.8.0'
-    implementation 'io.neow3j:compiler:3.8.0'
+    implementation 'io.neow3j:contract:3.9.0'
+    implementation 'io.neow3j:devpack:3.9.0'
+    implementation 'io.neow3j:compiler:3.9.0'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'junit:junit:4.12'
 }
@@ -25,7 +25,7 @@ dependencies {
 neow3jCompiler {
     // Option 1: (easier/preferred)
     // Set the class name of the contract to compile when running the `neow3jCompiler` Gradle task.
-    className = "io.neow3j.examples.contractdevelopment.contracts.FungibleToken"
+     className = "io.neow3j.examples.contractdevelopment.contracts.NonFungibleToken"
 
     // Option 2:
     // If you want to set the contract class name as a project property,

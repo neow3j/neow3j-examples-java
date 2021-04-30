@@ -1,5 +1,6 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
+import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.annotations.ManifestExtra;
@@ -15,7 +16,7 @@ public class SimpleStorageContract {
         return true;
     }
 
-   public static byte[] getSomething(String key) {
+   public static ByteString getSomething(String key) {
         return Storage.get(ctx, key);
    }
 }

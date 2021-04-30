@@ -10,7 +10,7 @@ import io.neow3j.wallet.Wallet;
 public class Constants {
 
     // This sets up the connection to the neo-node of our private network.
-    public static Neow3j NEOW3J = Neow3j.build(new HttpService("http://localhost:40332"));
+    public static Neow3j NEOW3J = Neow3j.build(new HttpService("http://127.0.0.1:40332"));
 
     // This is Alice' account which is also available on the pre-configured private network.
     public static Account ALICE =

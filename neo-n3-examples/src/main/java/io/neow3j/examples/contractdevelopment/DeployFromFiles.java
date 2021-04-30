@@ -7,6 +7,7 @@ import static io.neow3j.examples.Constants.WALLET;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Paths;
+
 import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.Hash160;
 import io.neow3j.contract.NefFile;
@@ -27,7 +28,8 @@ public class DeployFromFiles {
         File contractNefFile = Paths.get("build", "neow3j", contractName + ".nef").toFile();
         NefFile nefFile = NefFile.readFromFile(contractNefFile);
         // Manifest file:
-        File contractManifestFile = Paths.get("build", "neow3j", contractName + ".manifest.json").toFile();
+        File contractManifestFile =
+                Paths.get("build", "neow3j", contractName + ".manifest.json").toFile();
         ContractManifest manifest;
         try (FileInputStream s = new FileInputStream(contractManifestFile)) {
             manifest = ObjectMapperFactory.getObjectMapper().readValue(s, ContractManifest.class);
@@ -46,11 +48,11 @@ public class DeployFromFiles {
             System.out.printf("Deployment was not successful. Error message from neo-node "
                     + "was: '%s'\n", response.getError().getMessage());
         } else {
-            System.out.printf("The contract was deployed in transaction %s\n", 
+            System.out.printf("The contract was deployed in transaction %s\n",
                     response.getSendRawTransaction().getHash());
             Hash160 contractHash = SmartContract.getContractHash(
                     ALICE.getScriptHash(), nefFile.getCheckSumAsInteger(), manifest.getName());
-            System.out.printf("Script hash of the deployed contract: %s\n", contractHash.toString());
+            System.out.printf("Script hash of the deployed contract: %s\n", contractHash);
             System.out.printf("Contract Address: %s\n", contractHash.toAddress());
         }
     }
