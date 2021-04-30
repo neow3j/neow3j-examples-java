@@ -1,6 +1,7 @@
 package io.neow3j.examples.contractinvoke;
 
 import static io.neow3j.examples.Constants.BOB;
+import static io.neow3j.examples.Constants.GENESIS;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
@@ -19,10 +20,11 @@ public class TransferNeo {
         // The transfer method will add the wallets default account as the signer and use that
         // accounts tokens to cover the transfer amount.
         NeoSendRawTransaction response = neoToken
-                .transfer(
+                .transferFromSpecificAccounts(
                         WALLET,
                         BOB.getScriptHash(),
-                        BigInteger.ONE
+                        new BigInteger("1000"),
+                        GENESIS.getScriptHash()
                 )
                 .sign() // Signs the transaction with the account that was configured as the signer.
                 .send(); // Sends the transaction to the neo-node.

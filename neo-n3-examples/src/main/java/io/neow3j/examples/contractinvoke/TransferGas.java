@@ -1,6 +1,6 @@
 package io.neow3j.examples.contractinvoke;
 
-import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.BOB;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
@@ -24,11 +24,10 @@ public class TransferGas {
         NeoSendRawTransaction response = gasToken
                 .transfer(
                         WALLET, // the wallet to use for the transfer
-                        ALICE.getScriptHash(), // the recipient
+                        BOB.getScriptHash(), // the recipient
                         gasToken.toFractions(new BigDecimal("10.5")) // the transfer amount
                         // the amount can also be passed as a fraction value directly:
 //                        new BigInteger("1050000000")
-
                         // or by calling the static method `Token.toFractions()` providing the
                         // number of decimal numbers:
 //                        Token.toFractions(new BigDecimal("10.5"), 8)

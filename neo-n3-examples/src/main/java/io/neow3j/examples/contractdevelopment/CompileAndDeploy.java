@@ -45,12 +45,13 @@ public class CompileAndDeploy {
         if (response.hasError()) {
             System.out.printf("Deployment was not successful. Error message from neo-node was: "
                     + "'%s'\n", response.getError().getMessage());
-            return;
+        } else {
+            Hash160 contractHash = SmartContract.getContractHash(
+                    ALICE.getScriptHash(), res.getNefFile().getCheckSumAsInteger(),
+                    res.getManifest().getName());
+            System.out.println("Script hash of the deployed contract: " + contractHash);
+            System.out.println("Contract Address: " + contractHash.toAddress());
         }
-        Hash160 contractHash = SmartContract.getContractHash(
-                ALICE.getScriptHash(), res.getNefFile().getCheckSumAsInteger(),
-                res.getManifest().getName());
-        System.out.println("Script hash of the deployed contract: " + contractHash);
-        System.out.println("Contract Address: " + contractHash.toAddress());
     }
+
 }
