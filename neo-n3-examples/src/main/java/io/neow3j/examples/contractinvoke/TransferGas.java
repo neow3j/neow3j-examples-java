@@ -6,10 +6,8 @@ import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import io.neow3j.contract.GasToken;
-import io.neow3j.contract.Token;
 import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
 
 public class TransferGas {
@@ -26,12 +24,9 @@ public class TransferGas {
                         WALLET, // the wallet to use for the transfer
                         ALICE.getScriptHash(), // the recipient
                         gasToken.toFractions(new BigDecimal("10.5")) // the transfer amount
-                        // the amount can also be passed as a fraction value directly:
-//                        new BigInteger("1050000000")
-
+                        // the amount can also be passed as a fraction value directly: new BigInteger("1050000000")
                         // or by calling the static method `Token.toFractions()` providing the
-                        // number of decimal numbers:
-//                        Token.toFractions(new BigDecimal("10.5"), 8)
+                        // number of decimal numbers: Token.toFractions(new BigDecimal("10.5"), 8)
                 )
                 .sign() // Signs the transaction with the account that was configured as the signer.
                 .send(); // Sends the transaction to the neo-node.
