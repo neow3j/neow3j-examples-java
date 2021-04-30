@@ -18,9 +18,11 @@ public class Utils {
         } else {
             Hash256 txHash = response.getSendRawTransaction().getHash();
             System.out.printf("Successfully transmitted the transaction with hash '%s'.%n", txHash);
+            System.out.println("Waiting until transaction is persisted in a block...");
             Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
-            System.out.println(
-                    "Tx: " + NEOW3J.getTransaction(txHash).send().getTransaction().toString());
+            System.out.println(NEOW3J.getTransaction(txHash).send().getTransaction());
+            // To check the transaction's status, you can check its application log.
+            // -> see the example `GetApplicationLogsForTx.java`
             System.out.println("\n####################");
         }
     }

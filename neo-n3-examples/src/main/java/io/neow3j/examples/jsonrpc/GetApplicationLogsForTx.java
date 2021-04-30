@@ -12,11 +12,10 @@ public class GetApplicationLogsForTx {
     public static void main(String[] args) throws IOException {
 
         NeoGetApplicationLog al = NEOW3J
-                .getApplicationLog(new Hash256("f8ceb2a490f5412185f2a8899f8e38c7272db4a84076c5257dc71d356e516e72"))
+                .getApplicationLog(new Hash256("92fb5decb03055cea8edbeb2c1c1c2ae0e9b5aa23df24922867e9210a358e560"))
                 .send();
 
-        System.out.println("\n####################");
-        System.out.println("Application log: ");
+        System.out.println("\n####################\n");
         System.out.println(al.getApplicationLog());
         System.out.println("\n####################");
 
