@@ -1,0 +1,11 @@
+[
+  {
+    "contract": "NonFungibleToken",
+    "operation": "mint",
+    "args": [
+      "0x0b",
+      "@Bob",
+      "0x74657374686578"
+    ]
+  }
+]

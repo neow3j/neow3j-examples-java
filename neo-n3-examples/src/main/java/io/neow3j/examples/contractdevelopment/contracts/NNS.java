@@ -9,8 +9,8 @@ import io.neow3j.devpack.StorageContext;
 
 // A name service contract that allows anyone to register a domain name under her address.
 @ManifestExtra(key = "name", value = "NameService")
-@ManifestExtra(key = "author", value = "neow3j")
-public class NameService {
+@ManifestExtra(key = "author", value = "AxLabs")
+public class NNS {
 
     static StorageContext ctx = Storage.getStorageContext();
 

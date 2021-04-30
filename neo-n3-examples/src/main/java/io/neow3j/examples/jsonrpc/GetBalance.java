@@ -12,7 +12,7 @@ public class GetBalance {
 
         // Setup a wrapper to invoke the contract.
         FungibleToken token = new FungibleToken(
-            new Hash160("0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"), NEOW3J);
+                new Hash160("0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"), NEOW3J);
 
         System.out.println("\n####################");
 

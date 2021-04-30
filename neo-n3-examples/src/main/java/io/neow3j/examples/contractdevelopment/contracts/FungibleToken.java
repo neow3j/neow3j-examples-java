@@ -1,11 +1,12 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
+
+import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.CallFlags;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.ExecutionEngine;
 import io.neow3j.devpack.Hash160;
-import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
