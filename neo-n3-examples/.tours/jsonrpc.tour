@@ -9,7 +9,7 @@
     {
       "file": "default.neo-express",
       "description": "## Configuring Neo Visual Devtracker\n\nTo work with the devtracker we need to setup a blockchain configuration. The configuration we use for this tour is contained in this file (`default.neo-express`). The configuration defines consensus nodes, wallets and a few other settings. For this tour we configure one consensus node and two accounts with the names *Alice* and *Bob* (see `wallets` after the consensus node definition). The consensus node uses the private and public key of the *Alice* account.\n\nIn the Neo blockchain, all participating consensus nodes together form a multi-sig account from their public keys that serves as the *genesis* account. This is the account that holds all NEO and GAS at the beginning of the blockchain. Since we only configured one consensus node the *genesis* account is made up only from the public key of this single node. Nevertheless, we will need it to distributed NEO and GAS to *Alice* or *Bob*.\n\n\nBut first, let's start the configured blockchain network, i.e. a single node:\n  * [Click here](command:neo3-visual-devtracker.express.run) to run it.\n  * Wait a bit until a terminal tab is opened with outputs of the running node.\n  * You should see a new block being output every 15 seconds.\n\nOnce the node is running, execute the following commands to transfer NEO and GAS from the *genesis* account to *Alice*.\n\n* [Click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22NEO%22%2C%20%22amount%22%3A%201000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to issue a transaction to transfer 1000 NEO from 'genesis' to \"Alice\" account. You will see a balloon with the submitted transaction.\n* [Click here](command:neo3-visual-devtracker.express.transfer?%5B%7B%22asset%22%3A%20%22GAS%22%2C%20%22amount%22%3A%20100000%2C%20%22sender%22%3A%20%22genesis%22%2C%20%22receiver%22%3A%20%22Alice%22%7D%5D) to transfer 100000 GAS from 'genesis' to \"Alice\" account. ",
-      "line": 2,
+      "line": 1,
       "title": "Configuring Neo Visual Devtracker"
     },
     {
@@ -35,12 +35,12 @@
     },
     {
       "file": "src/main/java/io/neow3j/examples/jsonrpc/SendNeoToAddress.java",
-      "description": "## Send NEO to address\n\nNow let's use the RPC call `sendtoaddress` to send NEO from Alice to BOB. [Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/jsonrpc/SendNeoToAddress.java\") to run this code.",
-      "line": 21
+      "description": "## Send NEO to address\n\nNow let's use the RPC call `sendtoaddress` to send NEO from Alice to Bob. This command doesn't create a transaction locally but asks the neo-node to construct the transatction on our behalf. For this to work, the wallet on the node needs to be unlocked/open, which is done in the first few lines.\n\n[Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/jsonrpc/SendNeoToAddress.java\") to run this code.",
+      "line": 27
     },
     {
       "file": "src/main/java/io/neow3j/examples/jsonrpc/GetWalletState.java",
-      "description": "## Get wallet balance\n\nYou can also the get the wallet balance of the wallet that is stored in the currently running Neo node. [Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/jsonrpc/GetWalletState.java\") to run this code.",
+      "description": "## Get wallet balance\n\nYou can also the get the wallet balance of the wallet that is stored in the currently running Neo node. Similarly as in the last step this command requires the wallet on the node to be unlocked. At this point the wallet is already open because we opened it in the last step. Nevertheless, this code example still includes the wallet opening in the first few lines.\n\n[Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/jsonrpc/GetWalletState.java\") to run this code.",
       "line": 39
     },
     {
@@ -60,7 +60,7 @@
     },
     {
       "file": "src/main/java/io/neow3j/examples/jsonrpc/GetBlock.java",
-      "description": "# Get block\n\nNow let's get information about a specific block. [Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/jsonrpc/GetBlock.java\") to run this code. Change the block index in the code to get the information about a different block.\n\nCheck out the other RPC examples as well or try out other RPC calls yourself (see [here](https://docs.neo.org/v3/docs/en-us/reference/rpc/latest-version/api.html) for all supported RPC calls).",
+      "description": "# Get block\n\nNow let's get information about a specific block. [Click here](command:java.debug.runJavaFile?path=\"src/main/java/io/neow3j/examples/jsonrpc/GetBlock.java\") to run this code. Change the block index in the code to get the information about a different block.\n\nCheck out the other RPC examples as well or try out other RPC calls yourself (see [here](https://docs.neo.org/docs/en-us/reference/rpc/latest-version/api.html) for all supported RPC calls).",
       "line": 14
     }
   ],
