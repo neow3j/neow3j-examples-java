@@ -98,7 +98,7 @@ public class FungibleToken {
             // Initialize supply
             Storage.put(sc, totalSupplyKey, initialSupply);
             // And allocate all tokens to the contract owner.
-            assetMap.put(owner.toString(), initialSupply);
+            assetMap.put(owner.toByteArray(), initialSupply);
         }
     }
 
