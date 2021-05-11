@@ -6,7 +6,6 @@ import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.CallFlags;
 import io.neow3j.devpack.Contract;
-import io.neow3j.devpack.ExecutionEngine;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
@@ -92,7 +91,7 @@ public class NonDivisibleNFToken {
         }
         Hash160 tokenOwner = new Hash160(tokenOwnerBytes);
         // Only the token owner may transfer the token
-        if (!(ExecutionEngine.getCallingScriptHash() == tokenOwner)
+        if (!(Runtime.getCallingScriptHash() == tokenOwner)
                 && !Runtime.checkWitness(tokenOwner)) {
             return false;
         }

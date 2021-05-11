@@ -5,7 +5,6 @@ import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.CallFlags;
 import io.neow3j.devpack.Contract;
-import io.neow3j.devpack.ExecutionEngine;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
@@ -61,7 +60,7 @@ public class FungibleToken {
         if (amount < 0) {
             throw new Exception("The transfer amount was negative.");
         }
-        if (!Runtime.checkWitness(from) && from != ExecutionEngine.getCallingScriptHash()) {
+        if (!Runtime.checkWitness(from) && from != Runtime.getCallingScriptHash()) {
             throw new Exception("Invalid sender signature. The sender of the tokens needs to be "
                     + "the signing account.");
         }
