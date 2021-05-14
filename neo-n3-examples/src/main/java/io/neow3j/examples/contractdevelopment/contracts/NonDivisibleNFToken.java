@@ -86,7 +86,7 @@ public class NonDivisibleNFToken {
         }
         ByteString tokenOwnerBytes = tokens.get(tokenId);
         if (tokenOwnerBytes == null) {
-            throw new Exception("The tooken with ID " + tokenId.asString() +
+            throw new Exception("The token with ID " + tokenId.toString() +
                 " does not exist.");
         }
         Hash160 tokenOwner = new Hash160(tokenOwnerBytes);
@@ -155,7 +155,7 @@ public class NonDivisibleNFToken {
     }
 
     public static String properties(ByteString tokenid) {
-        return propertiesMap.get(tokenid).asString();
+        return propertiesMap.get(tokenid).toString();
     }
 
     private static void incrementBalance(Hash160 owner) {
