@@ -18,7 +18,6 @@ public class Constants {
     // This is Alice' account which is also available on the pre-configured private network.
     public static Account ALICE =
             Account.fromWIF("L1eV34wPoj9weqhGijdDLtVQzUpWGHszXXpdU9dPuh2nRFFzFa7E");
-//            Account.fromWIF("Kyz7AyXZiEpGT8gUcBGnHRz9GFQ6pXuSeMzuM6wDUioAz6mQsZQx");
 
     // This is Bob's account which is also available on the pre-configured private network.
     public static Account BOB =
