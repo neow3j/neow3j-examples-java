@@ -6,10 +6,10 @@ import static io.neow3j.examples.Constants.NEOW3J;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import io.neow3j.contract.Hash160;
+import io.neow3j.types.Hash160;
 import io.neow3j.contract.NeoToken;
-import io.neow3j.protocol.core.methods.response.NeoOpenWallet;
-import io.neow3j.protocol.core.methods.response.Transaction;
+import io.neow3j.protocol.core.response.NeoOpenWallet;
+import io.neow3j.protocol.core.response.Transaction;
 
 public class SendNeoToAddress {
 

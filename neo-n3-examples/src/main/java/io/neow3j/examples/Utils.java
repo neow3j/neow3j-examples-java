@@ -1,7 +1,7 @@
 package io.neow3j.examples;
 
-import io.neow3j.contract.Hash256;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.types.Hash256;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.utils.Await;
 
 import java.io.IOException;

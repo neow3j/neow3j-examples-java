@@ -5,8 +5,8 @@ import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 
 import io.neow3j.contract.NeoURI;
-import io.neow3j.contract.TransactionBuilder;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.transaction.TransactionBuilder;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 
 public class TransferFromNeoURI {
 

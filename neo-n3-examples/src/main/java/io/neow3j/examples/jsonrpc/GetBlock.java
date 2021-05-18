@@ -3,7 +3,7 @@ package io.neow3j.examples.jsonrpc;
 import static io.neow3j.examples.Constants.NEOW3J;
 import java.io.IOException;
 import java.math.BigInteger;
-import io.neow3j.protocol.core.methods.response.NeoBlock;
+import io.neow3j.protocol.core.response.NeoBlock;
 
 public class GetBlock {
 

@@ -6,7 +6,7 @@ import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.transaction.Signer.calledByEntry;
 
 import io.neow3j.contract.GasToken;
-import io.neow3j.contract.Hash256;
+import io.neow3j.types.Hash256;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
 import io.neow3j.utils.Await;

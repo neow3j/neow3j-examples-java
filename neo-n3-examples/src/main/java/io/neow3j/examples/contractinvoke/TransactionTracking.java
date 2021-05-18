@@ -7,10 +7,10 @@ import static io.neow3j.examples.Constants.WALLET;
 import java.math.BigInteger;
 
 import io.neow3j.contract.NeoToken;
-import io.neow3j.contract.TransactionBuilder;
-import io.neow3j.model.types.NeoVMStateType;
-import io.neow3j.protocol.core.methods.response.NeoApplicationLog;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.transaction.TransactionBuilder;
+import io.neow3j.types.NeoVMStateType;
+import io.neow3j.protocol.core.response.NeoApplicationLog;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.Transaction;
 
 public class TransactionTracking {

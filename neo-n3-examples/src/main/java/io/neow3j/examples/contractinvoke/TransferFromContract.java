@@ -1,16 +1,16 @@
 package io.neow3j.examples.contractinvoke;
 
-import static io.neow3j.contract.ContractParameter.hash160;
-import static io.neow3j.contract.ContractParameter.integer;
-import static io.neow3j.contract.ContractParameter.string;
+import static io.neow3j.types.ContractParameter.hash160;
+import static io.neow3j.types.ContractParameter.integer;
+import static io.neow3j.types.ContractParameter.string;
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 
 import io.neow3j.contract.GasToken;
-import io.neow3j.contract.Hash160;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.types.Hash160;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.Signer;
 import io.neow3j.transaction.Transaction;
 import io.neow3j.transaction.Witness;
