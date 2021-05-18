@@ -2,8 +2,8 @@ package io.neow3j.examples.jsonrpc;
 
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.NeoToken;
-import io.neow3j.protocol.core.methods.response.NeoAddress;
-import io.neow3j.protocol.core.methods.response.NeoOpenWallet;
+import io.neow3j.protocol.core.response.NeoAddress;
+import io.neow3j.protocol.core.response.NeoOpenWallet;
 
 import java.io.IOException;
 import java.util.List;

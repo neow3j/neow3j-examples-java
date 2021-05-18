@@ -1,6 +1,6 @@
 package io.neow3j.examples.jsonrpc;
 
-import io.neow3j.protocol.core.methods.response.NeoGetNextBlockValidators.Validator;
+import io.neow3j.protocol.core.response.NeoGetNextBlockValidators.Validator;
 
 import java.io.IOException;
 import java.util.List;

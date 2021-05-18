@@ -9,12 +9,12 @@ import java.io.FileInputStream;
 import java.nio.file.Paths;
 
 import io.neow3j.contract.ContractManagement;
-import io.neow3j.contract.Hash160;
+import io.neow3j.types.Hash160;
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.ObjectMapperFactory;
-import io.neow3j.protocol.core.methods.response.ContractManifest;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.protocol.core.response.ContractManifest;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.Signer;
 
 // Shows how to read a smart contract's files from the disk and deployed it on through a local

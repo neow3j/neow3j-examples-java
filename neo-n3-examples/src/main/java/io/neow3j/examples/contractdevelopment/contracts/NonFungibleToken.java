@@ -1,10 +1,5 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
-import static io.neow3j.devpack.Helper.concat;
-import static io.neow3j.devpack.Helper.toByteArray;
-import static io.neow3j.devpack.Runtime.checkWitness;
-import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
-
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.FindOptions;
 import io.neow3j.devpack.Hash160;
@@ -20,12 +15,17 @@ import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
 
+import static io.neow3j.devpack.Helper.concat;
+import static io.neow3j.devpack.Helper.toByteArray;
+import static io.neow3j.devpack.Runtime.checkWitness;
+import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
+
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandards("NEP-11")
 public class NonFungibleToken {
 
     private static final Hash160 superAdmin =
-            addressToScriptHash("NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K");
+            addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
 
     private static final byte prefixTotalSupply = 10;
     private static final byte prefixTokenOwner = 11;
@@ -37,13 +37,13 @@ public class NonFungibleToken {
     private static final int FACTOR = 100_000_000;
 
     @DisplayName("mint")
-    private static Event3Args<Hash160, byte[], byte[]> onMint;
+    private static Event3Args<Hash160, ByteString, String> onMint;
 
     @DisplayName("burn")
-    private static Event3Args<Hash160, byte[], Integer> onBurn;
+    private static Event3Args<Hash160, ByteString, Integer> onBurn;
 
     @DisplayName("transfer")
-    private static Event4Args<Hash160, Hash160, Integer, byte[]> onTransfer;
+    private static Event4Args<Hash160, Hash160, Integer, ByteString> onTransfer;
 
     @Safe
     public static String symbol() {
@@ -69,18 +69,18 @@ public class NonFungibleToken {
         Storage.put(Storage.getStorageContext(), toByteArray(prefixTotalSupply), total);
     }
 
-    private static byte[] createStoragePrefix(byte prefix, byte[] key) {
+    private static byte[] createStoragePrefix(byte prefix, ByteString key) {
         return concat(toByteArray(prefix), key);
     }
 
-    public static boolean mint(byte[] tokenId, Hash160 owner, byte[] properties)
+    public static boolean mint(ByteString tokenId, Hash160 owner, String properties)
             throws Exception {
 
         if (!checkWitness(superAdmin)) {
             throw new Exception("No authorization.");
         }
 
-        if (properties.length > 2048) {
+        if (properties.length() > 2048) {
             throw new Exception("The length of properties should be less than 2048.");
         }
 
@@ -91,17 +91,17 @@ public class NonFungibleToken {
         }
 
         StorageMap tokenOfMap = Storage.getStorageContext()
-                .createMap(createStoragePrefix(prefixTokensOf, owner.toByteArray()));
+                .createMap(createStoragePrefix(prefixTokensOf, owner.asByteString()));
         byte[] key = createStoragePrefix(prefixProperties, tokenId);
         Storage.put(Storage.getStorageContext(), key, properties);
-        tokenOwnerMap.put(owner.toByteArray(), owner.toByteArray());
+        tokenOwnerMap.put(owner.asByteString(), owner.asByteString());
         tokenOfMap.put(tokenId, tokenId);
 
         int totalSupply = totalSupply();
         setTotalSupply(totalSupply + FACTOR);
 
         StorageMap tokenBalanceMap = Storage.getStorageContext()
-                .createMap(createStoragePrefix(prefixTokenBalance, owner.toByteArray()));
+                .createMap(createStoragePrefix(prefixTokenBalance, owner.asByteString()));
         tokenBalanceMap.put(tokenId, FACTOR);
 
         onMint.fire(owner, tokenId, properties);
@@ -109,16 +109,16 @@ public class NonFungibleToken {
     }
 
     @Safe
-    public static ByteString properties(byte[] tokenId) {
+    public static ByteString properties(ByteString tokenId) {
         byte[] key = createStoragePrefix(prefixProperties, tokenId);
         return Storage.get(Storage.getReadOnlyContext(), key);
     }
 
     @Safe
     @SuppressWarnings("unchecked")
-    public static int balanceOf(Hash160 owner, byte[] tokenId) {
+    public static int balanceOf(Hash160 owner, ByteString tokenId) {
         StorageContext context = Storage.getReadOnlyContext();
-        byte[] prefix = createStoragePrefix(prefixTokenBalance, owner.toByteArray());
+        byte[] prefix = createStoragePrefix(prefixTokenBalance, owner.asByteString());
         if (tokenId == null) {
             Iterator<ByteString> iterator = Storage.find(
                     context,
@@ -138,7 +138,7 @@ public class NonFungibleToken {
 
     @Safe
     @SuppressWarnings("unchecked")
-    public static Iterator<ByteString> ownerOf(byte[] tokenId) {
+    public static Iterator<ByteString> ownerOf(ByteString tokenId) {
         return Storage.find(
                 Storage.getReadOnlyContext(),
                 createStoragePrefix(prefixTokenOwner, tokenId),
@@ -150,11 +150,11 @@ public class NonFungibleToken {
     public static Iterator<ByteString> tokensOf(Hash160 owner) {
         return Storage.find(
                 Storage.getReadOnlyContext(),
-                createStoragePrefix(prefixTokensOf, owner.toByteArray()),
+                createStoragePrefix(prefixTokensOf, owner.asByteString()),
                 FindOptions.ValuesOnly);
     }
 
-    public static boolean burn(byte[] tokenId, Hash160 owner, int amount) throws Exception {
+    public static boolean burn(ByteString tokenId, Hash160 owner, int amount) throws Exception {
         if (amount < 0 || amount > FACTOR) {
             throw new Exception("The parameter 'amount' is out of range");
         }
@@ -167,7 +167,7 @@ public class NonFungibleToken {
 
         StorageContext context = Storage.getStorageContext();
         StorageMap tokenBalanceMap = context.createMap(
-                createStoragePrefix(prefixTokenBalance, owner.toByteArray()));
+                createStoragePrefix(prefixTokenBalance, owner.asByteString()));
         ByteString balanceValue = tokenBalanceMap.get(tokenId);
         int balance = balanceValue == null ? 0 : balanceValue.toInteger();
         if (balance < amount) {
@@ -191,7 +191,7 @@ public class NonFungibleToken {
         return true;
     }
 
-    public static boolean transfer(Hash160 from, Hash160 to, int amount, byte[] tokenId)
+    public static boolean transfer(Hash160 from, Hash160 to, int amount, ByteString tokenId)
             throws Exception {
         if (amount < 0 || amount > FACTOR) {
             throw new Exception("The parameter 'amount' is out of range.");
@@ -206,15 +206,15 @@ public class NonFungibleToken {
         }
         StorageContext context = Storage.getStorageContext();
         StorageMap fromTokenBalanceMap = context.createMap(
-                createStoragePrefix(prefixTokenBalance, from.toByteArray()));
+                createStoragePrefix(prefixTokenBalance, from.asByteString()));
         StorageMap toTokenBalanceMap = context.createMap(
-                createStoragePrefix(prefixTokenBalance, to.toByteArray()));
+                createStoragePrefix(prefixTokenBalance, to.asByteString()));
         StorageMap tokenOwnerMap = context.createMap(
                 createStoragePrefix(prefixTokenOwner, tokenId));
         StorageMap fromTokensOfMap = context.createMap(
-                createStoragePrefix(prefixTokensOf, from.toByteArray()));
+                createStoragePrefix(prefixTokensOf, from.asByteString()));
         StorageMap toTokensOfMap = context.createMap(
-                createStoragePrefix(prefixTokensOf, to.toByteArray()));
+                createStoragePrefix(prefixTokensOf, to.asByteString()));
 
         int fromTokenBalance = fromTokenBalanceMap.get(tokenId).toInteger();
         if (fromTokenBalance == 0 || fromTokenBalance < amount) {

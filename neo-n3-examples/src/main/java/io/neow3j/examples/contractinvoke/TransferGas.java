@@ -8,7 +8,7 @@ import static io.neow3j.examples.Utils.trackSentTransaction;
 import java.math.BigDecimal;
 
 import io.neow3j.contract.GasToken;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 
 public class TransferGas {
 

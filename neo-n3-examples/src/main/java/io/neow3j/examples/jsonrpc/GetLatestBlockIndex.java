@@ -11,10 +11,13 @@ public class GetLatestBlockIndex {
 
         BigInteger blockCount = NEOW3J.getBlockCount()
                 .send()
-                .getBlockIndex();
+                .getBlockCount();
+
+        // Note: The RPC getblockcount includes the genesis block with index 0.
+        BigInteger latestBlockIndex = blockCount.subtract(BigInteger.ONE);
 
         System.out.println("\n####################");
-        System.out.println("Latest block index: " + blockCount);
+        System.out.println("Latest block index: " + latestBlockIndex);
         System.out.println("####################");
     }
 }

@@ -3,10 +3,10 @@ package io.neow3j.examples.contractdevelopment;
 import io.neow3j.compiler.CompilationUnit;
 import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.ContractManagement;
-import io.neow3j.contract.Hash160;
+import io.neow3j.types.Hash160;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.examples.contractdevelopment.contracts.NonFungibleToken;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

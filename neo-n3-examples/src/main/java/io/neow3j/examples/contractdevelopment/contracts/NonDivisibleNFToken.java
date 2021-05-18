@@ -6,7 +6,6 @@ import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.CallFlags;
 import io.neow3j.devpack.Contract;
-import io.neow3j.devpack.ExecutionEngine;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
@@ -20,7 +19,7 @@ import io.neow3j.devpack.events.Event4Args;
 @ManifestExtra(key = "author", value = "AxLabs")
 public class NonDivisibleNFToken {
 
-    static final Hash160 contractOwner = addressToScriptHash("NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K");
+    static final Hash160 contractOwner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
     static final String totalSupplyKey = "totalSupply";
 
     static final StorageContext ctx = Storage.getStorageContext();
@@ -87,12 +86,12 @@ public class NonDivisibleNFToken {
         }
         ByteString tokenOwnerBytes = tokens.get(tokenId);
         if (tokenOwnerBytes == null) {
-            throw new Exception("The tooken with ID " + tokenId.asString() +
+            throw new Exception("The token with ID " + tokenId.toString() +
                 " does not exist.");
         }
         Hash160 tokenOwner = new Hash160(tokenOwnerBytes);
         // Only the token owner may transfer the token
-        if (!(ExecutionEngine.getCallingScriptHash() == tokenOwner)
+        if (!(Runtime.getCallingScriptHash() == tokenOwner)
                 && !Runtime.checkWitness(tokenOwner)) {
             return false;
         }
@@ -156,7 +155,7 @@ public class NonDivisibleNFToken {
     }
 
     public static String properties(ByteString tokenid) {
-        return propertiesMap.get(tokenid).asString();
+        return propertiesMap.get(tokenid).toString();
     }
 
     private static void incrementBalance(Hash160 owner) {

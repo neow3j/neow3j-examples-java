@@ -9,7 +9,7 @@ import static io.neow3j.examples.Utils.trackSentTransaction;
 import java.math.BigInteger;
 
 import io.neow3j.contract.NeoToken;
-import io.neow3j.protocol.core.methods.response.NeoSendRawTransaction;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 
 public class TransferNeo {
 

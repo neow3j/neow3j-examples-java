@@ -8,8 +8,8 @@
             "type": "java",
             "name": "Launch DeployFromFiles",
             "request": "launch",
-            "mainClass": "io.neow3j.examples.contractdev.DeployFromFiles",
-            "projectName": "neo3-examples"
+            "mainClass": "io.neow3j.examples.contractdevelopment.DeployFromFiles",
+            "projectName": "neo-n3-examples"
         },
         {
             "name": "Neo Contract",
@@ -21,7 +21,7 @@
                 "args": []
             },
             "signers": [
-                "NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K"
+                "NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP"
             ],
             "storage": [],
             "return-types": [
@@ -47,7 +47,7 @@
                 ]
             },
             "signers": [
-                "NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K"
+                "NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP"
             ],
             "storage": [
                 {
