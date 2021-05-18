@@ -19,7 +19,7 @@ import io.neow3j.devpack.events.Event4Args;
 @ManifestExtra(key = "author", value = "AxLabs")
 public class NonDivisibleNFToken {
 
-    static final Hash160 contractOwner = addressToScriptHash("NUrPrFLETzoe7N2FLi2dqTvLwc9L2Em84K");
+    static final Hash160 contractOwner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
     static final String totalSupplyKey = "totalSupply";
 
     static final StorageContext ctx = Storage.getStorageContext();

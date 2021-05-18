@@ -15,7 +15,7 @@ import io.neow3j.devpack.events.Event3Args;
 @ManifestExtra(key = "author", value = "AxLabs")
 public class OnVerificationContract {
 
-    static final Hash160 owner = addressToScriptHash("NZNos2WqTbu5oCgyfss9kUJgBXJqhuYAaj");
+    static final Hash160 owner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
 
     @DisplayName("onPayment")
     static Event3Args<Hash160, Integer, Object> onPayment;
