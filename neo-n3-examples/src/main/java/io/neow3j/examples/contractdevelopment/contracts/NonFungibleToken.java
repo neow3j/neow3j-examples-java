@@ -3,9 +3,9 @@ package io.neow3j.examples.contractdevelopment.contracts;
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 import io.neow3j.devpack.ByteString;
-import io.neow3j.devpack.CallFlags;
+import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.Contract;
-import io.neow3j.devpack.FindOptions;
+import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Iterator;
@@ -16,12 +16,14 @@ import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.StorageMap;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
+import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.Safe;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
 
 @ManifestExtra(key = "author", value = "AxLabs")
+@Permission(contract = "*", methods = "*") // Has to call onPayment method of any receiving contract.
 public class NonFungibleToken {
 
     static final Hash160 contractOwner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
@@ -109,7 +111,7 @@ public class NonFungibleToken {
         onTransfer.fire(owner, to, 1, tokenId);
 
         if (ContractManagement.getContract(to) != null) {
-            Contract.call(to, "onNEP11Payment", CallFlags.ALL,
+            Contract.call(to, "onNEP11Payment", CallFlags.All,
                     new Object[]{owner, 1, tokenId, data});
         }
         return true;

@@ -49,7 +49,7 @@ public class DeployFromFiles {
         } else {
             System.out.printf("The contract was deployed in transaction %s\n",
                     response.getSendRawTransaction().getHash());
-            Hash160 contractHash = SmartContract.getContractHash(
+            Hash160 contractHash = SmartContract.calcContractHash(
                     ALICE.getScriptHash(), nefFile.getCheckSumAsInteger(), manifest.getName());
             System.out.printf("Script hash of the deployed contract: %s\n", contractHash);
             System.out.printf("Contract Address: %s\n", contractHash.toAddress());

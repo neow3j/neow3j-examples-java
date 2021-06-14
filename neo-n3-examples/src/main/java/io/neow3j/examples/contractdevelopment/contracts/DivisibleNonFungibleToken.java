@@ -1,7 +1,7 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
 import io.neow3j.devpack.ByteString;
-import io.neow3j.devpack.FindOptions;
+import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Iterator;
@@ -13,6 +13,7 @@ import io.neow3j.devpack.StorageMap;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
+import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.Safe;
 import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.contracts.ContractManagement;
@@ -23,6 +24,7 @@ import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandards("NEP-11")
+@Permission(contract = "fffdc93764dbaddd97c48f252a53ea4643faa3fd") // ContractManagement
 public class DivisibleNonFungibleToken {
 
     static final Hash160 contractOwner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");

@@ -19,4 +19,5 @@ public class SimpleStorageContract {
    public static ByteString getSomething(String key) {
         return Storage.get(ctx, key);
    }
+
 }
