@@ -3,7 +3,7 @@ package io.neow3j.examples.contractdevelopment.contracts;
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 import io.neow3j.devpack.ByteString;
-import io.neow3j.devpack.CallFlags;
+import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Runtime;
@@ -14,6 +14,7 @@ import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
 import io.neow3j.devpack.annotations.OnVerification;
+import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
@@ -21,6 +22,7 @@ import io.neow3j.devpack.events.Event3Args;
 @ManifestExtra(key = "name", value = "FungibleToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandards("NEP-17")
+@Permission(contract = "fffdc93764dbaddd97c48f252a53ea4643faa3fd") // ContractManagement
 public class FungibleToken {
 
     static final Hash160 owner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
@@ -74,7 +76,7 @@ public class FungibleToken {
 
         onTransfer.fire(from, to, amount);
         if (ContractManagement.getContract(to) != null) {
-            Contract.call(to, "onNEP17Payment", CallFlags.ALL, data);
+            Contract.call(to, "onNEP17Payment", CallFlags.All, data);
         }
 
         return true;
