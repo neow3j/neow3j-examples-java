@@ -1,7 +1,6 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
 import io.neow3j.devpack.ByteString;
-import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Iterator;
@@ -16,6 +15,7 @@ import io.neow3j.devpack.annotations.OnDeployment;
 import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.Safe;
 import io.neow3j.devpack.annotations.SupportedStandards;
+import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;

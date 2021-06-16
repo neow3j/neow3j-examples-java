@@ -1,6 +1,7 @@
 package io.neow3j.examples.contractdevelopment;
 
 import static io.neow3j.examples.Constants.ALICE;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

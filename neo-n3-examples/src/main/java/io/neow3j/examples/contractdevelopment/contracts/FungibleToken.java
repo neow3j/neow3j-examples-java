@@ -3,7 +3,6 @@ package io.neow3j.examples.contractdevelopment.contracts;
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 import io.neow3j.devpack.ByteString;
-import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Runtime;
@@ -16,6 +15,7 @@ import io.neow3j.devpack.annotations.OnDeployment;
 import io.neow3j.devpack.annotations.OnVerification;
 import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.SupportedStandards;
+import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 
