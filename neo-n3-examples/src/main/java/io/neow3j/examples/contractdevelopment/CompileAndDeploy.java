@@ -6,8 +6,7 @@ import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.transaction.Signer.global;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import io.neow3j.compiler.CompilationUnit;
 import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.ContractManagement;
@@ -15,6 +14,9 @@ import io.neow3j.contract.SmartContract;
 import io.neow3j.examples.contractdevelopment.contracts.FungibleToken;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.types.Hash160;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 // Shows how a smart contract can be compiled programmatically and then deployed on a local
 // Neo blockchain.
@@ -47,7 +49,8 @@ public class CompileAndDeploy {
                     + "'%s'\n", response.getError().getMessage());
         } else {
             Hash160 contractHash = SmartContract.calcContractHash(
-                 ALICE.getScriptHash(), res.getNefFile().getCheckSumAsInteger(), res.getManifest().getName());
+                    ALICE.getScriptHash(), res.getNefFile().getCheckSumAsInteger(),
+                    res.getManifest().getName());
             System.out.println("Script hash of the deployed contract: " + contractHash);
             System.out.println("Contract Address: " + contractHash.toAddress());
         }

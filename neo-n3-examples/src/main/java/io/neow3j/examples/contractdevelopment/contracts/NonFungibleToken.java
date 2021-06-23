@@ -3,9 +3,7 @@ package io.neow3j.examples.contractdevelopment.contracts;
 import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 import io.neow3j.devpack.ByteString;
-import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.Contract;
-import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Iterator;
@@ -17,13 +15,17 @@ import io.neow3j.devpack.StorageMap;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.Permission;
+import io.neow3j.devpack.annotations.OnDeployment;
 import io.neow3j.devpack.annotations.Safe;
+import io.neow3j.devpack.constants.CallFlags;
+import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
 
 @ManifestExtra(key = "author", value = "AxLabs")
-@Permission(contract = "*", methods = "*") // Has to call onPayment method of any receiving contract.
+// Has to call onPayment method of any receiving contract.
+@Permission(contract = "*", methods = "*")
 public class NonFungibleToken {
 
     static final Hash160 contractOwner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
@@ -52,6 +54,13 @@ public class NonFungibleToken {
     static final StorageMap balanceMap = ctx.createMap(balanceKey);
 
     static final byte[] tokensOfKey = Helper.toByteArray((byte) 24);
+
+    @OnDeployment
+    public static void deploy(Object data, boolean update) {
+        if (!update) {
+            contractMap.put(totalSupplyKey, 0);
+        }
+    }
 
     @DisplayName("Transfer")
     static Event4Args<Hash160, Hash160, Integer, ByteString> onTransfer;
@@ -89,7 +98,9 @@ public class NonFungibleToken {
      */
     @Safe
     public static Iterator<ByteString> tokensOf(Hash160 owner) {
-        return (Iterator<ByteString>) Storage.find(ctx.asReadOnly(), createTokensOfPrefix(owner),
+        return (Iterator<ByteString>) Storage.find(
+                ctx.asReadOnly(),
+                createTokensOfPrefix(owner),
                 FindOptions.RemovePrefix);
     }
 
@@ -138,6 +149,7 @@ public class NonFungibleToken {
      */
     public static void mint(Hash160 owner, ByteString tokenId, Map<String, String> properties)
             throws Exception {
+
         if (!Runtime.checkWitness(contractOwner)) {
             throw new Exception("No authorization.");
         }
@@ -145,21 +157,22 @@ public class NonFungibleToken {
             throw new Exception("This token id already exists.");
         }
 
-        String tokenName = properties.get(propName);
-        if (tokenName == null) {
+        if (!properties.containsKey(propName)) {
             throw new Exception("The properties must contain a value for the key `name`.");
+        } else {
+            String tokenName = properties.get(propName);
+            propertiesNameMap.put(tokenId, tokenName);
         }
-        propertiesNameMap.put(tokenId, tokenName);
-        String description = properties.get(propDescription);
-        if (description != null) {
+        if (properties.containsKey(propDescription)) {
+            String description = properties.get(propDescription);
             propertiesDescriptionMap.put(tokenId, description);
         }
-        String image = properties.get(propImage);
-        if (image != null) {
+        if (properties.containsKey(propImage)) {
+            String image = properties.get(propImage);
             propertiesImageMap.put(tokenId, image);
         }
-        String tokenURI = properties.get(propTokenURI);
-        if (tokenURI != null) {
+        if (properties.containsKey(propTokenURI)) {
+            String tokenURI = properties.get(propTokenURI);
             propertiesTokenURIMap.put(tokenId, tokenURI);
         }
 
@@ -174,8 +187,10 @@ public class NonFungibleToken {
 
     @Safe
     public static Iterator<Iterator.Struct<ByteString, ByteString>> tokens() {
-        return (Iterator<Iterator.Struct<ByteString, ByteString>>)
-                Storage.find(ctx.asReadOnly(), registryPrefix, FindOptions.RemovePrefix);
+        return (Iterator<Iterator.Struct<ByteString, ByteString>>) Storage.find(
+                ctx.asReadOnly(),
+                registryPrefix,
+                FindOptions.RemovePrefix);
     }
 
     @Safe
