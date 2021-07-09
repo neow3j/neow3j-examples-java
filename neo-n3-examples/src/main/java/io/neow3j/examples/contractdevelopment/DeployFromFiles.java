@@ -1,21 +1,21 @@
 package io.neow3j.examples.contractdevelopment;
 
-import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J;
-import static io.neow3j.examples.Constants.WALLET;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.file.Paths;
-
 import io.neow3j.contract.ContractManagement;
-import io.neow3j.types.Hash160;
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.ObjectMapperFactory;
 import io.neow3j.protocol.core.response.ContractManifest;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
-import io.neow3j.transaction.Signer;
+import io.neow3j.transaction.AccountSigner;
+import io.neow3j.types.Hash160;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Paths;
+
+import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.WALLET;
 
 // Shows how to read a smart contract's files from the disk and deployed it on through a local
 // neo-node.
@@ -38,7 +38,7 @@ public class DeployFromFiles {
         // the neo-node.
         NeoSendRawTransaction response = new ContractManagement(NEOW3J)
                 .deploy(nefFile, manifest)
-                .signers(Signer.global(ALICE.getScriptHash()))
+                .signers(AccountSigner.global(ALICE.getScriptHash()))
                 .wallet(WALLET)
                 .sign()
                 .send();

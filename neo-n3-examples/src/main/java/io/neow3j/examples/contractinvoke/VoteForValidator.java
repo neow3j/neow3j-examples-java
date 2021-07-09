@@ -3,9 +3,9 @@ package io.neow3j.examples.contractinvoke;
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
-import static io.neow3j.transaction.Signer.calledByEntry;
 
 import io.neow3j.contract.GasToken;
+import static io.neow3j.transaction.AccountSigner.calledByEntry;
 import io.neow3j.types.Hash256;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;

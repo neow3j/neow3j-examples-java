@@ -56,7 +56,7 @@ public class FungibleToken {
     public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data)
             throws Exception {
 
-        if (!from.isValid() || !to.isValid()) {
+        if (!Hash160.isValid(from) || !Hash160.isValid(to)) {
             throw new Exception("From or To address is not a valid address.");
         }
         if (amount < 0) {
@@ -83,7 +83,7 @@ public class FungibleToken {
     }
 
     public static int balanceOf(Hash160 account) throws Exception {
-        if (!account.isValid()) {
+        if (!Hash160.isValid(account)) {
             throw new Exception("Argument is not a valid address.");
         }
         return getBalance(account);

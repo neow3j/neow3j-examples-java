@@ -11,7 +11,7 @@ import static io.neow3j.examples.Utils.trackSentTransaction;
 import io.neow3j.contract.GasToken;
 import io.neow3j.types.Hash160;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
-import io.neow3j.transaction.Signer;
+import static io.neow3j.transaction.AccountSigner.calledByEntry;
 import io.neow3j.transaction.Transaction;
 import io.neow3j.transaction.Witness;
 
@@ -41,8 +41,8 @@ public class TransferFromContract {
                 )
                 .wallet(WALLET)
                 .signers( // The contract owner and the contract are both required here.
-                        Signer.calledByEntry(ALICE.getScriptHash()),
-                        Signer.calledByEntry(contract)
+                        calledByEntry(ALICE.getScriptHash()),
+                        calledByEntry(contract)
                 )
                 .getUnsignedTransaction();
 
