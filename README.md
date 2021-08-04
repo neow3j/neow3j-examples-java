@@ -1,26 +1,35 @@
-# neow3j Examples
+# neow3j - Examples for Neo Legacy
 
-This repository contains Java examples for [neow3j](https://github.com/neow3j/neow3j). Its goal is
-to give you a better understanding on how to use neow3j to develop dApps and smart contracts for 
-[Neo](https://neo.org/).
+This project contains example usages of neow3j with the Neo Legacy blockchain.
 
-The directory *neo-n3-examples* contains examples for Neo N3 and *neo-legacy-examples* contains
-examples for Neo Legacy. More information about the examples can be found inside the directories.
+It contains:
 
-
-## Requirements
-
-At least Java 8 is required.
-
-Additionally, many examples will require a Neo network. We
-recommend using [*Neo Express*](https://github.com/neo-project/neo-express) for that purpose. It
-is integrated into the [*Neo Blockchain Toolkit*](https://marketplace.visualstudio.com/items?itemName=ngd-seattle.neo-blockchain-toolkit)
-that is available on the VSCode Extension Marketplace. 
-
-All examples are using [*Gradle*](https://gradle.org/) as the build tool and provide a Gradle
-wrapper. So, you don't necessarily need Gradle installed on your machine.
+- Examples of JSON RPC calls to interact with the Neo node
+- ECC key related examples
+- Transaction related examples with specific NEP-5 transfers
+- And several Wallet and Account related examples
 
 
-## Contact
+## Instructions
 
-For questions, issues, or suggestions, please create an issue [here](https://github.com/neow3j/neow3j/issues).
+You can run the examples either via the built-in funtionality of your IDE or the command line.
+To run the examples via the command line, first, go to the root of the project and build the
+project:
+
+```
+$ ./gradlew clean build
+```
+
+Then, you can execute each example separately with the following command:
+
+```
+$ java -cp build/libs/examples-1.0-SNAPSHOT.jar <CLASS_NAME>
+```
+
+Where `<CLASS_NAME>` is the fully qualified class name of the example you wish to run.
+
+For example, to run the `CreateKeyPair` class:
+
+```
+$ java -cp build/libs/examples-1.0-SNAPSHOT-all.jar io.neow3j.examples.keys.CreateKeyPair
+```
