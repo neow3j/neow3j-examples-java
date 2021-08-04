@@ -44,8 +44,10 @@ public class CustomScriptContract {
         @Instruction(opcode = OpCode.CONVERT, operand = StackItemType.INTEGER_CODE)
         public static native int getIntOrThrow(StorageContext context, ByteString key) throws Exception;
 
+    }
+}
 //--------------------------------------------------------------------------------------------------
-//   Alternatively, the same functionality can be implemented without the instructions annotatin as
+//   Alternatively, the same functionality can be implemented without the instructions annotation as
 //   follows. But, the `toInteger()` method used at the end of this method introduces an extra null
 //   check (see its implementation in the devpack). That extra null check is obviously unnecessary.
 //--------------------------------------------------------------------------------------------------
@@ -58,6 +60,4 @@ public class CustomScriptContract {
 //        }
 //--------------------------------------------------------------------------------------------------
 
-    }
-}
 
