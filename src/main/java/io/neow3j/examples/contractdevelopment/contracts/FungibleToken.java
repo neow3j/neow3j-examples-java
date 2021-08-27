@@ -93,7 +93,7 @@ public class FungibleToken {
     public static void deploy(Object data, boolean update) throws Exception {
         throwIfSignerIsNotOwner();
         if (!update) {
-            if (getTotalSupply() > 0) {
+            if (Storage.get(sc, totalSupplyKey) != null) {
                 throw new Exception("Contract was already deployed.");
             }
             // Initialize supply

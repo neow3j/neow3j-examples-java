@@ -19,12 +19,10 @@ public class GetScriptHashFromContractFile {
     public static void main(String[] args) throws DeserializationException, IOException {
 
         // NEF:
-        File contractNefFile = Paths.get("build", "neow3j",
-                "FungibleToken.nef").toFile();
+        File contractNefFile = Paths.get("build", "neow3j", "FungibleToken.nef").toFile();
         NefFile nefFile = NefFile.readFromFile(contractNefFile);
         // Manifest file:
-        File contractManifestFile = Paths.get("build", "neow3j",
-                "FungibleToken.manifest.json").toFile();
+        File contractManifestFile = Paths.get("build", "neow3j", "FungibleToken.manifest.json").toFile();
         ContractManifest manifest;
         try (FileInputStream s = new FileInputStream(contractManifestFile)) {
             manifest = ObjectMapperFactory.getObjectMapper().readValue(s, ContractManifest.class);
