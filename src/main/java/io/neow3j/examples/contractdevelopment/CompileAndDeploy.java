@@ -40,7 +40,6 @@ public class CompileAndDeploy {
         NeoSendRawTransaction response = new ContractManagement(NEOW3J)
                 .deploy(res.getNefFile(), res.getManifest())
                 .signers(AccountSigner.global(ALICE))
-                .wallet(WALLET)
                 .sign()
                 .send();
 

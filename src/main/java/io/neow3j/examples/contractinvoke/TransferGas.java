@@ -1,6 +1,8 @@
 package io.neow3j.examples.contractinvoke;
 
+import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.BOB;
+import static io.neow3j.examples.Constants.GENESIS;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
@@ -20,14 +22,11 @@ public class TransferGas {
         // The transfer method will add the wallets default account as the signer and use that
         // accounts tokens to cover the transfer amount.
         NeoSendRawTransaction response = gasToken
-                .transfer(
-                        WALLET, // the wallet to use for the transfer
-                        BOB.getScriptHash(), // the recipient
-                        gasToken.toFractions(new BigDecimal("10.5")) // the transfer amount
-                        // the amount can also be passed as a fraction value directly: new BigInteger("1050000000")
-                        // or by calling the static method `Token.toFractions()` providing the // number of decimal 
-                        // numbers: Token.toFractions(new BigDecimal("10.5"), 8)
-                )
+                // The amount can be passed directly in fractions, e.g., BigInteger("150000000").
+                // But here we use the method `toFractions()` providing that takes the number of
+                // decimals of the specific token (here GasToken) into account. There is also a
+                // static method `Token.toFractions(...)` for manual setting of the decimal number.
+                .transfer(ALICE, BOB.getScriptHash(), gasToken.toFractions(new BigDecimal("1.5")))
                 .sign() // Signs the transaction with the account that was configured as the signer.
                 .send(); // Sends the transaction to the neo-node.
 

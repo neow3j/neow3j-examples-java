@@ -39,9 +39,8 @@ public class TransferFromContract {
                         integer(100),
                         string("a GAS transfer")
                 )
-                .wallet(WALLET)
                 .signers( // The contract owner and the contract are both required here.
-                        calledByEntry(ALICE.getScriptHash()),
+                        calledByEntry(ALICE),
                         calledByEntry(contract)
                 )
                 .getUnsignedTransaction();

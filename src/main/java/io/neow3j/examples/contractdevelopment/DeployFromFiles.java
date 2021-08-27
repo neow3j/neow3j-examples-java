@@ -38,8 +38,7 @@ public class DeployFromFiles {
         // the neo-node.
         NeoSendRawTransaction response = new ContractManagement(NEOW3J)
                 .deploy(nefFile, manifest)
-                .signers(AccountSigner.global(ALICE.getScriptHash()))
-                .wallet(WALLET)
+                .signers(AccountSigner.global(ALICE))
                 .sign()
                 .send();
 

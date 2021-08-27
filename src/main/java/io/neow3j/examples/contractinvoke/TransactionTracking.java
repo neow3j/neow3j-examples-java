@@ -1,6 +1,8 @@
 package io.neow3j.examples.contractinvoke;
 
+import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.BOB;
+import static io.neow3j.examples.Constants.GENESIS;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Constants.WALLET;
 
@@ -18,7 +20,7 @@ public class TransactionTracking {
     public static void main(String[] args) throws Throwable {
 
         TransactionBuilder b = new NeoToken(NEOW3J)
-                .transferFromDefaultAccount(WALLET, BOB.getScriptHash(), new BigInteger("1"));
+                .transfer(ALICE, BOB.getScriptHash(), new BigInteger("1"));
 
         Transaction tx = b.sign();
         NeoSendRawTransaction response = tx.send();
