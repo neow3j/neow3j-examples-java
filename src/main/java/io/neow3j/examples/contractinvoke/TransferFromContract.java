@@ -1,19 +1,22 @@
 package io.neow3j.examples.contractinvoke;
 
+import io.neow3j.contract.GasToken;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
+import io.neow3j.transaction.AccountSigner;
+import io.neow3j.transaction.ContractSigner;
+import io.neow3j.transaction.Transaction;
+import io.neow3j.transaction.Witness;
+import io.neow3j.types.Hash160;
+
+import java.math.BigInteger;
+
+import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.BOB;
+import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Utils.trackSentTransaction;
 import static io.neow3j.types.ContractParameter.hash160;
 import static io.neow3j.types.ContractParameter.integer;
 import static io.neow3j.types.ContractParameter.string;
-import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J;
-import static io.neow3j.examples.Constants.WALLET;
-import static io.neow3j.examples.Utils.trackSentTransaction;
-
-import io.neow3j.contract.GasToken;
-import io.neow3j.types.Hash160;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
-import static io.neow3j.transaction.AccountSigner.calledByEntry;
-import io.neow3j.transaction.Transaction;
-import io.neow3j.transaction.Witness;
 
 /*
  * This example shows how to transfer tokens from a smart contract. The contract used for this
@@ -28,29 +31,19 @@ public class TransferFromContract {
     public static void main(String[] args) throws Throwable {
 
         // GAS holding contract (`OnVerificationContract`).
-        Hash160 contract = new Hash160("5dca8617f3db7ee6b65788e2941c9bd9ff1a2ef2");
+        Hash160 contract = new Hash160("0xe7c27a246c701755574134aaa094b4fd5c79f78a");
 
         GasToken gas = new GasToken(NEOW3J);
-        Transaction tx = gas
-                .invokeFunction(
-                        "transfer",
-                        hash160(contract),
-                        hash160(ALICE.getScriptHash()),
-                        integer(100),
-                        string("a GAS transfer")
-                )
-                .signers( // The contract owner and the contract are both required here.
-                        calledByEntry(ALICE),
-                        calledByEntry(contract)
-                )
-                .getUnsignedTransaction();
-
-        // The contract owner needs to sign the transaction.
-        tx.addWitness(Witness.create(tx.getHashData(), ALICE.getECKeyPair()));
-        // A witness is also needed for the contract signer, but it is empty.
-        tx.addWitness(new Witness(new byte[0], new byte[0]));
-
-        NeoSendRawTransaction response = tx.send();
+        NeoSendRawTransaction response = gas.transfer(
+                        contract,
+                        BOB.getScriptHash(),
+                        new BigInteger("100"))
+                .signers( // The contract owner (Alice) and the contract are both required here.
+                        AccountSigner.calledByEntry(ALICE),
+                        ContractSigner.calledByEntry(contract, string("hello, world!")))
+                .sign() // Adds a witness for Alice and one for the contract including the
+                        // parameter ("hello, world!") that should be passed to the verify method.
+                .send();
 
         trackSentTransaction(response);
     }

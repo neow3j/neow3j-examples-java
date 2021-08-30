@@ -20,16 +20,9 @@ public class OnVerificationContract {
     @DisplayName("onPayment")
     static Event3Args<Hash160, Integer, Object> onPayment;
 
-    @DisplayName("onVerification")
-    static Event1Arg<String> onVerification;
-
     @OnVerification
-    public static boolean verify() throws Exception {
-        if (!Runtime.checkWitness(owner)) {
-            throw new Exception("The calling entity is not the owner of this contract.");
-        }
-        onVerification.fire("It's the owner!");
-        return true;
+    public static boolean verify(String value) throws Exception {
+        return Runtime.checkWitness(owner) && value == "hello, world!";
     }
 
     @OnNEP17Payment
