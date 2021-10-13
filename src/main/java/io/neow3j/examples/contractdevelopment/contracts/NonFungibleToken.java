@@ -82,7 +82,7 @@ public class NonFungibleToken {
 
     @Safe
     public static int totalSupply() {
-        return contractMap.get(totalSupplyKey).toInteger();
+        return contractMap.getInteger(totalSupplyKey);
     }
 
     /**
@@ -229,16 +229,16 @@ public class NonFungibleToken {
         if (balanceMap.get(owner.toByteArray()) == null) {
             return 0;
         }
-        return balanceMap.get(owner.toByteArray()).toInteger();
+        return balanceMap.get(owner.toByteArray()).toInt();
     }
 
     private static void incrementTotalSupplyByOne() {
-        int updatedTotalSupply = contractMap.get(totalSupplyKey).toInteger() + 1;
+        int updatedTotalSupply = contractMap.getInteger(totalSupplyKey) + 1;
         contractMap.put(totalSupplyKey, updatedTotalSupply);
     }
 
     private static void decrementTotalSupplyByOne() {
-        int updatedTotalSupply = contractMap.get(totalSupplyKey).toInteger() - 1;
+        int updatedTotalSupply = contractMap.getInteger(totalSupplyKey) - 1;
         contractMap.put(totalSupplyKey, updatedTotalSupply);
     }
 

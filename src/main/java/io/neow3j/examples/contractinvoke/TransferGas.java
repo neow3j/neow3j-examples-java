@@ -2,15 +2,17 @@ package io.neow3j.examples.contractinvoke;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.BOB;
-import static io.neow3j.examples.Constants.GENESIS;
 import static io.neow3j.examples.Constants.NEOW3J;
-import static io.neow3j.examples.Constants.WALLET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 
 import java.math.BigDecimal;
 
 import io.neow3j.contract.GasToken;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
+import io.neow3j.transaction.AccountSigner;
+import io.neow3j.transaction.Transaction;
+import io.neow3j.transaction.TransactionBuilder;
+import io.neow3j.wallet.Account;
 
 public class TransferGas {
 

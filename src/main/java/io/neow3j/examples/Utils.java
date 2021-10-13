@@ -14,7 +14,7 @@ public class Utils {
         System.out.println("####################\n");
         if (response.hasError()) {
             System.out.printf("The neo-node responded with the error message '%s'.%n",
-                    response.getError());
+                    response.getError().getMessage());
         } else {
             Hash256 txHash = response.getSendRawTransaction().getHash();
             System.out.printf("Successfully transmitted the transaction with hash '%s'.%n", txHash);

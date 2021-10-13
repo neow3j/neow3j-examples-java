@@ -50,7 +50,7 @@ public class FungibleToken {
     }
 
     static int getTotalSupply() {
-        return Storage.get(sc, totalSupplyKey).toInteger();
+        return Storage.getInteger(sc, totalSupplyKey);
     }
 
     public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data)
@@ -151,7 +151,7 @@ public class FungibleToken {
     }
 
     private static int getBalance(Hash160 key) {
-        return assetMap.get(key.toByteArray()).toInteger();
+        return assetMap.getInteger(key.toByteArray());
     }
 
 }

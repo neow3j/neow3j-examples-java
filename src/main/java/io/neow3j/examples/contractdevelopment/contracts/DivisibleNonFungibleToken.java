@@ -85,7 +85,7 @@ public class DivisibleNonFungibleToken {
 
     @Safe
     public static int totalSupply() {
-        return contractMap.get(totalSupplyKey).toInteger();
+        return contractMap.getInteger(totalSupplyKey);
     }
 
     private static byte[] createOwnerOfPrefix(ByteString tokenId) {
@@ -106,7 +106,7 @@ public class DivisibleNonFungibleToken {
         if (b == null) {
             return 0;
         }
-        return b.toInteger();
+        return b.toIntOrZero();
     }
 
     @Safe
@@ -115,7 +115,7 @@ public class DivisibleNonFungibleToken {
         if (balance == null) {
             return 0;
         }
-        return balance.toInteger();
+        return balance.toIntOrZero();
     }
 
     @Safe
@@ -164,7 +164,7 @@ public class DivisibleNonFungibleToken {
 
         increaseTotalOwnerBalance(owner, FACTOR);
         increaseBalance(owner, tokenId, FACTOR);
-        int amountOfOwnedTokens = amountOfOwnedTokensMap.get(owner.toByteArray()).toInteger();
+        int amountOfOwnedTokens = amountOfOwnedTokensMap.getInteger(owner.toByteArray());
         amountOfOwnedTokensMap.put(owner.toByteArray(), amountOfOwnedTokens + 1);
         onMint.fire(owner, tokenId, properties);
         return true;
@@ -226,7 +226,7 @@ public class DivisibleNonFungibleToken {
         if (totalBalance == null) {
             totalBalanceMap.put(owner.toByteArray(), addition);
         } else {
-            totalBalanceMap.put(owner.toByteArray(), totalBalance.toInteger() + addition);
+            totalBalanceMap.put(owner.toByteArray(), totalBalance.toInt() + addition);
         }
     }
 
@@ -235,10 +235,10 @@ public class DivisibleNonFungibleToken {
         if (totalBalance == null) {
             throw new Exception("Can not decrease an nonexistent balance.");
         }
-        if (totalBalance.toInteger() < subtraction) {
+        if (totalBalance.toInt() < subtraction) {
             throw new Exception("Can not subtract more than the actual balance.");
         }
-        totalBalanceMap.put(owner.toByteArray(), totalBalance.toInteger() - subtraction);
+        totalBalanceMap.put(owner.toByteArray(), totalBalance.toInt() - subtraction);
     }
 
     public static boolean transfer(Hash160 from, Hash160 to, int amount, ByteString tokenId,
@@ -252,7 +252,7 @@ public class DivisibleNonFungibleToken {
         }
 
         if (amount == balance) {
-            int amountOfOwnedTokens = amountOfOwnedTokensMap.get(from.toByteArray()).toInteger();
+            int amountOfOwnedTokens = amountOfOwnedTokensMap.getInteger(from.toByteArray());
             amountOfOwnedTokensMap.put(from.toByteArray(), amountOfOwnedTokens - 1);
             removeTokenOwner(tokenId, from);
             removeOwnersToken(from, tokenId);
@@ -282,7 +282,7 @@ public class DivisibleNonFungibleToken {
         if (balance == null) {
             return 0;
         }
-        return balance.toInteger();
+        return balance.toInt();
     }
 
     public static boolean migrate(ByteString script, String manifest) throws Exception {
