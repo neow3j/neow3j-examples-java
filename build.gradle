@@ -19,7 +19,12 @@ dependencies {
     implementation 'io.neow3j:devpack:3.13.1'
     implementation 'io.neow3j:compiler:3.13.1'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
-    implementation 'junit:junit:4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1',
+            'io.neow3j:devpack-test:3.13.1'
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
 }
 
 neow3jCompiler {
