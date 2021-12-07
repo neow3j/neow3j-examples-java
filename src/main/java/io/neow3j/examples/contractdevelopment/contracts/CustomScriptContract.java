@@ -46,18 +46,4 @@ public class CustomScriptContract {
 
     }
 }
-//--------------------------------------------------------------------------------------------------
-//   Alternatively, the same functionality can be implemented without the instructions annotation as
-//   follows. But, the `toInteger()` method used at the end of this method introduces an extra null
-//   check (see its implementation in the devpack). That extra null check is obviously unnecessary.
-//--------------------------------------------------------------------------------------------------
-//        public static int getIntOrThrow(StorageContext context, ByteString key) throws Exception {
-//            ByteString value = Storage.get(context, key);
-//            if (value == null) {
-//                throw new Exception("No entry found.");
-//            }
-//            return value.toInteger();
-//        }
-//--------------------------------------------------------------------------------------------------
-
 

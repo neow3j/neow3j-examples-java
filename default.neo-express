@@ -1,6 +1,9 @@
 {
   "magic": 5195086,
   "address-version": 53,
+  "settings": {
+    "chain.SecondsPerBlock": 5
+  },
   "consensus-nodes": [
     {
       "tcp-port": 40333,
