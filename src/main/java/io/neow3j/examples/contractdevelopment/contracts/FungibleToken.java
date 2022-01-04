@@ -151,7 +151,8 @@ public class FungibleToken {
     }
 
     private static int getBalance(Hash160 key) {
-        return assetMap.getInteger(key.toByteArray());
+        Integer b = assetMap.getInteger(key.toByteArray());
+        return b != null ? b : 0;
     }
 
 }
