@@ -28,7 +28,7 @@ tasks.withType(Test) {
 neow3jCompiler {
     // Option 1: (easier/preferred)
     // Set the class name of the contract to compile when running the `neow3jCompiler` Gradle task.
-    className = "io.neow3j.examples.contractdevelopment.contracts.FungibleToken"
+    className = "io.neow3j.examples.contractdevelopment.contracts.ExampleContract"
 
     // Option 2:
     // If you want to set the contract class name as a project property,

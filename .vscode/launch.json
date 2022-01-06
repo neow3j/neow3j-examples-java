@@ -34,59 +34,20 @@
             }
         },
         {
-            "name": "NonFungibleTokenContract",
+            "name": "ExampleContract",
             "type": "neo-contract",
             "request": "launch",
-            "program": "${workspaceFolder}/build/neow3j/NonFungibleToken.nef",
+            "program": "${workspaceFolder}/build/neow3j/ExampleContract.nef",
             "invocation": {
-                "operation": "burn",
+                "operation": "method",
                 "args": [
-                    "0xfb2b",
-                    "0xfb2b60c9ea35be51abf741981e7c4954eedf50c3",
-                    10
+                    "storage_key"
                 ]
             },
             "signers": [
-                "NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP"
+                "@Alice"
             ],
-            "storage": [
-                {
-                    "key": "0x0cfb2b60c9ea35be51abf741981e7c4954eedf50c3fb2b",
-                    "value": 10
-                },
-                {
-                    "key": "0x0cfb2b60c9ea35be51abf741981e7c4954eedf50c3fb2c",
-                    "value": 20
-                },
-                {
-                    "key": "0x0efb2b60c9ea35be51abf741981e7c4954eedf50c3fb2b",
-                    "value": "0xfb2b"
-                },
-                {
-                    "key": "0x0efb2b60c9ea35be51abf741981e7c4954eedf50c3fb2c",
-                    "value": "0xfb2c"
-                },
-                {
-                    "key": "0x0bfb2b60c9ea35be51abf741981e7c4954eedf50c3fb2b",
-                    "value": "0xfb2b"
-                },
-                {
-                    "key": "0x0bfb2b60c9ea35be51abf741981e7c4954eedf50c3fb2c",
-                    "value": "0xfb2c"
-                },
-                {
-                    "key": "0x0a",
-                    "value": 1000
-                }
-            ],
-            "return-types": [
-                "bool"
-            ],
-            "runtime": {
-                "witnesses": {
-                    "check-result": true
-                }
-            }
+            "neo-express": "${workspaceFolder}/default.neo-express",
         }
     ]
 }
