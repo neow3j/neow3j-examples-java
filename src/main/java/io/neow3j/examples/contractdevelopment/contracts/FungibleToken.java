@@ -32,10 +32,9 @@ public class FungibleToken {
 
     static final int initialSupply = 200_000_000;
     static final int decimals = 8;
-    static final String assetPrefix = "asset";
     static final String totalSupplyKey = "totalSupply";
-    static final StorageContext sc = Storage.getStorageContext();
-    static final StorageMap assetMap = sc.createMap(assetPrefix);
+    static final StorageContext ctx = Storage.getStorageContext();
+    static final StorageMap assetMap = new StorageMap(ctx, "assets");
 
     public static String symbol() {
         return "FGT";
@@ -50,7 +49,7 @@ public class FungibleToken {
     }
 
     static int getTotalSupply() {
-        return Storage.getInteger(sc, totalSupplyKey);
+        return Storage.getInt(ctx, totalSupplyKey);
     }
 
     public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data)
@@ -93,11 +92,11 @@ public class FungibleToken {
     public static void deploy(Object data, boolean update) throws Exception {
         throwIfSignerIsNotOwner();
         if (!update) {
-            if (Storage.get(sc, totalSupplyKey) != null) {
+            if (Storage.get(ctx, totalSupplyKey) != null) {
                 throw new Exception("Contract was already deployed.");
             }
             // Initialize supply
-            Storage.put(sc, totalSupplyKey, initialSupply);
+            Storage.put(ctx, totalSupplyKey, initialSupply);
             // And allocate all tokens to the contract owner.
             assetMap.put(owner.toByteArray(), initialSupply);
         }
@@ -151,7 +150,7 @@ public class FungibleToken {
     }
 
     private static int getBalance(Hash160 key) {
-        Integer b = assetMap.getInteger(key.toByteArray());
+        Integer b = assetMap.getInt(key.toByteArray());
         return b != null ? b : 0;
     }
 

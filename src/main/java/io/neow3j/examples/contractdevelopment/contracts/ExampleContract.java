@@ -17,4 +17,8 @@ public class ExampleContract {
         return Storage.get(ctx, prefix + key);
         // return Storage.get(Storage.getStorageContext(), prefix + key);
     }
+
+    static class MyStruct {
+
+    }
 }

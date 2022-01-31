@@ -30,27 +30,25 @@ public class DivisibleNonFungibleToken {
     static final Hash160 contractOwner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
 
     static final StorageContext ctx = Storage.getStorageContext();
-    static final StorageMap contractMap = ctx.createMap((byte) 1);
-    static final byte[] totalSupplyKey = Helper.toByteArray((byte) 1);
+    static final StorageMap contractMap = new StorageMap(ctx, 1);
+    static final String totalSupplyKey = "totSupply";
 
-    static final byte[] registryPrefix = Helper.toByteArray((byte) 8);
-    static final StorageMap registryMap = ctx.createMap(registryPrefix);
+    static final StorageMap registryMap = new StorageMap(ctx, 8);
 
     static final String propName = "name";
     static final String propDescription = "description";
     static final String propImage = "image";
     static final String propTokenURI = "tokenURI";
-    static final StorageMap propertiesNameMap = ctx.createMap((byte) 12);
-    static final StorageMap propertiesDescriptionMap = ctx.createMap((byte) 13);
-    static final StorageMap propertiesImageMap = ctx.createMap((byte) 14);
-    static final StorageMap propertiesTokenURIMap = ctx.createMap((byte) 15);
+    static final StorageMap propertiesNameMap = new StorageMap(ctx, 12);
+    static final StorageMap propertiesDescriptionMap = new StorageMap(ctx, 13);
+    static final StorageMap propertiesImageMap = new StorageMap(ctx, 14);
+    static final StorageMap propertiesTokenURIMap = new StorageMap(ctx, 15);
+    static final StorageMap amountOfOwnedTokensMap = new StorageMap(ctx, 21);
+    static final StorageMap totalBalanceMap = new StorageMap(ctx, 22);
 
-    static final StorageMap amountOfOwnedTokensMap = ctx.createMap((byte) 21);
-    static final StorageMap totalBalanceMap = ctx.createMap((byte) 22);
-
-    static final byte[] balanceTokenOwnerKey = Helper.toByteArray((byte) 23);
-    static final byte[] ownerOfKey = Helper.toByteArray((byte) 32);
-    static final byte[] tokensOfKey = Helper.toByteArray((byte) 33);
+    static final ByteString balanceTokenOwnerKey = new ByteString("balanceTokenOwner");
+    static final ByteString ownerOfKey = new ByteString("ownerOf");
+    static final ByteString tokensOfKey = new ByteString("tokensOf");
 
     private static final int TOKEN_DECIMALS = 8;
     private static final int FACTOR = 100_000_000;
@@ -85,19 +83,19 @@ public class DivisibleNonFungibleToken {
 
     @Safe
     public static int totalSupply() {
-        return contractMap.getInteger(totalSupplyKey);
+        return contractMap.getInt(totalSupplyKey);
     }
 
-    private static byte[] createOwnerOfPrefix(ByteString tokenId) {
-        return Helper.concat(ownerOfKey, tokenId);
+    private static ByteString createOwnerOfPrefix(ByteString tokenId) {
+        return ownerOfKey.concat(tokenId);
     }
 
-    private static byte[] createTokensOfPrefix(Hash160 owner) {
-        return Helper.concat(tokensOfKey, owner.toByteArray());
+    private static ByteString createTokensOfPrefix(Hash160 owner) {
+        return tokensOfKey.concat(owner.toByteString());
     }
 
-    private static byte[] createBalancePrefix(Hash160 owner) {
-        return Helper.concat(balanceTokenOwnerKey, owner.toByteArray());
+    private static ByteString createBalancePrefix(Hash160 owner) {
+        return balanceTokenOwnerKey.concat(owner.toByteString());
     }
 
     @Safe
@@ -111,7 +109,7 @@ public class DivisibleNonFungibleToken {
 
     @Safe
     public static int balanceOf(Hash160 owner, ByteString tokenId) {
-        ByteString balance = ctx.asReadOnly().createMap(createTokensOfPrefix(owner)).get(tokenId);
+        ByteString balance = new StorageMap(ctx, createTokensOfPrefix(owner)).get(tokenId);
         if (balance == null) {
             return 0;
         }
@@ -164,32 +162,32 @@ public class DivisibleNonFungibleToken {
 
         increaseTotalOwnerBalance(owner, FACTOR);
         increaseBalance(owner, tokenId, FACTOR);
-        int amountOfOwnedTokens = amountOfOwnedTokensMap.getInteger(owner.toByteArray());
+        int amountOfOwnedTokens = amountOfOwnedTokensMap.getInt(owner.toByteArray());
         amountOfOwnedTokensMap.put(owner.toByteArray(), amountOfOwnedTokens + 1);
         onMint.fire(owner, tokenId, properties);
         return true;
     }
 
     private static void addTokenOwner(ByteString tokenId, Hash160 owner) {
-        ctx.createMap(createOwnerOfPrefix(tokenId)).put(owner.toByteArray(), owner.toByteArray());
+        new StorageMap(ctx, createOwnerOfPrefix(tokenId))
+                .put(owner.toByteArray(), owner.toByteArray());
     }
 
     private static void removeTokenOwner(ByteString tokenId, Hash160 owner) {
-        ctx.createMap(createOwnerOfPrefix(tokenId)).delete(owner.toByteArray());
+        new StorageMap(ctx, createOwnerOfPrefix(tokenId)).delete(owner.toByteArray());
     }
 
     private static void addToOwnersTokens(Hash160 owner, ByteString tokenId) {
-        ctx.createMap(createTokensOfPrefix(owner)).put(tokenId, tokenId);
+        new StorageMap(ctx, createTokensOfPrefix(owner)).put(tokenId, tokenId);
     }
 
     private static void removeOwnersToken(Hash160 owner, ByteString tokenId) {
-        ctx.createMap(createTokensOfPrefix(owner)).put(tokenId, tokenId);
+        new StorageMap(ctx, createTokensOfPrefix(owner)).put(tokenId, tokenId);
     }
 
     @Safe
     public static Iterator<ByteString> tokens() {
-        return (Iterator<ByteString>) Storage.find(ctx.asReadOnly(), registryPrefix,
-                FindOptions.ValuesOnly);
+        return (Iterator<ByteString>) registryMap.find(FindOptions.ValuesOnly);
     }
 
     @Safe
@@ -252,7 +250,7 @@ public class DivisibleNonFungibleToken {
         }
 
         if (amount == balance) {
-            int amountOfOwnedTokens = amountOfOwnedTokensMap.getInteger(from.toByteArray());
+            int amountOfOwnedTokens = amountOfOwnedTokensMap.getInt(from.toByteArray());
             amountOfOwnedTokensMap.put(from.toByteArray(), amountOfOwnedTokens - 1);
             removeTokenOwner(tokenId, from);
             removeOwnersToken(from, tokenId);
@@ -268,17 +266,17 @@ public class DivisibleNonFungibleToken {
     }
 
     private static void increaseBalance(Hash160 owner, ByteString tokenId, int addition) {
-        ctx.createMap(createBalancePrefix(owner)).put(tokenId,
-                getBalanceOf(owner, tokenId) + addition);
+        new StorageMap(ctx, createBalancePrefix(owner))
+                .put(tokenId, getBalanceOf(owner, tokenId) + addition);
     }
 
     private static void decreaseBalance(Hash160 owner, ByteString tokenId, int subtraction) {
-        ctx.createMap(createBalancePrefix(owner)).put(tokenId,
-                getBalanceOf(owner, tokenId) - subtraction);
+        new StorageMap(ctx, createBalancePrefix(owner))
+                .put(tokenId, getBalanceOf(owner, tokenId) - subtraction);
     }
 
     private static int getBalanceOf(Hash160 owner, ByteString tokenId) {
-        ByteString balance = ctx.createMap(createBalancePrefix(owner)).get(tokenId);
+        ByteString balance = new StorageMap(ctx, createBalancePrefix(owner)).get(tokenId);
         if (balance == null) {
             return 0;
         }

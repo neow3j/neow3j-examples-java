@@ -1,7 +1,5 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
-import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
-
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.Hash160;
@@ -14,14 +12,16 @@ import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.StorageMap;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
-import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.OnDeployment;
+import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.Safe;
 import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
+
+import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 @ManifestExtra(key = "author", value = "AxLabs")
 // Has to call onPayment method of any receiving contract.
@@ -31,27 +31,21 @@ public class NonFungibleToken {
     static final Hash160 contractOwner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
 
     static final StorageContext ctx = Storage.getStorageContext();
-    static final StorageMap contractMap = ctx.createMap((byte) 1);
     static final byte[] totalSupplyKey = Helper.toByteArray((byte) 1);
-
-    static final byte[] registryPrefix = Helper.toByteArray((byte) 8);
-    static final StorageMap registryMap = ctx.createMap(registryPrefix);
-
-    static final byte[] ownerOfKey = Helper.toByteArray((byte) 10);
-    static final StorageMap ownerOfMap = ctx.createMap(ownerOfKey);
+    static final StorageMap contractMap = new StorageMap(ctx, 1);
+    static final StorageMap registryMap = new StorageMap(ctx, "registry");
+    static final StorageMap ownerOfMap = new StorageMap(ctx, "ownerOf");
+    static final StorageMap balanceMap = new StorageMap(ctx, "balance");
 
     static final String propName = "name";
     static final String propDescription = "description";
     static final String propImage = "image";
     static final String propTokenURI = "tokenURI";
 
-    static final StorageMap propertiesNameMap = ctx.createMap((byte) 12);
-    static final StorageMap propertiesDescriptionMap = ctx.createMap((byte) 13);
-    static final StorageMap propertiesImageMap = ctx.createMap((byte) 14);
-    static final StorageMap propertiesTokenURIMap = ctx.createMap((byte) 15);
-
-    static final byte[] balanceKey = Helper.toByteArray((byte) 20);
-    static final StorageMap balanceMap = ctx.createMap(balanceKey);
+    static final StorageMap propertiesNameMap = new StorageMap(ctx, "propsName");
+    static final StorageMap propertiesDescriptionMap = new StorageMap(ctx, "propsDesc");
+    static final StorageMap propertiesImageMap = new StorageMap(ctx, "propsImg");
+    static final StorageMap propertiesTokenURIMap = new StorageMap(ctx, "tokenUriMap");
 
     static final byte[] tokensOfKey = Helper.toByteArray((byte) 24);
 
@@ -82,7 +76,7 @@ public class NonFungibleToken {
 
     @Safe
     public static int totalSupply() {
-        return contractMap.getInteger(totalSupplyKey);
+        return contractMap.getInt(totalSupplyKey);
     }
 
     /**
@@ -99,9 +93,7 @@ public class NonFungibleToken {
     @Safe
     public static Iterator<ByteString> tokensOf(Hash160 owner) {
         return (Iterator<ByteString>) Storage.find(
-                ctx.asReadOnly(),
-                createTokensOfPrefix(owner),
-                FindOptions.RemovePrefix);
+                ctx.asReadOnly(), createTokensOfPrefix(owner), FindOptions.RemovePrefix);
     }
 
     public static boolean transfer(Hash160 to, ByteString tokenId, Object data) throws Exception {
@@ -113,8 +105,8 @@ public class NonFungibleToken {
             throw new Exception("No authorization.");
         }
         ownerOfMap.put(tokenId, to.toByteArray());
-        ctx.createMap(createTokensOfPrefix(owner)).delete(tokenId);
-        ctx.createMap(createTokensOfPrefix(to)).put(tokenId, 1);
+        new StorageMap(ctx, createTokensOfPrefix(owner)).delete(tokenId);
+        new StorageMap(ctx, createTokensOfPrefix(to)).put(tokenId, 1);
 
         decrementBalanceByOne(owner);
         incrementBalanceByOne(to);
@@ -178,7 +170,7 @@ public class NonFungibleToken {
 
         registryMap.put(tokenId, tokenId);
         ownerOfMap.put(tokenId, owner.toByteArray());
-        ctx.createMap(createTokensOfPrefix(owner)).put(tokenId, 1);
+        new StorageMap(ctx, createTokensOfPrefix(owner)).put(tokenId, 1);
 
         incrementBalanceByOne(owner);
         incrementTotalSupplyByOne();
@@ -187,10 +179,7 @@ public class NonFungibleToken {
 
     @Safe
     public static Iterator<Iterator.Struct<ByteString, ByteString>> tokens() {
-        return (Iterator<Iterator.Struct<ByteString, ByteString>>) Storage.find(
-                ctx.asReadOnly(),
-                registryPrefix,
-                FindOptions.RemovePrefix);
+        return (Iterator<Iterator.Struct<ByteString, ByteString>>) registryMap.find(FindOptions.RemovePrefix);
     }
 
     @Safe
@@ -233,12 +222,12 @@ public class NonFungibleToken {
     }
 
     private static void incrementTotalSupplyByOne() {
-        int updatedTotalSupply = contractMap.getInteger(totalSupplyKey) + 1;
+        int updatedTotalSupply = contractMap.getInt(totalSupplyKey) + 1;
         contractMap.put(totalSupplyKey, updatedTotalSupply);
     }
 
     private static void decrementTotalSupplyByOne() {
-        int updatedTotalSupply = contractMap.getInteger(totalSupplyKey) - 1;
+        int updatedTotalSupply = contractMap.getInt(totalSupplyKey) - 1;
         contractMap.put(totalSupplyKey, updatedTotalSupply);
     }
 
@@ -256,7 +245,7 @@ public class NonFungibleToken {
         propertiesImageMap.delete(tokenId);
         propertiesTokenURIMap.delete(tokenId);
         ownerOfMap.delete(tokenId);
-        ctx.createMap(createTokensOfPrefix(owner)).delete(tokenId);
+        new StorageMap(ctx, createTokensOfPrefix(owner)).delete(tokenId);
         decrementBalanceByOne(owner);
         decrementTotalSupplyByOne();
         return true;

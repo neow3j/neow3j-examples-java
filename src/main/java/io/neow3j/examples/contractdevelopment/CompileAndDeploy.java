@@ -4,7 +4,7 @@ import io.neow3j.compiler.CompilationUnit;
 import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.SmartContract;
-import io.neow3j.examples.contractdevelopment.contracts.FungibleToken;
+import io.neow3j.examples.contractdevelopment.contracts.SimpleStorageContract;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
 import io.neow3j.types.Hash160;
@@ -16,7 +16,6 @@ import static io.neow3j.contract.ContractUtils.writeContractManifestFile;
 import static io.neow3j.contract.ContractUtils.writeNefFile;
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
-import static io.neow3j.examples.Constants.WALLET;
 
 // Shows how a smart contract can be compiled programmatically and then deployed on a local
 // Neo blockchain.
@@ -25,7 +24,8 @@ public class CompileAndDeploy {
     public static void main(String[] args) throws Throwable {
 
         // Compile the NonFungibleToken contract and construct a SmartContract object from it.
-        CompilationUnit res = new Compiler().compile(FungibleToken.class.getCanonicalName());
+        CompilationUnit res =
+                new Compiler().compile(SimpleStorageContract.class.getCanonicalName());
 
         // Write contract (compiled, NEF) to the disk
         Path buildNeow3jPath = Paths.get("build", "neow3j");
