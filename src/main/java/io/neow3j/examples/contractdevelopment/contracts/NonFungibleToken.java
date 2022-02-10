@@ -10,59 +10,46 @@ import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.StorageMap;
+import io.neow3j.devpack.StringLiteralHelper;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
-import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.Safe;
+import io.neow3j.devpack.annotations.SupportedStandards;
 import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
 
-import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
-
+@DisplayName("FurryFriends")
 @ManifestExtra(key = "author", value = "AxLabs")
-// Has to call onPayment method of any receiving contract.
-@Permission(contract = "*", methods = "*")
+@SupportedStandards("NEP-11")
 public class NonFungibleToken {
 
-    static final Hash160 contractOwner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
+    static final Hash160 contractOwner = StringLiteralHelper.addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
 
     static final StorageContext ctx = Storage.getStorageContext();
-    static final byte[] totalSupplyKey = Helper.toByteArray((byte) 1);
-    static final StorageMap contractMap = new StorageMap(ctx, 1);
-    static final StorageMap registryMap = new StorageMap(ctx, "registry");
-    static final StorageMap ownerOfMap = new StorageMap(ctx, "ownerOf");
-    static final StorageMap balanceMap = new StorageMap(ctx, "balance");
+    static final StorageMap contractMap = new StorageMap(ctx, 0);
+    static final StorageMap registryMap = new StorageMap(ctx, 1);
+    static final StorageMap ownerOfMap = new StorageMap(ctx, 2);
+    static final StorageMap balanceMap = new StorageMap(ctx, 3);
 
+    // Keys of key-value pairs in NFT properties
     static final String propName = "name";
     static final String propDescription = "description";
     static final String propImage = "image";
     static final String propTokenURI = "tokenURI";
 
-    static final StorageMap propertiesNameMap = new StorageMap(ctx, "propsName");
-    static final StorageMap propertiesDescriptionMap = new StorageMap(ctx, "propsDesc");
-    static final StorageMap propertiesImageMap = new StorageMap(ctx, "propsImg");
-    static final StorageMap propertiesTokenURIMap = new StorageMap(ctx, "tokenUriMap");
+    static final StorageMap propertiesNameMap = new StorageMap(ctx, 8);
+    static final StorageMap propertiesDescriptionMap = new StorageMap(ctx, 9);
+    static final StorageMap propertiesImageMap = new StorageMap(ctx, 10);
+    static final StorageMap propertiesTokenURIMap = new StorageMap(ctx, 11);
 
-    static final byte[] tokensOfKey = Helper.toByteArray((byte) 24);
+    static final byte[] totalSupplyKey = new byte[]{0x10};
+    static final byte[] tokensOfKey = new byte[]{0x11};
 
-    @OnDeployment
-    public static void deploy(Object data, boolean update) {
-        if (!update) {
-            contractMap.put(totalSupplyKey, 0);
-        }
-    }
-
-    @DisplayName("Transfer")
-    static Event4Args<Hash160, Hash160, Integer, ByteString> onTransfer;
-
-    @Safe
-    public static Hash160 contractOwner() {
-        return contractOwner;
-    }
+    // NEP-11 Methods
 
     @Safe
     public static String symbol() {
@@ -79,49 +66,35 @@ public class NonFungibleToken {
         return contractMap.getInt(totalSupplyKey);
     }
 
-    /**
-     * Gets the number of tokens owned by the specified {@code owner}.
-     */
     @Safe
     public static int balanceOf(Hash160 owner) {
-        return getBalanceOf(owner);
+        return balanceMap.getIntOrZero(owner.toByteArray());
     }
 
-    /**
-     * Gets the token ids owned by the specified {@code owner}.
-     */
     @Safe
     public static Iterator<ByteString> tokensOf(Hash160 owner) {
         return (Iterator<ByteString>) Storage.find(
                 ctx.asReadOnly(), createTokensOfPrefix(owner), FindOptions.RemovePrefix);
     }
 
-    public static boolean transfer(Hash160 to, ByteString tokenId, Object data) throws Exception {
+    public static boolean transfer(Hash160 to, ByteString tokenId, Object[] data) {
         Hash160 owner = ownerOf(tokenId);
-        if (owner == null) {
-            throw new Exception("This token id does not exist.");
-        }
-        if (!Runtime.checkWitness(owner)) {
-            throw new Exception("No authorization.");
-        }
+        assert owner != null : "This token id does not exist.";
+        throwIfSignerIsNotOwner(owner);
+
         ownerOfMap.put(tokenId, to.toByteArray());
+
         new StorageMap(ctx, createTokensOfPrefix(owner)).delete(tokenId);
         new StorageMap(ctx, createTokensOfPrefix(to)).put(tokenId, 1);
 
-        decrementBalanceByOne(owner);
-        incrementBalanceByOne(to);
+        decreaseBalanceByOne(owner);
+        increaseBalanceByOne(to);
 
         onTransfer.fire(owner, to, 1, tokenId);
-
         if (ContractManagement.getContract(to) != null) {
-            Contract.call(to, "onNEP11Payment", CallFlags.All,
-                    new Object[]{owner, 1, tokenId, data});
+            Contract.call(to, "onNEP17Payment", CallFlags.All, data);
         }
         return true;
-    }
-
-    private static byte[] createTokensOfPrefix(Hash160 owner) {
-        return Helper.concat(tokensOfKey, owner.toByteArray());
     }
 
     @Safe
@@ -133,62 +106,16 @@ public class NonFungibleToken {
         return new Hash160(owner);
     }
 
-    @DisplayName("Mint")
-    private static Event3Args<Hash160, ByteString, Map<String, String>> onMint;
-
-    /**
-     * Initializes a new token.
-     */
-    public static void mint(Hash160 owner, ByteString tokenId, Map<String, String> properties)
-            throws Exception {
-
-        if (!Runtime.checkWitness(contractOwner)) {
-            throw new Exception("No authorization.");
-        }
-        if (registryMap.get(tokenId) != null) {
-            throw new Exception("This token id already exists.");
-        }
-
-        if (!properties.containsKey(propName)) {
-            throw new Exception("The properties must contain a value for the key `name`.");
-        } else {
-            String tokenName = properties.get(propName);
-            propertiesNameMap.put(tokenId, tokenName);
-        }
-        if (properties.containsKey(propDescription)) {
-            String description = properties.get(propDescription);
-            propertiesDescriptionMap.put(tokenId, description);
-        }
-        if (properties.containsKey(propImage)) {
-            String image = properties.get(propImage);
-            propertiesImageMap.put(tokenId, image);
-        }
-        if (properties.containsKey(propTokenURI)) {
-            String tokenURI = properties.get(propTokenURI);
-            propertiesTokenURIMap.put(tokenId, tokenURI);
-        }
-
-        registryMap.put(tokenId, tokenId);
-        ownerOfMap.put(tokenId, owner.toByteArray());
-        new StorageMap(ctx, createTokensOfPrefix(owner)).put(tokenId, 1);
-
-        incrementBalanceByOne(owner);
-        incrementTotalSupplyByOne();
-        onMint.fire(owner, tokenId, properties);
-    }
-
     @Safe
     public static Iterator<Iterator.Struct<ByteString, ByteString>> tokens() {
         return (Iterator<Iterator.Struct<ByteString, ByteString>>) registryMap.find(FindOptions.RemovePrefix);
     }
 
     @Safe
-    public static Map<String, String> properties(ByteString tokenId) throws Exception {
+    public static Map<String, String> properties(ByteString tokenId) {
         Map<String, String> p = new Map<>();
         ByteString tokenName = propertiesNameMap.get(tokenId);
-        if (tokenName == null) {
-            throw new Exception("This token id does not exist.");
-        }
+        assert tokenName != null : "This token id does not exist.";
 
         p.put(propName, tokenName.toString());
         ByteString tokenDescription = propertiesDescriptionMap.get(tokenId);
@@ -206,19 +133,105 @@ public class NonFungibleToken {
         return p;
     }
 
-    private static void incrementBalanceByOne(Hash160 owner) {
-        balanceMap.put(owner.toByteArray(), getBalanceOf(owner) + 1);
-    }
+    // Events
 
-    private static void decrementBalanceByOne(Hash160 owner) {
-        balanceMap.put(owner.toByteArray(), getBalanceOf(owner) - 1);
-    }
+    @DisplayName("Mint")
+    private static Event3Args<Hash160, ByteString, Map<String, String>> onMint;
 
-    private static int getBalanceOf(Hash160 owner) {
-        if (balanceMap.get(owner.toByteArray()) == null) {
-            return 0;
+    @DisplayName("Transfer")
+    static Event4Args<Hash160, Hash160, Integer, ByteString> onTransfer;
+
+    // Deploy, Update, Destroy
+
+    @OnDeployment
+    public static void deploy(Object data, boolean update) {
+        if (!update) {
+            throwIfSignerIsNotContractOwner();
+            contractMap.put(totalSupplyKey, 0);
         }
-        return balanceMap.get(owner.toByteArray()).toInt();
+    }
+
+    public static void update(ByteString script, String manifest) {
+        throwIfSignerIsNotContractOwner();
+        ContractManagement.update(script, manifest);
+    }
+
+    public static void destroy() {
+        throwIfSignerIsNotContractOwner();
+        ContractManagement.destroy();
+    }
+
+    // Custom Methods
+
+    @Safe
+    public static Hash160 contractOwner() {
+        return contractOwner;
+    }
+
+    public static void mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) {
+        assert Runtime.checkWitness(contractOwner) : "No authorization.";
+        assert registryMap.get(tokenId) == null : "This token id already exists.";
+        assert properties.containsKey(propName) : "The properties must contain a value for the key 'name'.";
+
+        String tokenName = properties.get(propName);
+        propertiesNameMap.put(tokenId, tokenName);
+
+        if (properties.containsKey(propDescription)) {
+            String description = properties.get(propDescription);
+            propertiesDescriptionMap.put(tokenId, description);
+        }
+        if (properties.containsKey(propImage)) {
+            String image = properties.get(propImage);
+            propertiesImageMap.put(tokenId, image);
+        }
+        if (properties.containsKey(propTokenURI)) {
+            String tokenURI = properties.get(propTokenURI);
+            propertiesTokenURIMap.put(tokenId, tokenURI);
+        }
+
+        registryMap.put(tokenId, tokenId);
+        ownerOfMap.put(tokenId, owner.toByteArray());
+        new StorageMap(ctx, createTokensOfPrefix(owner)).put(tokenId, 1);
+
+        increaseBalanceByOne(owner);
+        incrementTotalSupplyByOne();
+        onMint.fire(owner, tokenId, properties);
+    }
+
+    public static boolean burn(ByteString tokenId) {
+        Hash160 owner = ownerOf(tokenId);
+        assert owner != null : "This token id does not exist.";
+        throwIfSignerIsNotOwner(owner);
+
+        registryMap.delete(tokenId);
+        propertiesNameMap.delete(tokenId);
+        propertiesDescriptionMap.delete(tokenId);
+        propertiesImageMap.delete(tokenId);
+        propertiesTokenURIMap.delete(tokenId);
+        ownerOfMap.delete(tokenId);
+
+        new StorageMap(ctx, createTokensOfPrefix(owner)).delete(tokenId);
+        decreaseBalanceByOne(owner);
+        decrementTotalSupplyByOne();
+        return true;
+    }
+
+    // Private Helper Methods
+
+    private static void throwIfSignerIsNotContractOwner() {
+        assert Runtime.checkWitness(contractOwner) : "No authorization.";
+    }
+
+    private static void throwIfSignerIsNotOwner(Hash160 owner) {
+        assert Runtime.checkWitness(owner) : "No authorization.";
+    }
+
+    private static void increaseBalanceByOne(Hash160 owner) {
+        balanceMap.put(owner.toByteArray(), balanceOf(owner) + 1);
+    }
+
+    private static void decreaseBalanceByOne(Hash160 owner) {
+        balanceMap.put(owner.toByteArray(), balanceOf(owner) - 1);
     }
 
     private static void incrementTotalSupplyByOne() {
@@ -231,32 +244,8 @@ public class NonFungibleToken {
         contractMap.put(totalSupplyKey, updatedTotalSupply);
     }
 
-    public static boolean burn(ByteString tokenId) throws Exception {
-        Hash160 owner = ownerOf(tokenId);
-        if (owner == null) {
-            throw new Exception("This token id does not exist.");
-        }
-        if (!Runtime.checkWitness(owner)) {
-            throw new Exception("No authorization.");
-        }
-        registryMap.delete(tokenId);
-        propertiesNameMap.delete(tokenId);
-        propertiesDescriptionMap.delete(tokenId);
-        propertiesImageMap.delete(tokenId);
-        propertiesTokenURIMap.delete(tokenId);
-        ownerOfMap.delete(tokenId);
-        new StorageMap(ctx, createTokensOfPrefix(owner)).delete(tokenId);
-        decrementBalanceByOne(owner);
-        decrementTotalSupplyByOne();
-        return true;
-    }
-
-    public static boolean destroy() {
-        if (!Runtime.checkWitness(contractOwner)) {
-            return false;
-        }
-        ContractManagement.destroy();
-        return true;
+    private static byte[] createTokensOfPrefix(Hash160 owner) {
+        return Helper.concat(tokensOfKey, owner.toByteArray());
     }
 
 }
