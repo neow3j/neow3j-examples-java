@@ -20,4 +20,5 @@ public class GetLatestBlockIndex {
         System.out.println("Latest block index: " + latestBlockIndex);
         System.out.println("####################");
     }
+
 }

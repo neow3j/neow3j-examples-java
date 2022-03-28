@@ -11,6 +11,7 @@ import java.nio.file.Path;
 public class CreateNewBIP39WalletFile {
 
     public static void main(String[] args) throws IOException, CipherException {
+
         Path tempFile = Files.createTempFile("wallet-dir-prefix-test", ".wallet");
 
         Bip39Account a = Bip39Account.create("myPassw0rd!@#");
@@ -24,4 +25,5 @@ public class CreateNewBIP39WalletFile {
         System.out.println("Mnemonic words: " + mnemonicWords);
         System.out.println("####################");
     }
+
 }

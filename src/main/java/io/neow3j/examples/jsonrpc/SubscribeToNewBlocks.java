@@ -18,4 +18,5 @@ public class SubscribeToNewBlocks {
                     System.out.println("Transactions:    " + blockReqResult.getBlock().getTransactions());
                 });
     }
+
 }

@@ -63,8 +63,8 @@ public class VoteForValidator {
         System.out.println("Voted!");
         System.out.println("Voted validators are:");
 
-        NEOW3J.getNextBlockValidators().send().getResult().forEach(v -> System.out.println(
-                "Pubkey: " + v.getPublicKey() + ", votes: " + v.getVotes()));
-
+        NEOW3J.getNextBlockValidators().send().getResult()
+                .forEach(v -> System.out.println("Pubkey: " + v.getPublicKey() + ", votes: " + v.getVotes()));
     }
+
 }

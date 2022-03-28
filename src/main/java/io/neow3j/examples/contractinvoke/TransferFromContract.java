@@ -19,12 +19,10 @@ import static io.neow3j.types.ContractParameter.integer;
 import static io.neow3j.types.ContractParameter.string;
 
 /*
- * This example shows how to transfer tokens from a smart contract. The contract used for this
- * example is the `OnVerificationContract`. This contract has a `verify` method that is called when
- * we try to send tokens away from it.
+ * This example shows how to transfer tokens from a smart contract. The contract used for this example is the
+ * `OnVerificationContract`. This contract has a `verify` method that is called when we try to send tokens away from it.
  *
- * For this example to work the `OnVerificationContract` has to be deployed first and GAS needs to
- * be sent to it.
+ * For this example to work the `OnVerificationContract` has to be deployed first and GAS needs to be sent to it.
  */
 public class TransferFromContract {
 
@@ -42,9 +40,10 @@ public class TransferFromContract {
                         AccountSigner.calledByEntry(ALICE),
                         ContractSigner.calledByEntry(contract, string("hello, world!")))
                 .sign() // Adds a witness for Alice and one for the contract including the
-                        // parameter ("hello, world!") that should be passed to the verify method.
+                // parameter ("hello, world!") that should be passed to the verify method.
                 .send();
 
         trackSentTransaction(response);
     }
+
 }

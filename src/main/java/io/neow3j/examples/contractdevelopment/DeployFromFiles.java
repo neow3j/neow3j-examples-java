@@ -15,10 +15,8 @@ import java.nio.file.Paths;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
-import static io.neow3j.examples.Constants.WALLET;
 
-// Shows how to read a smart contract's files from the disk and deployed it on through a local
-// neo-node.
+// Shows how to read a smart contract's files from the disk and deployed it on through a local neo-node.
 public class DeployFromFiles {
 
     public static void main(String[] args) throws Throwable {
@@ -34,8 +32,7 @@ public class DeployFromFiles {
             manifest = ObjectMapperFactory.getObjectMapper().readValue(s, ContractManifest.class);
         }
 
-        // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
-        // the neo-node.
+        // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to the neo-node.
         NeoSendRawTransaction response = new ContractManagement(NEOW3J)
                 .deploy(nefFile, manifest)
                 .signers(AccountSigner.global(ALICE))
@@ -43,8 +40,8 @@ public class DeployFromFiles {
                 .send();
 
         if (response.hasError()) {
-            System.out.printf("Deployment was not successful. Error message from neo-node "
-                    + "was: '%s'\n", response.getError().getMessage());
+            System.out.printf("Deployment was not successful. Error message from neo-node was: '%s'\n",
+                    response.getError().getMessage());
         } else {
             System.out.printf("The contract was deployed in transaction %s\n",
                     response.getSendRawTransaction().getHash());

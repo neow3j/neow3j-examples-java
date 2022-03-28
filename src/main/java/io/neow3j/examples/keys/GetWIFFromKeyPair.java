@@ -8,7 +8,9 @@ import java.security.NoSuchProviderException;
 
 public class GetWIFFromKeyPair {
 
-    public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+            NoSuchProviderException {
+
         ECKeyPair ecKeyPair = ECKeyPair.createEcKeyPair();
         String wif = ecKeyPair.exportAsWIF();
 
@@ -16,4 +18,5 @@ public class GetWIFFromKeyPair {
         System.out.println("wif: " + wif);
         System.out.println("####################");
     }
+
 }

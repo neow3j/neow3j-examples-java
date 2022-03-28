@@ -20,16 +20,14 @@ public class SendNeoToAddress {
         // first the wallet is opened with the `openwallet` RPC method.
         NeoOpenWallet resp = NEOW3J.openWallet("Alice.wallet.json", "neo").send();
         if (resp.hasError()) {
-            System.out.println("Couldn't open wallet. Error message was: '"
-                    + resp.getError().getMessage() + "'");
+            System.out.println("Couldn't open wallet. Error message was: '" + resp.getError().getMessage() + "'");
             return;
         }
 
         // Then the `sendtoaddress` RPC method is used to transfer NEO from the opened wallet.
         // This requires that Alice's account owns some NEO.
         Hash160 assetId = NeoToken.SCRIPT_HASH;
-        NeoSendToAddress response = NEOW3J.sendToAddress(
-                assetId, BOB.getScriptHash(), new BigInteger("2")).send();
+        NeoSendToAddress response = NEOW3J.sendToAddress(assetId, BOB.getScriptHash(), new BigInteger("2")).send();
 
         if (response.hasError()) {
             System.out.println("Call resulted in an error with message:");
@@ -38,9 +36,8 @@ public class SendNeoToAddress {
         }
 
         System.out.println("\n####################");
-        System.out.println("Issued transaction with hash " + response.getSendToAddress().getHash()
-                .toString());
+        System.out.println("Issued transaction with hash " + response.getSendToAddress().getHash().toString());
         System.out.println("####################");
     }
-}
 
+}

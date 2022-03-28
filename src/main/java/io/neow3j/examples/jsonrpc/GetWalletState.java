@@ -16,8 +16,7 @@ public class GetWalletState {
 
         NeoOpenWallet resp = NEOW3J.openWallet("Alice.wallet.json", "neo").send();
         if (resp.hasError()) {
-            System.out.println("Couldn't open wallet. Error message was: '"
-                    + resp.getError().getMessage() + "'");
+            System.out.println("Couldn't open wallet. Error message was: '" + resp.getError().getMessage() + "'");
             return;
         }
 
@@ -48,4 +47,5 @@ public class GetWalletState {
 
         System.out.println("####################");
     }
+
 }

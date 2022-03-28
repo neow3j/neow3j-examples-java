@@ -11,6 +11,7 @@ import static io.neow3j.examples.Constants.NEOW3J;
 public class Utils {
 
     public static void trackSentTransaction(NeoSendRawTransaction response) throws IOException {
+
         System.out.println("####################\n");
         if (response.hasError()) {
             System.out.printf("The neo-node responded with the error message '%s'.%n",
@@ -26,4 +27,5 @@ public class Utils {
             System.out.println("\n####################");
         }
     }
+
 }

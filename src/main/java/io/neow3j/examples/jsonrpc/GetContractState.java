@@ -16,8 +16,8 @@ public class GetContractState {
                 .getContractState();
 
         System.out.println("\n####################");
-        System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter()
-                .writeValueAsString(state));
+        System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(state));
         System.out.println("####################");
     }
+
 }

@@ -25,4 +25,5 @@ public class CreateMultiSigAccount {
         System.out.println(Numeric.toHexStringNoPrefix(multiSigAcc.getVerificationScript().getScript()));
         System.out.println("####################\n");
     }
+
 }

@@ -32,12 +32,12 @@ public class TransactionTracking {
                 System.out.println("\n####################");
                 NeoApplicationLog log = tx.getApplicationLog();
                 NeoVMStateType state = log.getExecutions().get(0).getState();
-                System.out.printf("Found the transaction on block %s. It exited with state %s.\n",
-                        blockIndex, state);
+                System.out.printf("Found the transaction on block %s. It exited with state %s.\n", blockIndex, state);
                 System.out.println(log);
                 System.out.println("####################");
                 NEOW3J.shutdown();
             });
         }
     }
+
 }

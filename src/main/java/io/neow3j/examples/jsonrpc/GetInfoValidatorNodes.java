@@ -25,4 +25,5 @@ public class GetInfoValidatorNodes {
         }
         System.out.println("####################");
     }
+
 }

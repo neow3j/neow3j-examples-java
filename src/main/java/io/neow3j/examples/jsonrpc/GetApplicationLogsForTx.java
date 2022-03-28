@@ -18,7 +18,6 @@ public class GetApplicationLogsForTx {
         System.out.println("\n####################\n");
         System.out.println(al.getApplicationLog());
         System.out.println("\n####################");
-
     }
 
 }

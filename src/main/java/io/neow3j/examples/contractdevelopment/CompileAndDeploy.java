@@ -17,15 +17,13 @@ import static io.neow3j.contract.ContractUtils.writeNefFile;
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J;
 
-// Shows how a smart contract can be compiled programmatically and then deployed on a local
-// Neo blockchain.
+// Shows how a smart contract can be compiled programmatically and then deployed on a local Neo blockchain.
 public class CompileAndDeploy {
 
     public static void main(String[] args) throws Throwable {
 
         // Compile the NonFungibleToken contract and construct a SmartContract object from it.
-        CompilationUnit res =
-                new Compiler().compile(SimpleStorageContract.class.getCanonicalName());
+        CompilationUnit res = new Compiler().compile(SimpleStorageContract.class.getCanonicalName());
 
         // Write contract (compiled, NEF) to the disk
         Path buildNeow3jPath = Paths.get("build", "neow3j");
@@ -35,8 +33,7 @@ public class CompileAndDeploy {
         // Write manifest to the disk
         writeContractManifestFile(res.getManifest(), buildNeow3jPath);
 
-        // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to
-        // the neo-node.
+        // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to the neo-node.
         NeoSendRawTransaction response = new ContractManagement(NEOW3J)
                 .deploy(res.getNefFile(), res.getManifest())
                 .signers(AccountSigner.global(ALICE))
@@ -44,12 +41,11 @@ public class CompileAndDeploy {
                 .send();
 
         if (response.hasError()) {
-            System.out.printf("Deployment was not successful. Error message from neo-node was: "
-                    + "'%s'\n", response.getError().getMessage());
+            System.out.printf("Deployment was not successful. Error message from neo-node was: '%s'\n",
+                    response.getError().getMessage());
         } else {
             Hash160 contractHash = SmartContract.calcContractHash(
-                    ALICE.getScriptHash(), res.getNefFile().getCheckSumAsInteger(),
-                    res.getManifest().getName());
+                    ALICE.getScriptHash(), res.getNefFile().getCheckSumAsInteger(), res.getManifest().getName());
             System.out.println("Script hash of the deployed contract: " + contractHash);
             System.out.println("Contract Address: " + contractHash.toAddress());
         }

@@ -10,6 +10,7 @@ import java.nio.file.Path;
 public class CreateNewStandardWalletFile {
 
     public static void main(String[] args) throws IOException, CipherException {
+
         Path tempFile = Files.createTempFile("wallet-dir-prefix-test", ".wallet");
 
         Wallet.create("myPassw0rd!@#", tempFile.toFile());
@@ -18,4 +19,5 @@ public class CreateNewStandardWalletFile {
         System.out.println("Wallet file path: " + tempFile.toAbsolutePath());
         System.out.println("####################");
     }
+
 }

@@ -23,4 +23,5 @@ public class BuildNeoURI {
         System.out.println("NEP-9 URI: '" + uriAsString + "'");
         System.out.println("####################\n");
     }
+
 }

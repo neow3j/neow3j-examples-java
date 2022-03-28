@@ -19,4 +19,5 @@ public class GetRawTransaction {
         System.out.println("Raw Tx: " + rawTransaction);
         System.out.println("####################");
     }
+
 }

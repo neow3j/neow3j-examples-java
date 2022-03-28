@@ -12,9 +12,10 @@ import io.neow3j.contract.NeoToken;
 public class GetBalance {
 
     public static void main(String[] args) throws Throwable {
+
         Hash160 contractHash = NeoToken.SCRIPT_HASH;
 
-        // Setup a wrapper to invoke the contract.
+        // Set up a wrapper to invoke the contract.
         FungibleToken token = new FungibleToken(contractHash, NEOW3J);
 
         System.out.println("\n####################");
@@ -26,4 +27,5 @@ public class GetBalance {
         System.out.println(symbol + " balance of the Alice's account is " + balance.toString());
         System.out.println("####################");
     }
+
 }

@@ -11,7 +11,7 @@ public class FetchValidators {
 
     public static void main(String[] args) throws IOException {
 
-        // Setup the NeoToken class with a node connection for further calls to the contract.
+        // Set up the NeoToken class with a node connection for further calls to the contract.
         NeoToken neo = new NeoToken(NEOW3J);
 
         // Get the public keys of nodes that are validators of the network.
@@ -25,4 +25,5 @@ public class FetchValidators {
         }
         System.out.println("\n####################");
     }
+
 }
