@@ -57,9 +57,9 @@ application {
 // The following task is *not* required for a neow3j project.
 // This is just a task to provide a convenient way to download
 // all dependencies.
-task downloadDependencies(type: Exec) {
-    configurations.testRuntime.files
-    configurations.runtime.files
-    configurations.runtimeClasspath.files
-    commandLine 'echo', 'Downloaded all dependencies'
-}
+// task downloadDependencies(type: Exec) {
+//     configurations.testRuntime.files
+//     configurations.runtime.files
+//     configurations.runtimeClasspath.files
+//     commandLine 'echo', 'Downloaded all dependencies'
+// }
