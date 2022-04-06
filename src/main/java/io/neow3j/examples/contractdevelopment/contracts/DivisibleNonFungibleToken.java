@@ -2,7 +2,6 @@ package io.neow3j.examples.contractdevelopment.contracts;
 
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Hash160;
-import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Iterator;
 import io.neow3j.devpack.Map;
 import io.neow3j.devpack.Runtime;
@@ -130,8 +129,7 @@ public class DivisibleNonFungibleToken {
                 FindOptions.ValuesOnly);
     }
 
-    public static boolean mint(Hash160 owner, ByteString tokenId, Map<String, String> properties)
-            throws Exception {
+    public static boolean mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) throws Exception {
         if (!Runtime.checkWitness(contractOwner)) {
             throw new Exception("No authorization.");
         }
@@ -171,8 +169,7 @@ public class DivisibleNonFungibleToken {
     }
 
     private static void addTokenOwner(ByteString tokenId, Hash160 owner) {
-        new StorageMap(ctx, createOwnerOfPrefix(tokenId))
-                .put(owner.toByteArray(), owner.toByteArray());
+        new StorageMap(ctx, createOwnerOfPrefix(tokenId)).put(owner.toByteArray(), owner.toByteArray());
     }
 
     private static void removeTokenOwner(ByteString tokenId, Hash160 owner) {
@@ -184,7 +181,7 @@ public class DivisibleNonFungibleToken {
     }
 
     private static void removeOwnersToken(Hash160 owner, ByteString tokenId) {
-        new StorageMap(ctx, createTokensOfPrefix(owner)).put(tokenId, tokenId);
+        new StorageMap(ctx, createTokensOfPrefix(owner)).delete(tokenId);
     }
 
     @Safe
@@ -221,28 +218,29 @@ public class DivisibleNonFungibleToken {
         contractMap.put(totalSupplyKey, totalSupply + FACTOR);
     }
 
-    private static void increaseTotalOwnerBalance(Hash160 owner, int addition) {
+    private static void increaseTotalOwnerBalance(Hash160 owner, int addend) {
         ByteString totalBalance = totalBalanceMap.get(owner.toByteArray());
         if (totalBalance == null) {
-            totalBalanceMap.put(owner.toByteArray(), addition);
+            totalBalanceMap.put(owner.toByteArray(), addend);
         } else {
-            totalBalanceMap.put(owner.toByteArray(), totalBalance.toInt() + addition);
+            totalBalanceMap.put(owner.toByteArray(), totalBalance.toInt() + addend);
         }
     }
 
-    private static void decreaseTotalBalance(Hash160 owner, int subtraction) throws Exception {
+    private static void decreaseTotalBalance(Hash160 owner, int subtrahend) throws Exception {
         ByteString totalBalance = totalBalanceMap.get(owner.toByteArray());
         if (totalBalance == null) {
             throw new Exception("Can not decrease an nonexistent balance.");
         }
-        if (totalBalance.toInt() < subtraction) {
+        if (totalBalance.toInt() < subtrahend) {
             throw new Exception("Can not subtract more than the actual balance.");
         }
-        totalBalanceMap.put(owner.toByteArray(), totalBalance.toInt() - subtraction);
+        totalBalanceMap.put(owner.toByteArray(), totalBalance.toInt() - subtrahend);
     }
 
-    public static boolean transfer(Hash160 from, Hash160 to, int amount, ByteString tokenId,
-            Object data) throws Exception {
+    public static boolean transfer(Hash160 from, Hash160 to, int amount, ByteString tokenId, Object data)
+            throws Exception {
+
         if (!Runtime.checkWitness(from)) {
             throw new Exception("No authorization.");
         }
@@ -267,14 +265,12 @@ public class DivisibleNonFungibleToken {
         return true;
     }
 
-    private static void increaseBalance(Hash160 owner, ByteString tokenId, int addition) {
-        new StorageMap(ctx, createBalancePrefix(owner))
-                .put(tokenId, getBalanceOf(owner, tokenId) + addition);
+    private static void increaseBalance(Hash160 owner, ByteString tokenId, int addend) {
+        new StorageMap(ctx, createBalancePrefix(owner)).put(tokenId, getBalanceOf(owner, tokenId) + addend);
     }
 
-    private static void decreaseBalance(Hash160 owner, ByteString tokenId, int subtraction) {
-        new StorageMap(ctx, createBalancePrefix(owner))
-                .put(tokenId, getBalanceOf(owner, tokenId) - subtraction);
+    private static void decreaseBalance(Hash160 owner, ByteString tokenId, int subtrahend) {
+        new StorageMap(ctx, createBalancePrefix(owner)).put(tokenId, getBalanceOf(owner, tokenId) - subtrahend);
     }
 
     private static int getBalanceOf(Hash160 owner, ByteString tokenId) {
