@@ -74,8 +74,8 @@ public class NonFungibleToken {
 
     @Safe
     public static Iterator<ByteString> tokensOf(Hash160 owner) {
-        return (Iterator<ByteString>) Storage.find(
-                ctx.asReadOnly(), createTokensOfPrefix(owner), FindOptions.RemovePrefix);
+        return (Iterator<ByteString>) Storage.find(ctx.asReadOnly(), createTokensOfPrefix(owner),
+                (byte) (FindOptions.KeysOnly | FindOptions.RemovePrefix));
     }
 
     public static boolean transfer(Hash160 to, ByteString tokenId, Object[] data) {
