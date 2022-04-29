@@ -4,7 +4,6 @@ import io.neow3j.contract.NeoURI;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.GENESIS;
 import static io.neow3j.examples.Constants.NEOW3J;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 

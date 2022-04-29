@@ -8,7 +8,6 @@ import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnNEP17Payment;
 import io.neow3j.devpack.annotations.OnVerification;
-import io.neow3j.devpack.events.Event1Arg;
 import io.neow3j.devpack.events.Event3Args;
 
 @ManifestExtra(key = "name", value = "OnVerificationContract")

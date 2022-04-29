@@ -1,7 +1,5 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
-import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
-
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.Hash160;
@@ -20,6 +18,8 @@ import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
+
+import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 @ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
@@ -51,10 +51,19 @@ public class FungibleToken {
         return Storage.getInt(ctx, totalSupplyKey);
     }
 
-    public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data) {
-        assert Hash160.isValid(from) && Hash160.isValid(to) : "'from' or 'to' address is not a valid address.";
-        assert amount >= 0 : "The transfer amount must be non-negative.";
-        assert Runtime.checkWitness(from) : "Invalid sender signature.";
+    public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data) throws Exception {
+        if (!Hash160.isValid(from) || !Hash160.isValid(to)) {
+            throw new Exception("'from' or 'to' address is not a valid address.");
+        }
+        if (amount < 0) {
+            throw new Exception("The transfer amount must be non-negative.");
+        }
+        if (!Runtime.checkWitness(from)) {
+            throw new Exception("Invalid sender signature.");
+        }
+        if (!Runtime.checkWitness(from)) {
+            throw new Exception("Invalid sender signature.");
+        }
 
         if (amount > getBalance(from)) {
             return false;
@@ -72,8 +81,10 @@ public class FungibleToken {
     }
 
     @Safe
-    public static int balanceOf(Hash160 account) {
-        assert Hash160.isValid(account) : "Argument is not a valid address.";
+    public static int balanceOf(Hash160 account) throws Exception {
+        if (!Hash160.isValid(account)) {
+            throw new Exception("Argument is not a valid address.");
+        }
         return getBalance(account);
     }
 
@@ -85,7 +96,7 @@ public class FungibleToken {
     // Deploy, Update, Destroy
 
     @OnDeployment
-    public static void deploy(Object data, boolean update) {
+    public static void deploy(Object data, boolean update) throws Exception {
         if (!update) {
             throwIfSignerIsNotOwner();
             // Initialize the supply
@@ -96,12 +107,12 @@ public class FungibleToken {
         }
     }
 
-    public static void update(ByteString script, String manifest) {
+    public static void update(ByteString script, String manifest) throws Exception {
         throwIfSignerIsNotOwner();
         ContractManagement.update(script, manifest);
     }
 
-    public static void destroy() {
+    public static void destroy() throws Exception {
         throwIfSignerIsNotOwner();
         ContractManagement.destroy();
     }
@@ -115,8 +126,10 @@ public class FungibleToken {
 
     // Private Helper Methods
 
-    private static void throwIfSignerIsNotOwner() {
-        assert Runtime.checkWitness(owner) : "The calling entity is not the owner of this contract.";
+    private static void throwIfSignerIsNotOwner() throws Exception {
+        if (!Runtime.checkWitness(owner)) {
+            throw new Exception("The calling entity is not the owner of this contract.");
+        }
     }
 
     private static void addToBalance(Hash160 key, int value) {

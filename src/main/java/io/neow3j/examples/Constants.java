@@ -1,13 +1,13 @@
 package io.neow3j.examples;
 
-import static java.util.Arrays.asList;
-
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.wallet.Account;
 import io.neow3j.wallet.Wallet;
+
+import static java.util.Arrays.asList;
 
 public class Constants {
 

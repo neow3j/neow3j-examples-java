@@ -28,7 +28,8 @@ public class CreateMultiInvokeTransaction {
     static final Hash160 OWNER_2 = new Hash160("4a207f225f1e3672cb6f57ace0de1a3da63d8e80");
     static final Hash160 OWNER_3 = new Hash160("ceeb02bf7f1289c574343ee1fd3d5aeb002b2405");
 
-    static final String URI_1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgoG6bMrfO7Jj25o4dP-WR2H_DCTRGFnlBLQ&usqp=CAU";
+    static final String URI_1 =
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgoG6bMrfO7Jj25o4dP-WR2H_DCTRGFnlBLQ&usqp=CAU";
     static final String URI_2 = "https://neow3j.io/images/neow3j-neo3.png";
     static final String URI_3 = "https://neo-playground.dev/assets/images/horz-logo4x-2156x342.png";
 

@@ -62,4 +62,5 @@ public class NNS {
         Storage.delete(ctx, domain);
         return true;
     }
+
 }

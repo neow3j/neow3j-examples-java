@@ -1,11 +1,12 @@
 package io.neow3j.examples.keys;
 
-import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.BOB;
 import java.util.Arrays;
 import io.neow3j.crypto.ECKeyPair;
 import io.neow3j.utils.Numeric;
 import io.neow3j.wallet.Account;
+
+import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.BOB;
 
 public class CreateMultiSigAccount {
 

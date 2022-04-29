@@ -1,11 +1,10 @@
 package io.neow3j.examples.contractdevelopment;
 
-import static io.neow3j.examples.Constants.ALICE;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
+
 import io.neow3j.types.Hash160;
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.SmartContract;
@@ -13,6 +12,8 @@ import io.neow3j.serialization.exceptions.DeserializationException;
 import io.neow3j.protocol.ObjectMapperFactory;
 import io.neow3j.protocol.core.response.ContractManifest;
 import io.neow3j.utils.Numeric;
+
+import static io.neow3j.examples.Constants.ALICE;
 
 public class GetScriptHashFromContractFile {
 

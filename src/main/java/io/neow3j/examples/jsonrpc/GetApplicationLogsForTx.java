@@ -1,11 +1,11 @@
 package io.neow3j.examples.jsonrpc;
 
-import static io.neow3j.examples.Constants.NEOW3J;
-
 import java.io.IOException;
 
 import io.neow3j.types.Hash256;
 import io.neow3j.protocol.core.response.NeoGetApplicationLog;
+
+import static io.neow3j.examples.Constants.NEOW3J;
 
 public class GetApplicationLogsForTx {
 

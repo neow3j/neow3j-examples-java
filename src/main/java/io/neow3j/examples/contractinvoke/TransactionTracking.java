@@ -2,9 +2,7 @@ package io.neow3j.examples.contractinvoke;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.BOB;
-import static io.neow3j.examples.Constants.GENESIS;
 import static io.neow3j.examples.Constants.NEOW3J;
-import static io.neow3j.examples.Constants.WALLET;
 
 import java.math.BigInteger;
 

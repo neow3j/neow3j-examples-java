@@ -5,7 +5,7 @@ import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.annotations.ManifestExtra;
 
-// A simple contract that allows putting and getting from it's storage area.
+// A simple contract that allows putting and getting from its storage area.
 @ManifestExtra(key = "name", value = "SimpleStorageContract")
 public class SimpleStorageContract {
 
@@ -16,8 +16,8 @@ public class SimpleStorageContract {
         return true;
     }
 
-   public static ByteString getSomething(String key) {
+    public static ByteString getSomething(String key) {
         return Storage.get(ctx, key);
-   }
+    }
 
 }

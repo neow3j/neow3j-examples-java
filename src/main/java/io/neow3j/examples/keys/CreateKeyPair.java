@@ -8,19 +8,22 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
+import static io.neow3j.utils.Numeric.toHexStringNoPrefix;
+
 public class CreateKeyPair {
 
-    public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public static void main(String[] args)
+            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         ECKeyPair ecKeyPair = ECKeyPair.createEcKeyPair();
 
         System.out.println("\n####################");
         System.out.println("Private Key");
         System.out.println("BigInteger: " + ecKeyPair.getPrivateKey().getInt());
-        System.out.println("Hex:        " + Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey().getInt()));
+        System.out.println("Hex:        " + toHexStringNoPrefix(ecKeyPair.getPrivateKey().getInt()));
         System.out.println();
         System.out.println("Public Key");
         System.out.println("BigInteger: " + new BigInteger(1, ecKeyPair.getPublicKey().getEncoded(true)));
-        System.out.println("Hex:        " + Numeric.toHexStringNoPrefix(new BigInteger(1, ecKeyPair.getPublicKey().getEncoded(true))));
+        System.out.println("Hex:        " + toHexStringNoPrefix(new BigInteger(1, ecKeyPair.getPublicKey().getEncoded(true))));
         System.out.println("####################");
     }
 

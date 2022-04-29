@@ -9,7 +9,7 @@ import io.neow3j.devpack.annotations.Permission;
 
 @ManifestExtra(key = "author", value = "AxLabs")
 // Set the permissions to any contract because the contract called from within this contract is dynamic.
-@Permission(contract = "*", methods = "*") 
+@Permission(contract = "*", methods = "*")
 public class CallAnotherContract {
 
     // You can use these two methods with the contract `SimpleStorageContract`.
@@ -19,9 +19,8 @@ public class CallAnotherContract {
     }
 
     public static void putOnAnotherContract(Hash160 simpleStorageContract, String key, String value) {
-        // In this method, you could cast the return to a boolean (since `putSomething` has a
-        // boolean as return type), if you want to check whether the method `putSomething` was
-        // successful.
+        // In this method, you could cast the return to a boolean (since `putSomething` has a boolean as return type),
+        // if you want to check whether the method `putSomething` was successful.
         // However, if the return is not needed, no cast is necessary.
         Contract.call(simpleStorageContract, "putSomething", CallFlags.All, new Object[]{key, value});
     }

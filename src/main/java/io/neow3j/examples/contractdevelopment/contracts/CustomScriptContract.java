@@ -37,13 +37,12 @@ public class CustomScriptContract {
         @Instruction(
                 opcode = OpCode.PUSHDATA1,
                 operandPrefix = {0x11},
-                operand = {0x22, 0x4e, 0x6f, 0x20, 0x65, 0x6e, 0x74, 0x72, 0x79, 0x20, 0x66, 0x6f,
-                        0x75, 0x6e, 0x64, 0x2e, 0x22} // bytes for "no entry found" message
-        )
+                operand = {0x22, 0x4e, 0x6f, 0x20, 0x65, 0x6e, 0x74, 0x72, 0x79, 0x20, 0x66, 0x6f, 0x75, 0x6e, 0x64,
+                        0x2e, 0x22} // bytes for "no entry found" message
+                )
         @Instruction(opcode = OpCode.THROW)
         @Instruction(opcode = OpCode.CONVERT, operand = StackItemType.INTEGER_CODE)
         public static native int getIntOrThrow(StorageContext context, ByteString key) throws Exception;
 
     }
 }
-

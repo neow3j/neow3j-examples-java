@@ -1,11 +1,13 @@
 package io.neow3j.examples.contractinvoke;
 
-import static io.neow3j.examples.Constants.NEOW3J;
 import java.io.IOException;
 import java.util.List;
+
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
 import io.neow3j.utils.Numeric;
+
+import static io.neow3j.examples.Constants.NEOW3J;
 
 public class FetchValidators {
 

@@ -78,9 +78,11 @@ public class NonFungibleToken {
                 (byte) (FindOptions.KeysOnly | FindOptions.RemovePrefix));
     }
 
-    public static boolean transfer(Hash160 to, ByteString tokenId, Object[] data) {
+    public static boolean transfer(Hash160 to, ByteString tokenId, Object[] data) throws Exception {
         Hash160 owner = ownerOf(tokenId);
-        assert owner != null : "This token id does not exist.";
+        if (owner == null) {
+            throw new Exception("This token id does not exist.");
+        }
         throwIfSignerIsNotOwner(owner);
 
         ownerOfMap.put(tokenId, to.toByteArray());
@@ -113,10 +115,12 @@ public class NonFungibleToken {
     }
 
     @Safe
-    public static Map<String, String> properties(ByteString tokenId) {
+    public static Map<String, String> properties(ByteString tokenId) throws Exception {
         Map<String, String> p = new Map<>();
         ByteString tokenName = propertiesNameMap.get(tokenId);
-        assert tokenName != null : "This token id does not exist.";
+        if (tokenName == null) {
+            throw new Exception("This token id does not exist.");
+        }
 
         p.put(propName, tokenName.toString());
         ByteString tokenDescription = propertiesDescriptionMap.get(tokenId);
@@ -145,19 +149,19 @@ public class NonFungibleToken {
     // Deploy, Update, Destroy
 
     @OnDeployment
-    public static void deploy(Object data, boolean update) {
+    public static void deploy(Object data, boolean update) throws Exception {
         if (!update) {
             throwIfSignerIsNotContractOwner();
             contractMap.put(totalSupplyKey, 0);
         }
     }
 
-    public static void update(ByteString script, String manifest) {
+    public static void update(ByteString script, String manifest) throws Exception {
         throwIfSignerIsNotContractOwner();
         ContractManagement.update(script, manifest);
     }
 
-    public static void destroy() {
+    public static void destroy() throws Exception {
         throwIfSignerIsNotContractOwner();
         ContractManagement.destroy();
     }
@@ -169,10 +173,14 @@ public class NonFungibleToken {
         return contractOwner;
     }
 
-    public static void mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) {
-        assert Runtime.checkWitness(contractOwner) : "No authorization.";
-        assert registryMap.get(tokenId) == null : "This token id already exists.";
-        assert properties.containsKey(propName) : "The properties must contain a value for the key 'name'.";
+    public static void mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) throws Exception {
+        throwIfSignerIsNotContractOwner();
+        if (registryMap.get(tokenId) != null) {
+            throw new Exception("This token id already exists.");
+        }
+        if (!properties.containsKey(propName)) {
+            throw new Exception("The properties must contain a value for the key 'name'.");
+        }
 
         String tokenName = properties.get(propName);
         propertiesNameMap.put(tokenId, tokenName);
@@ -199,9 +207,11 @@ public class NonFungibleToken {
         onMint.fire(owner, tokenId, properties);
     }
 
-    public static boolean burn(ByteString tokenId) {
+    public static boolean burn(ByteString tokenId) throws Exception {
         Hash160 owner = ownerOf(tokenId);
-        assert owner != null : "This token id does not exist.";
+        if (owner == null) {
+            throw new Exception("This token id does not exist.");
+        }
         throwIfSignerIsNotOwner(owner);
 
         registryMap.delete(tokenId);
@@ -219,12 +229,16 @@ public class NonFungibleToken {
 
     // Private Helper Methods
 
-    private static void throwIfSignerIsNotContractOwner() {
-        assert Runtime.checkWitness(contractOwner) : "No authorization.";
+    private static void throwIfSignerIsNotContractOwner() throws Exception {
+        if (!Runtime.checkWitness(contractOwner)) {
+            throw new Exception("No authorization.");
+        }
     }
 
-    private static void throwIfSignerIsNotOwner(Hash160 owner) {
-        assert Runtime.checkWitness(owner) : "No authorization.";
+    private static void throwIfSignerIsNotOwner(Hash160 owner) throws Exception {
+        if (!Runtime.checkWitness(owner)) {
+            throw new Exception("No authorization.");
+        }
     }
 
     private static void increaseBalanceByOne(Hash160 owner) {
