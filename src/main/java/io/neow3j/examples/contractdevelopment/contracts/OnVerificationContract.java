@@ -16,11 +16,11 @@ public class OnVerificationContract {
 
     static final Hash160 owner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
 
-    @DisplayName("onPayment")
+    @DisplayName("Transfer")
     static Event3Args<Hash160, Integer, Object> onPayment;
 
     @OnVerification
-    public static boolean verify(String value) throws Exception {
+    public static boolean verify(String value) {
         return Runtime.checkWitness(owner) && value == "hello, world!";
     }
 
