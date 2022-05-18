@@ -3,10 +3,11 @@ package io.neow3j.examples.contractdevelopment.contracts;
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.Hash160;
+import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
-import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.StorageMap;
+import io.neow3j.devpack.StringLiteralHelper;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
@@ -17,9 +18,8 @@ import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
+import io.neow3j.devpack.events.Event2Args;
 import io.neow3j.devpack.events.Event3Args;
-
-import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 
 @ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
@@ -27,14 +27,41 @@ import static io.neow3j.devpack.StringLiteralHelper.addressToScriptHash;
 @Permission(nativeContract = NativeContract.ContractManagement)
 public class FungibleToken {
 
-    static final Hash160 owner = addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
-
-    static final int decimals = 2;
+    static final StorageMap assetMap = new StorageMap(Storage.getStorageContext(), new byte[]{0x01});
     static final byte[] totalSupplyKey = new byte[]{0x00};
-    static final StorageContext ctx = Storage.getStorageContext();
-    static final StorageMap assetMap = new StorageMap(ctx, new byte[]{0x01});
 
-    // NEP-17 Methods
+    // region deploy, update, destroy
+
+    @OnDeployment
+    public static void deploy(Object data, boolean update) {
+        if (!update) {
+            if (!Runtime.checkWitness(contractOwner())) {
+                fireErrorAndAbort("No authorization.", "deploy");
+            }
+            // Initialize the supply
+            int initialSupply = 200_000_000;
+            Storage.put(Storage.getStorageContext(), totalSupplyKey, initialSupply);
+            // Allocate all tokens to the contract owner.
+            assetMap.put(contractOwner().toByteArray(), initialSupply);
+        }
+    }
+
+    public static void update(ByteString script, String manifest) {
+        if (!Runtime.checkWitness(contractOwner())) {
+            fireErrorAndAbort("No authorization.", "update");
+        }
+        ContractManagement.update(script, manifest);
+    }
+
+    public static void destroy() {
+        if (!Runtime.checkWitness(contractOwner())) {
+            fireErrorAndAbort("No authorization.", "destroy");
+        }
+        ContractManagement.destroy();
+    }
+
+    // endregion deploy, update, destroy
+    // region NEP-17 methods
 
     @Safe
     public static String symbol() {
@@ -43,29 +70,22 @@ public class FungibleToken {
 
     @Safe
     public static int decimals() {
-        return decimals;
+        return 2;
     }
 
     @Safe
     public static int totalSupply() {
-        return Storage.getInt(ctx, totalSupplyKey);
+        return Storage.getInt(Storage.getReadOnlyContext(), totalSupplyKey);
     }
 
     public static boolean transfer(Hash160 from, Hash160 to, int amount, Object[] data) throws Exception {
         if (!Hash160.isValid(from) || !Hash160.isValid(to)) {
-            throw new Exception("'from' or 'to' address is not a valid address.");
+            throw new Exception("The parameters 'from' and 'to' must be 20-byte addresses.");
         }
         if (amount < 0) {
-            throw new Exception("The transfer amount must be non-negative.");
+            throw new Exception("The parameter 'amount' must be greater than or equal to 0.");
         }
-        if (!Runtime.checkWitness(from)) {
-            throw new Exception("Invalid sender signature.");
-        }
-        if (!Runtime.checkWitness(from)) {
-            throw new Exception("Invalid sender signature.");
-        }
-
-        if (amount > getBalance(from)) {
+        if (amount > getBalance(from) || !Runtime.checkWitness(from)) {
             return false;
         }
 
@@ -73,6 +93,7 @@ public class FungibleToken {
             deductFromBalance(from, amount);
             addToBalance(to, amount);
         }
+
         onTransfer.fire(from, to, amount);
         if (ContractManagement.getContract(to) != null) {
             Contract.call(to, "onNEP17Payment", CallFlags.All, data);
@@ -83,53 +104,38 @@ public class FungibleToken {
     @Safe
     public static int balanceOf(Hash160 account) throws Exception {
         if (!Hash160.isValid(account)) {
-            throw new Exception("Argument is not a valid address.");
+            throw new Exception("The parameter 'account' must be a 20-byte address.");
         }
         return getBalance(account);
     }
 
-    // Events
+    // endregion NEP-17 methods
+    // region events
 
     @DisplayName("Transfer")
     static Event3Args<Hash160, Hash160, Integer> onTransfer;
 
-    // Deploy, Update, Destroy
+    /**
+     * This event is intended to be fired before aborting the VM. The first argument should be a message and the
+     * second argument should be the method name whithin which it has been fired.
+     */
+    @DisplayName("Error")
+    private static Event2Args<String, String> error;
 
-    @OnDeployment
-    public static void deploy(Object data, boolean update) throws Exception {
-        if (!update) {
-            throwIfSignerIsNotOwner();
-            // Initialize the supply
-            int initialSupply = 200_000_000;
-            Storage.put(ctx, totalSupplyKey, initialSupply);
-            // Allocate all tokens to the contract owner.
-            assetMap.put(owner.toByteArray(), initialSupply);
-        }
-    }
-
-    public static void update(ByteString script, String manifest) throws Exception {
-        throwIfSignerIsNotOwner();
-        ContractManagement.update(script, manifest);
-    }
-
-    public static void destroy() throws Exception {
-        throwIfSignerIsNotOwner();
-        ContractManagement.destroy();
-    }
-
-    // Custom Methods
+    // endregion events
+    // region custom methods
 
     @Safe
     public static Hash160 contractOwner() {
-        return owner;
+        return StringLiteralHelper.addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
     }
 
-    // Private Helper Methods
+    // endregion custom methods
+    // region private helper methods
 
-    private static void throwIfSignerIsNotOwner() throws Exception {
-        if (!Runtime.checkWitness(owner)) {
-            throw new Exception("The calling entity is not the owner of this contract.");
-        }
+    private static void fireErrorAndAbort(String msg, String method) {
+        error.fire(msg, method);
+        Helper.abort();
     }
 
     private static void addToBalance(Hash160 key, int value) {
@@ -144,5 +150,7 @@ public class FungibleToken {
     private static int getBalance(Hash160 key) {
         return assetMap.getIntOrZero(key.toByteArray());
     }
+
+    // endregion private helper methods
 
 }

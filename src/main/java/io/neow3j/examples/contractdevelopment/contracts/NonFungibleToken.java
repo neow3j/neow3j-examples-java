@@ -14,13 +14,14 @@ import io.neow3j.devpack.StringLiteralHelper;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
+import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.Safe;
 import io.neow3j.devpack.annotations.SupportedStandard;
 import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.constants.FindOptions;
+import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
-import io.neow3j.devpack.events.Event1Arg;
 import io.neow3j.devpack.events.Event2Args;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
@@ -28,6 +29,7 @@ import io.neow3j.devpack.events.Event4Args;
 @DisplayName("FurryFriends")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandard(neoStandard = NeoStandard.NEP_11)
+@Permission(nativeContract = NativeContract.ContractManagement)
 public class NonFungibleToken {
 
     static final StorageContext ctx = Storage.getStorageContext();
@@ -55,19 +57,28 @@ public class NonFungibleToken {
 
     @OnDeployment
     public static void deploy(Object data, boolean update) {
+        if (!Runtime.checkWitness(contractOwner())) {
+            error.fire("No authorization", "deploy");
+            Helper.abort();
+        }
         if (!update) {
-            abortIfNoContractOwnerWitness();
             contractMap.put(totalSupplyKey, 0);
         }
     }
 
     public static void update(ByteString script, String manifest) {
-        abortIfNoContractOwnerWitness();
+        if (!Runtime.checkWitness(contractOwner())) {
+            error.fire("No authorization", "update");
+            Helper.abort();
+        }
         ContractManagement.update(script, manifest);
     }
 
     public static void destroy() {
-        abortIfNoContractOwnerWitness();
+        if (!Runtime.checkWitness(contractOwner())) {
+            error.fire("No authorization", "destroy");
+            Helper.abort();
+        }
         ContractManagement.destroy();
     }
 
@@ -106,7 +117,7 @@ public class NonFungibleToken {
                 (byte) (FindOptions.KeysOnly | FindOptions.RemovePrefix));
     }
 
-    public static boolean transfer(Hash160 to, ByteString tokenId, Object[] data) throws Exception {
+    public static boolean transfer(Hash160 to, ByteString tokenId, Object data) throws Exception {
         if (!Hash160.isValid(to)) {
             throw new Exception("The parameter 'to' must be a 20-byte address.");
         }
@@ -126,10 +137,9 @@ public class NonFungibleToken {
 
             decreaseBalanceByOne(owner);
             increaseBalanceByOne(to);
-
-            if (ContractManagement.getContract(to) != null) {
-                Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{owner, 1, tokenId, data});
-            }
+        }
+        if (ContractManagement.getContract(to) != null) {
+            Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{owner, 1, tokenId, data});
         }
         return true;
     }
@@ -193,9 +203,6 @@ public class NonFungibleToken {
     @DisplayName("Transfer")
     private static Event4Args<Hash160, Hash160, Integer, ByteString> onTransfer;
 
-    @DisplayName("Burn")
-    private static Event1Arg<ByteString> onBurn;
-
     /**
      * This event is intended to be fired before aborting the VM. The first argument should be a message and the
      * second argument should be the method name whithin which it has been fired.
@@ -212,7 +219,9 @@ public class NonFungibleToken {
     }
 
     public static void mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) {
-        abortIfNoContractOwnerWitness();
+        if (!Runtime.checkWitness(contractOwner())) {
+            fireErrorAndAbort("No authorization.", "mint");
+        }
         if (registryMap.get(tokenId) != null) {
             fireErrorAndAbort("This token id already exists.", "mint");
         }
@@ -264,7 +273,7 @@ public class NonFungibleToken {
         new StorageMap(ctx, createTokensOfPrefix(owner)).delete(tokenId);
         decreaseBalanceByOne(owner);
         decrementTotalSupplyByOne();
-        onBurn.fire(tokenId);
+        onTransfer.fire(owner, null, 1, tokenId);
     }
 
     // endregion custom methods
@@ -272,12 +281,6 @@ public class NonFungibleToken {
 
     private static int getBalance(Hash160 owner) {
         return balanceMap.getIntOrZero(owner.toByteArray());
-    }
-
-    private static void abortIfNoContractOwnerWitness() {
-        if (!Runtime.checkWitness(contractOwner())) {
-            fireErrorAndAbort("No authorization", "abortIfNoContractOwnerWitness");
-        }
     }
 
     private static void fireErrorAndAbort(String msg, String method) {
