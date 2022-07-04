@@ -50,14 +50,14 @@ public class FungibleToken {
         if (!Runtime.checkWitness(contractOwner())) {
             fireErrorAndAbort("No authorization.", "update");
         }
-        ContractManagement.update(script, manifest);
+        new ContractManagement().update(script, manifest);
     }
 
     public static void destroy() {
         if (!Runtime.checkWitness(contractOwner())) {
             fireErrorAndAbort("No authorization.", "destroy");
         }
-        ContractManagement.destroy();
+        new ContractManagement().destroy();
     }
 
     // endregion deploy, update, destroy
@@ -95,7 +95,7 @@ public class FungibleToken {
         }
 
         onTransfer.fire(from, to, amount);
-        if (ContractManagement.getContract(to) != null) {
+        if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP17Payment", CallFlags.All, data);
         }
         return true;

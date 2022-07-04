@@ -79,7 +79,7 @@ public class DivisibleNonFungibleToken {
             error.fire("No authorization", "update");
             Helper.abort();
         }
-        ContractManagement.update(script, manifest);
+        new ContractManagement().update(script, manifest);
     }
 
     public static void destroy() {
@@ -87,7 +87,7 @@ public class DivisibleNonFungibleToken {
             error.fire("No authorization", "destroy");
             Helper.abort();
         }
-        ContractManagement.destroy();
+        new ContractManagement().destroy();
     }
 
     // endregion deploy
@@ -160,7 +160,7 @@ public class DivisibleNonFungibleToken {
             increaseTotalOwnerBalance(to, FACTOR);
         }
         onTransfer.fire(from, to, FACTOR, tokenId);
-        if (ContractManagement.getContract(to) != null) {
+        if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{from, FACTOR, tokenId, data});
         }
         return true;
@@ -171,6 +171,7 @@ public class DivisibleNonFungibleToken {
 
     public static boolean transfer(Hash160 from, Hash160 to, int amount, ByteString tokenId, Object data)
             throws Exception {
+
         if (!Hash160.isValid(to)) {
             throw new Exception("The parameter 'to' must be a 20-byte address.");
         }
@@ -205,7 +206,7 @@ public class DivisibleNonFungibleToken {
         increaseBalance(to, tokenId, amount);
         increaseTotalOwnerBalance(to, amount);
         onTransfer.fire(from, to, amount, tokenId);
-        if (ContractManagement.getContract(to) != null) {
+        if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{from, amount, tokenId, data});
         }
         return true;

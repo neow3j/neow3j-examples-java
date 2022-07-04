@@ -14,7 +14,7 @@ public class CallOracleContract {
     // Check out the oracle service documentation here: https://docs.neo.org/docs/en-us/advanced/oracle.html
 
     public static void request(String url, String filter, int gasForResponse) {
-        OracleContract.request(url, filter, "callback", null, gasForResponse);
+        new OracleContract().request(url, filter, "callback", null, gasForResponse);
     }
 
     public static void callback(String url, Object userData, int responseCode, ByteString response) {

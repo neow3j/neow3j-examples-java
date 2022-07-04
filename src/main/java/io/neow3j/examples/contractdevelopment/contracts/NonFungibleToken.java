@@ -10,7 +10,6 @@ import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.StorageMap;
-import io.neow3j.devpack.StringLiteralHelper;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
@@ -52,18 +51,25 @@ public class NonFungibleToken {
     static final byte[] totalSupplyKey = new byte[]{0x10};
     static final byte[] tokensOfKey = new byte[]{0x11};
 
+    static final byte[] contractOwnerKey = new byte[]{0x7f};
+
     // endregion keys of key-value pairs in NFT properties
     // region deploy, update, destroy
 
     @OnDeployment
     public static void deploy(Object data, boolean update) {
+        if (!update) {
+            initializeContract((Hash160) data);
+        }
         if (!Runtime.checkWitness(contractOwner())) {
             error.fire("No authorization", "deploy");
             Helper.abort();
         }
-        if (!update) {
-            contractMap.put(totalSupplyKey, 0);
-        }
+    }
+
+    private static void initializeContract(Hash160 contractOwner) {
+        contractMap.put(totalSupplyKey, 0);
+        contractMap.put(contractOwnerKey, contractOwner);
     }
 
     public static void update(ByteString script, String manifest) {
@@ -71,7 +77,7 @@ public class NonFungibleToken {
             error.fire("No authorization", "update");
             Helper.abort();
         }
-        ContractManagement.update(script, manifest);
+        new ContractManagement().update(script, manifest);
     }
 
     public static void destroy() {
@@ -79,7 +85,7 @@ public class NonFungibleToken {
             error.fire("No authorization", "destroy");
             Helper.abort();
         }
-        ContractManagement.destroy();
+        new ContractManagement().destroy();
     }
 
     // endregion deploy, update, destroy
@@ -138,7 +144,7 @@ public class NonFungibleToken {
             decreaseBalanceByOne(owner);
             increaseBalanceByOne(to);
         }
-        if (ContractManagement.getContract(to) != null) {
+        if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{owner, 1, tokenId, data});
         }
         return true;
@@ -215,7 +221,7 @@ public class NonFungibleToken {
 
     @Safe
     public static Hash160 contractOwner() {
-        return StringLiteralHelper.addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
+        return contractMap.getHash160(contractOwnerKey);
     }
 
     public static void mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) {
