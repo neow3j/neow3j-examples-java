@@ -14,7 +14,8 @@ public class Constants {
     // This sets up the connection to the neo-node of our private network.
     public static Neow3j NEOW3J = Neow3j.build(new HttpService("http://127.0.0.1:40332", true));
 
-    public static Neow3j NEOW3J_TESTNET = Neow3j.build(new HttpService("http://seed2t4.neo.org:20332"));
+    // T5 testnet
+    public static Neow3j NEOW3J_TESTNET = Neow3j.build(new HttpService("http://seed2t5.neo.org:20332"));
 
     // This is Alice' account which is also available on the pre-configured private network.
     public static Account ALICE = Account.fromWIF("L1eV34wPoj9weqhGijdDLtVQzUpWGHszXXpdU9dPuh2nRFFzFa7E");
