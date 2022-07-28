@@ -12,6 +12,8 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    // Uncomment the next line to use snapshot versions of neow3j
+//    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
