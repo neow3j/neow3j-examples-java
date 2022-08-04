@@ -40,7 +40,9 @@
       },
       "settings": {
         "rpc.MaxGasInvoke": 100000,
-        "rpc.MaxFee": 0.2
+        "rpc.MaxFee": 0.2,
+        "rpc.SessionEnabled": true,
+        "rpc.SessionExpirationTime": 60
       }
     }
   ],
