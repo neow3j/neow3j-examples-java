@@ -33,6 +33,10 @@ It contains examples for the following use cases:
 
 **Visit [neow3j.io](https://neow3j.io) for more information and technical documentation.**
 
+**Important:** The provided example contracts are not audited nor tested and merely provide example implementations 
+about how to use neow3j for contract development. When developing contracts for production on mainnet, make sure to 
+extensively test them and desirably obtain an audit for them.
+
 ## Instructions
 
 We recommend using [*Virtual Studio Code*](https://code.visualstudio.com/) (VSCode) for trying
