@@ -3,7 +3,6 @@ package io.neow3j.examples.contractdevelopment.contracts;
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.Hash160;
-import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Iterator;
 import io.neow3j.devpack.Map;
 import io.neow3j.devpack.Runtime;
@@ -22,7 +21,6 @@ import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
-import io.neow3j.devpack.events.Event2Args;
 import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
 
@@ -32,60 +30,53 @@ import io.neow3j.devpack.events.Event4Args;
 @Permission(nativeContract = NativeContract.ContractManagement)
 public class DivisibleNonFungibleToken {
 
-    static final StorageContext ctx = Storage.getStorageContext();
-    static final StorageMap contractMap = new StorageMap(ctx, 1);
-    static final String totalSupplyKey = "totSupply";
+    static final int contractMapPrefix = 0;
+    static final byte[] totalSupplyKey = new byte[]{0x00};
 
-    static final StorageMap registryMap = new StorageMap(ctx, 8);
+    static final int registryMapPrefix = 1;
 
-    // region keys of key-value pairs in NFT properties
+    static final int propNameMapPrefix = 8;
+    static final int propDescriptionMapPrefix = 9;
+    static final int propImageMapPrefix = 10;
+    static final int propTokenURIMapPrefix = 11;
+
+    static final int amountOfOwnedTokensMapPrefix = 12;
+    static final int totalBalanceMapPrefix = 13;
+
+    static final byte[] balanceTokenOwnerKeyPrefix = new byte[]{0x20};
+    static final byte[] ownerOfKeyPrefix = new byte[]{0x21};
+    static final byte[] tokensOfKeyPrefix = new byte[]{0x22};
+
     static final String propName = "name";
     static final String propDescription = "description";
     static final String propImage = "image";
     static final String propTokenURI = "tokenURI";
-    static final StorageMap propNameMap = new StorageMap(ctx, 12);
-    static final StorageMap propDescriptionMap = new StorageMap(ctx, 13);
-    static final StorageMap propImageMap = new StorageMap(ctx, 14);
-    static final StorageMap propTokenURIMap = new StorageMap(ctx, 15);
-    static final StorageMap amountOfOwnedTokensMap = new StorageMap(ctx, 21);
-    static final StorageMap totalBalanceMap = new StorageMap(ctx, 22);
-
-    static final ByteString balanceTokenOwnerKey = new ByteString("balanceTokenOwner");
-    static final ByteString ownerOfKey = new ByteString("ownerOf");
-    static final ByteString tokensOfKey = new ByteString("tokensOf");
-
-    // endregion keys of key-value pairs in NFT properties
-    // region NFT constants
 
     // This NFT has 8 decimals, hence, 100_000_000 fractions are equivalent to a full NFT.
     private static final int FACTOR = 100_000_000;
 
-    // endregion NFT constants
     // region deploy, update, destroy
 
     @OnDeployment
-    public static void deploy(Object data, boolean update) {
+    public static void deploy(Object data, boolean update) throws Exception {
         if (!Runtime.checkWitness(contractOwner())) {
-            error.fire("No authorization", "deploy");
-            Helper.abort();
+            throw new Exception("No authorization");
         }
         if (!update) {
-            contractMap.put(totalSupplyKey, 0);
+            new StorageMap(Storage.getStorageContext(), contractMapPrefix).put(totalSupplyKey, 0);
         }
     }
 
-    public static void update(ByteString script, String manifest) {
+    public static void update(ByteString script, String manifest) throws Exception {
         if (!Runtime.checkWitness(contractOwner())) {
-            error.fire("No authorization", "update");
-            Helper.abort();
+            throw new Exception("No authorization");
         }
         new ContractManagement().update(script, manifest);
     }
 
-    public static void destroy() {
+    public static void destroy() throws Exception {
         if (!Runtime.checkWitness(contractOwner())) {
-            error.fire("No authorization", "destroy");
-            Helper.abort();
+            throw new Exception("No authorization");
         }
         new ContractManagement().destroy();
     }
@@ -105,7 +96,7 @@ public class DivisibleNonFungibleToken {
 
     @Safe
     public static int totalSupply() {
-        return contractMap.getInt(totalSupplyKey);
+        return new StorageMap(Storage.getReadOnlyContext(), contractMapPrefix).getInt(totalSupplyKey);
     }
 
     @Safe
@@ -113,7 +104,8 @@ public class DivisibleNonFungibleToken {
         if (!Hash160.isValid(owner)) {
             throw new Exception("The parameter 'owner' must be a 20-byte address.");
         }
-        return amountOfOwnedTokensMap.getIntOrZero(owner.toByteArray());
+        return new StorageMap(Storage.getReadOnlyContext(),
+                amountOfOwnedTokensMapPrefix).getIntOrZero(owner.toByteArray());
     }
 
     @Safe
@@ -121,7 +113,7 @@ public class DivisibleNonFungibleToken {
         if (!Hash160.isValid(owner)) {
             throw new Exception("The parameter 'owner' must be a 20-byte address.");
         }
-        return (Iterator<ByteString>) Storage.find(ctx.asReadOnly(), createTokensOfPrefix(owner),
+        return (Iterator<ByteString>) Storage.find(Storage.getReadOnlyContext(), createTokensOfPrefix(owner),
                 FindOptions.ValuesOnly);
     }
 
@@ -143,21 +135,24 @@ public class DivisibleNonFungibleToken {
         assert balanceOf(from, tokenId) == FACTOR;
         onTransfer.fire(from, to, FACTOR, tokenId);
         if (from != to) {
+            StorageContext ctx = Storage.getStorageContext();
+            StorageMap amountOfOwnedTokensMap =
+                    new StorageMap(ctx, amountOfOwnedTokensMapPrefix);
             int amountOfOwnedtokens = amountOfOwnedTokensMap.getInt(from.toByteArray());
             if (amountOfOwnedtokens == 1) {
                 amountOfOwnedTokensMap.delete(from.toByteArray());
             } else {
                 amountOfOwnedTokensMap.put(from.toByteArray(), amountOfOwnedtokens - 1);
             }
-            removeTokenOwner(tokenId, from);
-            removeOwnersToken(from, tokenId);
-            decreaseBalance(from, tokenId, FACTOR);
-            decreaseTotalBalance(from, FACTOR);
+            removeTokenOwner(ctx, tokenId, from);
+            removeOwnersToken(ctx, from, tokenId);
+            decreaseBalance(ctx, from, tokenId, FACTOR);
+            decreaseTotalBalance(ctx, from, FACTOR);
 
-            addTokenOwner(tokenId, to);
-            addOwnersTokens(to, tokenId);
-            increaseBalance(to, tokenId, FACTOR);
-            increaseTotalOwnerBalance(to, FACTOR);
+            addTokenOwner(ctx, tokenId, to);
+            addOwnersTokens(ctx, to, tokenId);
+            increaseBalance(ctx, to, tokenId, FACTOR);
+            increaseTotalOwnerBalance(ctx, to, FACTOR);
         }
         onTransfer.fire(from, to, FACTOR, tokenId);
         if (new ContractManagement().getContract(to) != null) {
@@ -188,23 +183,26 @@ public class DivisibleNonFungibleToken {
         if (!Runtime.checkWitness(from)) {
             return false;
         }
+        StorageContext ctx = Storage.getStorageContext();
         if (amount == balance) {
+            StorageMap amountOfOwnedTokensMap =
+                    new StorageMap(ctx, amountOfOwnedTokensMapPrefix);
             int amountOfOwnedTokens = amountOfOwnedTokensMap.getInt(from.toByteArray());
             if (amountOfOwnedTokens == 1) {
                 amountOfOwnedTokensMap.delete(from.toByteArray());
             } else {
                 amountOfOwnedTokensMap.put(from.toByteArray(), amountOfOwnedTokens - 1);
             }
-            removeTokenOwner(tokenId, from);
-            removeOwnersToken(from, tokenId);
+            removeTokenOwner(ctx, tokenId, from);
+            removeOwnersToken(ctx, from, tokenId);
         }
-        decreaseBalance(from, tokenId, amount);
-        decreaseTotalBalance(from, amount);
+        decreaseBalance(ctx, from, tokenId, amount);
+        decreaseTotalBalance(ctx, from, amount);
 
-        addTokenOwner(tokenId, to);
-        addOwnersTokens(to, tokenId);
-        increaseBalance(to, tokenId, amount);
-        increaseTotalOwnerBalance(to, amount);
+        addTokenOwner(ctx, tokenId, to);
+        addOwnersTokens(ctx, to, tokenId);
+        increaseBalance(ctx, to, tokenId, amount);
+        increaseTotalOwnerBalance(ctx, to, amount);
         onTransfer.fire(from, to, amount, tokenId);
         if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{from, amount, tokenId, data});
@@ -217,13 +215,14 @@ public class DivisibleNonFungibleToken {
         if (tokenId.length() > 64) {
             throw new Exception("The parameter 'tokenId' must be a valid NFT ID (64 or less bytes long).");
         }
-        return (Iterator<ByteString>) Storage.find(ctx.asReadOnly(), createOwnerOfPrefix(tokenId),
+        return (Iterator<ByteString>) Storage.find(Storage.getReadOnlyContext(), createOwnerOfPrefix(tokenId),
                 FindOptions.ValuesOnly);
     }
 
     @Safe
     public static int balanceOf(Hash160 owner, ByteString tokenId) {
-        return new StorageMap(ctx, createTokensOfPrefix(owner)).getIntOrZero(tokenId);
+        return new StorageMap(Storage.getReadOnlyContext().asReadOnly(),
+                createTokensOfPrefix(owner)).getIntOrZero(tokenId);
     }
 
     // endregion divisible NEP-11 methods
@@ -231,27 +230,29 @@ public class DivisibleNonFungibleToken {
 
     @Safe
     public static Iterator<ByteString> tokens() {
-        return (Iterator<ByteString>) registryMap.find(FindOptions.ValuesOnly);
+        return (Iterator<ByteString>) new StorageMap(Storage.getReadOnlyContext(), registryMapPrefix)
+                .find(FindOptions.ValuesOnly);
     }
 
     @Safe
     public static Map<String, String> properties(ByteString tokenId) throws Exception {
         Map<String, String> p = new Map<>();
-        ByteString tokenName = propNameMap.get(tokenId);
+        StorageContext ctx = Storage.getStorageContext();
+        ByteString tokenName = new StorageMap(ctx, propNameMapPrefix).get(tokenId);
         if (tokenName == null) {
             throw new Exception("This token id does not exist.");
         }
 
         p.put(propName, tokenName.toString());
-        ByteString tokenDescription = propDescriptionMap.get(tokenId);
+        ByteString tokenDescription = new StorageMap(ctx, propDescriptionMapPrefix).get(tokenId);
         if (tokenDescription != null) {
             p.put(propDescription, tokenDescription.toString());
         }
-        ByteString tokenImage = propImageMap.get(tokenId);
+        ByteString tokenImage = new StorageMap(ctx, propImageMapPrefix).get(tokenId);
         if (tokenImage != null) {
             p.put(propImage, tokenImage.toString());
         }
-        ByteString tokenURI = propTokenURIMap.get(tokenId);
+        ByteString tokenURI = new StorageMap(ctx, propTokenURIMapPrefix).get(tokenId);
         if (tokenURI != null) {
             p.put(propTokenURI, tokenURI.toString());
         }
@@ -267,13 +268,6 @@ public class DivisibleNonFungibleToken {
     @DisplayName("Transfer")
     private static Event4Args<Hash160, Hash160, Integer, ByteString> onTransfer;
 
-    /**
-     * This event is intended to be fired before aborting the VM. The first argument should be a message and the
-     * second argument should be the method name whithin which it has been fired.
-     */
-    @DisplayName("Error")
-    private static Event2Args<String, String> error;
-
     // endregion events
     // region custom methods
 
@@ -282,39 +276,41 @@ public class DivisibleNonFungibleToken {
         return StringLiteralHelper.addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
     }
 
-    public static boolean mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) {
+    public static boolean mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) throws Exception {
         if (!Runtime.checkWitness(contractOwner())) {
-            fireErrorAndAbort("No authorization.", "mint");
+            throw new Exception("No authorization");
         }
-        if (registryMap.get(tokenId) != null) {
-            fireErrorAndAbort("This token id already exists.", "mint");
+        StorageContext ctx = Storage.getStorageContext();
+        if (new StorageMap(ctx, registryMapPrefix).get(tokenId) != null) {
+            throw new Exception("This token id already exists.");
         }
 
         String tokenName = properties.get(propName);
         if (tokenName == null) {
-            fireErrorAndAbort("The properties must contain a value for the key `name`.", "mint");
+            throw new Exception("The properties must contain a value for the key `name`.");
         }
-        propNameMap.put(tokenId, tokenName);
+        new StorageMap(ctx, propNameMapPrefix).put(tokenId, tokenName);
         String description = properties.get(propDescription);
         if (description != null) {
-            propDescriptionMap.put(tokenId, description);
+            new StorageMap(ctx, propDescriptionMapPrefix).put(tokenId, description);
         }
         String image = properties.get(propImage);
         if (image != null) {
-            propImageMap.put(tokenId, image);
+            new StorageMap(ctx, propImageMapPrefix).put(tokenId, image);
         }
         String tokenURI = properties.get(propTokenURI);
         if (tokenURI != null) {
-            propTokenURIMap.put(tokenId, tokenURI);
+            new StorageMap(ctx, propTokenURIMapPrefix).put(tokenId, tokenURI);
         }
 
-        registryMap.put(tokenId, tokenId);
-        increaseTotalSupply();
-        addTokenOwner(tokenId, owner);
-        addOwnersTokens(owner, tokenId);
+        new StorageMap(ctx, registryMapPrefix).put(tokenId, tokenId);
+        increaseTotalSupply(ctx);
+        addTokenOwner(ctx, tokenId, owner);
+        addOwnersTokens(ctx, owner, tokenId);
 
-        increaseTotalOwnerBalance(owner, FACTOR);
-        increaseBalance(owner, tokenId, FACTOR);
+        increaseTotalOwnerBalance(ctx, owner, FACTOR);
+        increaseBalance(ctx, owner, tokenId, FACTOR);
+        StorageMap amountOfOwnedTokensMap = new StorageMap(ctx, amountOfOwnedTokensMapPrefix);
         int amountOfOwnedTokens = amountOfOwnedTokensMap.getInt(owner.toByteArray());
         amountOfOwnedTokensMap.put(owner.toByteArray(), amountOfOwnedTokens + 1);
         onMint.fire(owner, tokenId, properties);
@@ -324,45 +320,41 @@ public class DivisibleNonFungibleToken {
     // endregion custom methods
     // region private helper methods
 
-    private static void fireErrorAndAbort(String msg, String method) {
-        error.fire(msg, method);
-        Helper.abort();
-    }
-
     private static ByteString createOwnerOfPrefix(ByteString tokenId) {
-        return ownerOfKey.concat(tokenId);
+        return new ByteString(ownerOfKeyPrefix).concat(tokenId);
     }
 
     private static ByteString createTokensOfPrefix(Hash160 owner) {
-        return tokensOfKey.concat(owner.toByteString());
+        return new ByteString(tokensOfKeyPrefix).concat(owner.toByteString());
     }
 
     private static ByteString createBalancePrefix(Hash160 owner) {
-        return balanceTokenOwnerKey.concat(owner.toByteString());
+        return new ByteString(balanceTokenOwnerKeyPrefix).concat(owner.toByteString());
     }
 
-    private static void addTokenOwner(ByteString tokenId, Hash160 owner) {
+    private static void addTokenOwner(StorageContext ctx, ByteString tokenId, Hash160 owner) {
         new StorageMap(ctx, createOwnerOfPrefix(tokenId)).put(owner.toByteArray(), owner.toByteArray());
     }
 
-    private static void removeTokenOwner(ByteString tokenId, Hash160 owner) {
+    private static void removeTokenOwner(StorageContext ctx, ByteString tokenId, Hash160 owner) {
         new StorageMap(ctx, createOwnerOfPrefix(tokenId)).delete(owner.toByteArray());
     }
 
-    private static void addOwnersTokens(Hash160 owner, ByteString tokenId) {
+    private static void addOwnersTokens(StorageContext ctx, Hash160 owner, ByteString tokenId) {
         new StorageMap(ctx, createTokensOfPrefix(owner)).put(tokenId, tokenId);
     }
 
-    private static void removeOwnersToken(Hash160 owner, ByteString tokenId) {
+    private static void removeOwnersToken(StorageContext ctx, Hash160 owner, ByteString tokenId) {
         new StorageMap(ctx, createTokensOfPrefix(owner)).delete(tokenId);
     }
 
-    private static void increaseTotalSupply() {
+    private static void increaseTotalSupply(StorageContext ctx) {
         int totalSupply = totalSupply();
-        contractMap.put(totalSupplyKey, totalSupply + FACTOR);
+        new StorageMap(ctx, contractMapPrefix).put(totalSupplyKey, totalSupply + FACTOR);
     }
 
-    private static void increaseTotalOwnerBalance(Hash160 owner, int addend) {
+    private static void increaseTotalOwnerBalance(StorageContext ctx, Hash160 owner, int addend) {
+        StorageMap totalBalanceMap = new StorageMap(ctx, totalBalanceMapPrefix);
         ByteString totalBalance = totalBalanceMap.get(owner.toByteArray());
         if (totalBalance == null) {
             totalBalanceMap.put(owner.toByteArray(), addend);
@@ -371,20 +363,21 @@ public class DivisibleNonFungibleToken {
         }
     }
 
-    private static void decreaseTotalBalance(Hash160 owner, int subtrahend) {
+    private static void decreaseTotalBalance(StorageContext ctx, Hash160 owner, int subtrahend) {
+        StorageMap totalBalanceMap = new StorageMap(ctx, totalBalanceMapPrefix);
         ByteString totalBalance = totalBalanceMap.get(owner.toByteArray());
         totalBalanceMap.put(owner.toByteArray(), totalBalance.toInt() - subtrahend);
     }
 
-    private static void increaseBalance(Hash160 owner, ByteString tokenId, int addend) {
-        new StorageMap(ctx, createBalancePrefix(owner)).put(tokenId, getBalanceOf(owner, tokenId) + addend);
+    private static void increaseBalance(StorageContext ctx, Hash160 owner, ByteString tokenId, int addend) {
+        new StorageMap(ctx, createBalancePrefix(owner)).put(tokenId, getBalanceOf(ctx, owner, tokenId) + addend);
     }
 
-    private static void decreaseBalance(Hash160 owner, ByteString tokenId, int subtrahend) {
-        new StorageMap(ctx, createBalancePrefix(owner)).put(tokenId, getBalanceOf(owner, tokenId) - subtrahend);
+    private static void decreaseBalance(StorageContext ctx, Hash160 owner, ByteString tokenId, int subtrahend) {
+        new StorageMap(ctx, createBalancePrefix(owner)).put(tokenId, getBalanceOf(ctx, owner, tokenId) - subtrahend);
     }
 
-    private static int getBalanceOf(Hash160 owner, ByteString tokenId) {
+    private static int getBalanceOf(StorageContext ctx, Hash160 owner, ByteString tokenId) {
         ByteString balance = new StorageMap(ctx, createBalancePrefix(owner)).get(tokenId);
         if (balance == null) {
             return 0;
