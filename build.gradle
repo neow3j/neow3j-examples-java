@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'io.neow3j.gradle-plugin' version "3.18.1"
+    id 'io.neow3j.gradle-plugin' version "3.19.0"
 }
 
 group 'io.neow3j'
@@ -17,9 +17,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.neow3j:contract:3.18.1'
-    implementation 'io.neow3j:devpack:3.18.1'
-    implementation 'io.neow3j:compiler:3.18.1'
+    implementation 'io.neow3j:contract:3.19.0'
+    implementation 'io.neow3j:devpack:3.19.0'
+    implementation 'io.neow3j:compiler:3.19.0'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
 }
 
