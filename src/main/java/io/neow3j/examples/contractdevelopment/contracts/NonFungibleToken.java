@@ -62,12 +62,6 @@ public class NonFungibleToken {
         }
     }
 
-    private static void initializeContract(Hash160 contractOwner) {
-        StorageMap contractMap = new StorageMap(Storage.getStorageContext(), contractMapPrefix);
-        contractMap.put(totalSupplyKey, 0);
-        contractMap.put(contractOwnerKey, contractOwner);
-    }
-
     public static void update(ByteString script, String manifest) throws Exception {
         if (!Runtime.checkWitness(contractOwner())) {
             throw new Exception("No authorization");
@@ -214,11 +208,6 @@ public class NonFungibleToken {
         return new StorageMap(Storage.getReadOnlyContext(), contractMapPrefix).getHash160(contractOwnerKey);
     }
 
-    // Cheaper private method to use when storage context is already loaded.
-    private static Hash160 contractOwner(StorageContext ctx) {
-        return new StorageMap(ctx, contractMapPrefix).getHash160(contractOwnerKey);
-    }
-
     public static void mint(Hash160 owner, ByteString tokenId, Map<String, String> properties) throws Exception {
         if (!Runtime.checkWitness(contractOwner())) {
             throw new Exception("No authorization");
@@ -283,6 +272,17 @@ public class NonFungibleToken {
 
     // endregion custom methods
     // region private helper methods
+
+    private static void initializeContract(Hash160 contractOwner) {
+        StorageMap contractMap = new StorageMap(Storage.getStorageContext(), contractMapPrefix);
+        contractMap.put(totalSupplyKey, 0);
+        contractMap.put(contractOwnerKey, contractOwner);
+    }
+
+    // When storage context is already loaded, this is a cheaper method than `contractOwner()`.
+    private static Hash160 contractOwner(StorageContext ctx) {
+        return new StorageMap(ctx, contractMapPrefix).getHash160(contractOwnerKey);
+    }
 
     private static int getBalance(StorageContext ctx, Hash160 owner) {
         return new StorageMap(ctx, balanceMapPrefix).getIntOrZero(owner.toByteArray());

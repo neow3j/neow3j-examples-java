@@ -19,6 +19,7 @@ import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 
+@DisplayName("AxLabsToken")
 @ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandard(neoStandard = NeoStandard.NEP_17)
@@ -34,13 +35,12 @@ public class FungibleToken {
     // region deploy, update, destroy
 
     @OnDeployment
-    public static void deploy(Object data, boolean update) throws Exception {
+    public static void deploy(Object data, boolean update) {
         if (!update) {
             StorageContext ctx = Storage.getStorageContext();
-            if (!Runtime.checkWitness(contractOwner(ctx))) {
-                throw new Exception("No authorization");
-            }
-            // Initialize the supply
+            // Set the contract owner.
+            Storage.put(ctx, contractOwnerKey, (Hash160) data);
+            // Initialize the supply.
             int initialSupply = 200_000_000;
             Storage.put(ctx, totalSupplyKey, initialSupply);
             // Allocate all tokens to the contract owner.
@@ -127,13 +127,13 @@ public class FungibleToken {
         return new StorageMap(Storage.getReadOnlyContext(), contractMapPrefix).getHash160(contractOwnerKey);
     }
 
-    // Cheaper private method to use when storage context is already loaded.
+    // endregion custom methods
+    // region private helper methods
+
+    // When storage context is already loaded, this is a cheaper method than `contractOwner()`.
     private static Hash160 contractOwner(StorageContext ctx) {
         return new StorageMap(ctx, contractMapPrefix).getHash160(contractOwnerKey);
     }
-
-    // endregion custom methods
-    // region private helper methods
 
     private static void addToBalance(StorageContext ctx, Hash160 key, int value) {
         new StorageMap(ctx, assetMapPrefix).put(key.toByteArray(), getBalance(ctx, key) + value);
