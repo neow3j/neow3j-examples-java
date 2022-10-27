@@ -6,6 +6,41 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch CompileAndDeploy",
+            "request": "launch",
+            "mainClass": "io.neow3j.examples.contractdevelopment.CompileAndDeploy",
+            "projectName": "neo-n3-examples"
+        },
+        {
+            "type": "java",
+            "name": "Launch CreateKeyPair",
+            "request": "launch",
+            "mainClass": "io.neow3j.examples.keys.CreateKeyPair",
+            "projectName": "neo-n3-examples"
+        },
+        {
+            "type": "java",
+            "name": "Launch BuildTxWithWitnessRulesSigner",
+            "request": "launch",
+            "mainClass": "io.neow3j.examples.contractinvoke.BuildTxWithWitnessRulesSigner",
+            "projectName": "neo-n3-examples"
+        },
+        {
+            "type": "java",
+            "name": "Launch OracleMakeRequest",
+            "request": "launch",
+            "mainClass": "io.neow3j.examples.contractinvoke.OracleMakeRequest",
+            "projectName": "neo-n3-examples"
+        },
+        {
+            "type": "java",
+            "name": "Launch OracleCheckResponse",
+            "request": "launch",
+            "mainClass": "io.neow3j.examples.contractinvoke.OracleCheckResponse",
+            "projectName": "neo-n3-examples"
+        },
+        {
+            "type": "java",
             "name": "Launch DeployFromFiles",
             "request": "launch",
             "mainClass": "io.neow3j.examples.contractdevelopment.DeployFromFiles",
@@ -47,7 +82,7 @@
             "signers": [
                 "@Alice"
             ],
-            "neo-express": "${workspaceFolder}/default.neo-express",
+            "neo-express": "${workspaceFolder}/default.neo-express"
         }
     ]
 }

@@ -1,0 +1,46 @@
+{
+	"name": "neow3j-examples",
+	// "image": "ghcr.io/axlabs/yaky-docker/java8:latest",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			// Update the VARIANT arg to pick a Java version: 11, 17
+			// Append -bullseye or -buster to pin to an OS version.
+			// Use the -bullseye variants on local arm64/Apple Silicon.
+			"VARIANT": "11-bullseye",
+			// Options
+			"INSTALL_MAVEN": "false",
+			"INSTALL_GRADLE": "true",
+			"GRADLE_VERSION": "7.4.1",
+			"NODE_VERSION": "12"
+		}
+	},
+	
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"vsls-contrib.codetour",
+				"vscjava.vscode-java-pack",
+				"ngd-seattle.neo3-visual-tracker",
+				"ngd-seattle.neo-contract-debug"
+			],
+			
+			// Set *default* container specific settings.json values on container create.
+			// "settings": {
+			// 	"terminal.integrated.shell.linux": "/bin/bash"
+			// }
+		}
+	},
+	
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [5000, 5001],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "",
+
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "yaky"
+}
