@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import io.neow3j.protocol.core.response.NeoSendToAddress;
-import io.neow3j.protocol.exceptions.ErrorResponseException;
 import io.neow3j.types.Hash160;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.protocol.core.response.NeoOpenWallet;
@@ -14,7 +13,7 @@ import static io.neow3j.examples.Constants.NEOW3J;
 
 public class SendNeoToAddress {
 
-    public static void main(String[] args) throws IOException, ErrorResponseException {
+    public static void main(String[] args) throws IOException {
 
         // This example requires that the wallet of Alice's account is open on the node. Thus,
         // first the wallet is opened with the `openwallet` RPC method.

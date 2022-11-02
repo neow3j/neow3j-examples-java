@@ -21,7 +21,7 @@ public class Utils {
 
     public static void trackSentTransaction(NeoSendRawTransaction response) throws IOException {
 
-        System.out.println("####################\n");
+        System.out.println("####################");
         if (response.hasError()) {
             System.out.printf("The neo-node responded with the error message '%s'.%n",
                     response.getError().getMessage());
@@ -33,7 +33,7 @@ public class Utils {
             System.out.println(NEOW3J.getTransaction(txHash).send().getTransaction());
             // To check the transaction's status, you can check its application log.
             // -> see the example `GetApplicationLogsForTx.java`
-            System.out.println("\n####################");
+            System.out.println("####################");
         }
     }
 
