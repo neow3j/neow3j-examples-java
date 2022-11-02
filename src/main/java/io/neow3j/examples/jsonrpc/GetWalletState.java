@@ -2,25 +2,29 @@ package io.neow3j.examples.jsonrpc;
 
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.NeoToken;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.response.NeoAddress;
 import io.neow3j.protocol.core.response.NeoOpenWallet;
 
 import java.io.IOException;
 import java.util.List;
 
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
 public class GetWalletState {
 
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+
     public static void main(String[] args) throws IOException {
 
-        NeoOpenWallet resp = NEOW3J.openWallet("Alice.wallet.json", "neo").send();
+        NeoOpenWallet resp = neow3j.openWallet("Alice.wallet.json", "neo").send();
         if (resp.hasError()) {
             System.out.println("Couldn't open wallet. Error message was: '" + resp.getError().getMessage() + "'");
             return;
         }
 
-        List<NeoAddress> addresses = NEOW3J.listAddress()
+        List<NeoAddress> addresses = neow3j.listAddress()
                 .send()
                 .getAddresses();
 
@@ -29,11 +33,11 @@ public class GetWalletState {
         if (addresses != null) {
             System.out.println("Nr of addresses in your wallet: " + addresses.size());
             if (!addresses.isEmpty()) {
-                String neoBalance = NEOW3J.getWalletBalance(NeoToken.SCRIPT_HASH)
+                String neoBalance = neow3j.getWalletBalance(NeoToken.SCRIPT_HASH)
                         .send()
                         .getWalletBalance().getBalance();
 
-                String gasBalance = NEOW3J.getWalletBalance(GasToken.SCRIPT_HASH)
+                String gasBalance = neow3j.getWalletBalance(GasToken.SCRIPT_HASH)
                         .send()
                         .getWalletBalance().getBalance();
 

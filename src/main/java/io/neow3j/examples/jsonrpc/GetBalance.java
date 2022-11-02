@@ -3,20 +3,24 @@ package io.neow3j.examples.jsonrpc;
 import java.math.BigInteger;
 
 import io.neow3j.contract.FungibleToken;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.types.Hash160;
 import io.neow3j.contract.NeoToken;
 
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
 public class GetBalance {
+
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
 
     public static void main(String[] args) throws Throwable {
 
         Hash160 contractHash = NeoToken.SCRIPT_HASH;
 
         // Set up a wrapper to invoke the contract.
-        FungibleToken token = new FungibleToken(contractHash, NEOW3J);
+        FungibleToken token = new FungibleToken(contractHash, neow3j);
 
         System.out.println("\n####################");
 

@@ -12,10 +12,9 @@ import static java.util.Arrays.asList;
 
 public class Constants {
 
-    // This sets up the connection to the neo-node of our private network.
-    public static Neow3j NEOW3J = Neow3j.build(new HttpService("http://127.0.0.1:40332", true));
-
-    public static Neow3j NEOW3J_TESTNET = Neow3j.build(new HttpService("http://seed2t5.neo.org:20332"));
+    // This sets up the connection to the Neo node of our private network or the testnet respectively.
+    public static Neow3j NEOW3J_PRIVATENET = Neow3j.build(new HttpService("http://127.0.0.1:40332", true));
+    public static Neow3j NEOW3J_TESTNET = Neow3j.build(new HttpService("http://seed2t5.neo.org:20332", true));
 
     // This is Alice's account which is also available on the pre-configured private network.
     public static Account ALICE = Account.fromWIF("L1eV34wPoj9weqhGijdDLtVQzUpWGHszXXpdU9dPuh2nRFFzFa7E");
@@ -29,8 +28,8 @@ public class Constants {
 
     public static Wallet WALLET = Wallet.withAccounts(ALICE, GENESIS, BOB);
 
-    public static GasToken gasToken = new GasToken(NEOW3J);
-    public static NeoToken neoToken = new NeoToken(NEOW3J);
+    public static GasToken gasToken = new GasToken(NEOW3J_PRIVATENET);
+    public static NeoToken neoToken = new NeoToken(NEOW3J_PRIVATENET);
     public static final Hash160 TESTNET_NNS_CONTRACT_HASH = new Hash160("0xd4dbd72c8965b8f12c14d37ad57ddd91ee1d98cb");
 
     // Set NNS resolver for testnet

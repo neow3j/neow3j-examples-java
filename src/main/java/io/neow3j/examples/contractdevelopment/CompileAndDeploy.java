@@ -5,6 +5,7 @@ import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.examples.contractdevelopment.contracts.SimpleStorageContract;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
 import io.neow3j.types.Hash160;
@@ -15,10 +16,13 @@ import java.nio.file.Paths;
 import static io.neow3j.contract.ContractUtils.writeContractManifestFile;
 import static io.neow3j.contract.ContractUtils.writeNefFile;
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
 // Shows how a smart contract can be compiled programmatically and then deployed on a local Neo blockchain.
 public class CompileAndDeploy {
+
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
 
     public static void main(String[] args) throws Throwable {
 
@@ -34,7 +38,7 @@ public class CompileAndDeploy {
         writeContractManifestFile(res.getManifest(), buildNeow3jPath);
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to the neo-node.
-        NeoSendRawTransaction response = new ContractManagement(NEOW3J)
+        NeoSendRawTransaction response = new ContractManagement(neow3j)
                 .deploy(res.getNefFile(), res.getManifest())
                 .signers(AccountSigner.global(ALICE))
                 .sign()

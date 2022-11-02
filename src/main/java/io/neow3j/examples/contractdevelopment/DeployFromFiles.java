@@ -3,6 +3,7 @@ package io.neow3j.examples.contractdevelopment;
 import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.SmartContract;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.ObjectMapperFactory;
 import io.neow3j.protocol.core.response.ContractManifest;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
@@ -14,10 +15,13 @@ import java.io.FileInputStream;
 import java.nio.file.Paths;
 
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
 // Shows how to read a smart contract's files from the disk and deployed it on through a local neo-node.
 public class DeployFromFiles {
+
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
 
     public static void main(String[] args) throws Throwable {
 
@@ -33,7 +37,7 @@ public class DeployFromFiles {
         }
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to the neo-node.
-        NeoSendRawTransaction response = new ContractManagement(NEOW3J)
+        NeoSendRawTransaction response = new ContractManagement(neow3j)
                 .deploy(nefFile, manifest)
                 .signers(AccountSigner.global(ALICE))
                 .sign()

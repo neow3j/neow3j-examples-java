@@ -1,6 +1,7 @@
 package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.GasToken;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
 import io.neow3j.transaction.ContractSigner;
@@ -10,7 +11,7 @@ import java.math.BigInteger;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.BOB;
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 import static io.neow3j.types.ContractParameter.string;
 
@@ -22,12 +23,15 @@ import static io.neow3j.types.ContractParameter.string;
  */
 public class TransferFromContract {
 
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+
     public static void main(String[] args) throws Throwable {
 
         // GAS holding contract (`OnVerificationContract`).
         Hash160 contract = new Hash160("0xe7c27a246c701755574134aaa094b4fd5c79f78a");
 
-        GasToken gas = new GasToken(NEOW3J);
+        GasToken gas = new GasToken(neow3j);
         NeoSendRawTransaction response = gas.transfer(
                         contract,
                         BOB.getScriptHash(),
@@ -41,7 +45,7 @@ public class TransferFromContract {
 
         System.out.println(response);
 
-        trackSentTransaction(response);
+        trackSentTransaction(response, neow3j);
     }
 
 }

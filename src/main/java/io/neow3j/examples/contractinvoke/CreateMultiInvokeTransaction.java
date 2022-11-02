@@ -1,6 +1,7 @@
 package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.SmartContract;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
 import io.neow3j.transaction.Transaction;
@@ -12,13 +13,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 
 /**
  * This example shows how to create a transaction that contains multiple contract invocations.
  */
 public class CreateMultiInvokeTransaction {
+
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
 
     static final String MINT = "mint";
     static final String NAME = "name";
@@ -37,7 +41,7 @@ public class CreateMultiInvokeTransaction {
         // Before running this example, deploy the NonFungibleToken contract using the CompileAndDeploy example and
         // set the returned contract hash here accordingly.
         Hash160 contractHash = new Hash160("c65517c1ee197221fb482f0a5c5b09cd7732b722");
-        SmartContract contract = new SmartContract(contractHash, NEOW3J);
+        SmartContract contract = new SmartContract(contractHash, neow3j);
 
         ArrayList<Hash160> ownerList = new ArrayList<>();
         ownerList.add(OWNER_1);
@@ -50,7 +54,7 @@ public class CreateMultiInvokeTransaction {
         tokenURIList.add(URI_3);
 
         // Create the transaction builder.
-        TransactionBuilder transactionBuilder = new TransactionBuilder(NEOW3J);
+        TransactionBuilder transactionBuilder = new TransactionBuilder(neow3j);
 
         // Create mint scripts and add them to the transaction builder.
         HashMap<String, String> propertiesMap = new HashMap<>();
@@ -73,7 +77,7 @@ public class CreateMultiInvokeTransaction {
                 .sign();
 
         NeoSendRawTransaction response = tx.send();
-        trackSentTransaction(response);
+        trackSentTransaction(response, neow3j);
     }
 
 }

@@ -1,6 +1,7 @@
 package io.neow3j.examples;
 
 import io.neow3j.compiler.DebugInfo;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.ObjectMapperFactory;
 import io.neow3j.types.Hash256;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
@@ -15,11 +16,9 @@ import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static io.neow3j.examples.Constants.NEOW3J;
-
 public class Utils {
 
-    public static void trackSentTransaction(NeoSendRawTransaction response) throws IOException {
+    public static void trackSentTransaction(NeoSendRawTransaction response, Neow3j neow3j) throws IOException {
 
         System.out.println("####################");
         if (response.hasError()) {
@@ -29,8 +28,8 @@ public class Utils {
             Hash256 txHash = response.getSendRawTransaction().getHash();
             System.out.printf("Successfully transmitted the transaction with hash '%s'.%n", txHash);
             System.out.println("Waiting until transaction is persisted in a block...");
-            Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
-            System.out.println(NEOW3J.getTransaction(txHash).send().getTransaction());
+            Await.waitUntilTransactionIsExecuted(txHash, neow3j);
+            System.out.println(neow3j.getTransaction(txHash).send().getTransaction());
             // To check the transaction's status, you can check its application log.
             // -> see the example `GetApplicationLogsForTx.java`
             System.out.println("####################");

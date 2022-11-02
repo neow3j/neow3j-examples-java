@@ -1,6 +1,7 @@
 package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.FungibleToken;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.transaction.AccountSigner;
 import io.neow3j.transaction.Signer;
 import io.neow3j.transaction.Transaction;
@@ -14,15 +15,18 @@ import io.neow3j.types.Hash160;
 import java.math.BigInteger;
 
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
 public class BuildTxWithWitnessRulesSigner {
+
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
 
     public static void main(String[] args) throws Throwable {
         Hash160 trustedContract = new Hash160("0xe7c27a246c701755574134aaa094b4fd5c79f78a");
         Hash160 notWellKnownContract = new Hash160("d34002490103d4333d91638411d1ec39e07aaafe");
 
-        FungibleToken token = new FungibleToken(trustedContract, NEOW3J);
+        FungibleToken token = new FungibleToken(trustedContract, neow3j);
 
         WitnessRule witnessRule = new WitnessRule(
                 WitnessAction.ALLOW, // Allow the witness to be used, if the following condition is true.
