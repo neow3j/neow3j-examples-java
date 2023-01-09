@@ -16,6 +16,10 @@ public class Constants {
     public static Neow3j NEOW3J_PRIVATENET = Neow3j.build(new HttpService("http://127.0.0.1:40332", true));
     public static Neow3j NEOW3J_TESTNET = Neow3j.build(new HttpService("http://seed2t5.neo.org:20332", true));
 
+    // Endpoint to a NeoFS node and the NeoFS contract hash on testnet.
+    public static String NEOFS_GRPC_ENDPOINT_TESTNET = "grpcs://st1.t5.fs.neo.org:8082";
+    public static Hash160 NEOFS_CONTRACT_TESTNET = Hash160.fromAddress("NZAUkYbJ1Cb2HrNmwZ1pg9xYHBhm2FgtKV");
+
     // This is Alice's account which is also available on the pre-configured private network.
     public static Account ALICE = Account.fromWIF("L1eV34wPoj9weqhGijdDLtVQzUpWGHszXXpdU9dPuh2nRFFzFa7E");
 
