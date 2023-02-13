@@ -39,7 +39,7 @@ extensively test them and desirably obtain an audit for them.
 
 ## Instructions
 
-We recommend using [*Virtual Studio Code*](https://code.visualstudio.com/) (VSCode) for trying
+We recommend using [*Visual Studio Code*](https://code.visualstudio.com/) (VSCode) for trying
 these examples. You can then make use of the [*Neo Blockchain
 Toolkit*](https://marketplace.visualstudio.com/items?itemName=ngd-seattle.neo-blockchain-toolkit)
 which gives you the best developer experience with Neo. Checkout their [Quickstart
