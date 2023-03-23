@@ -13,15 +13,13 @@ import static io.neow3j.script.InteropService.SYSTEM_STORAGE_GET;
 @Permission(contract = "*", methods = "*")
 public class CustomScriptContract {
 
-    static StorageContext ctx = Storage.getStorageContext();
-
     public static void put(ByteString key, int value) {
-        Storage.put(ctx, key, value);
+        Storage.put(Storage.getStorageContext(), key, value);
     }
 
     public static int get(ByteString key) throws Exception {
         try {
-            return Helper.getIntOrThrow(ctx, key);
+            return Helper.getIntOrThrow(Storage.getReadOnlyContext(), key);
         } catch (Exception e) {
             throw new Exception("Couldn't find a value corresponding to key " + key.toString());
         }
@@ -45,4 +43,5 @@ public class CustomScriptContract {
         public static native int getIntOrThrow(StorageContext context, ByteString key) throws Exception;
 
     }
+
 }

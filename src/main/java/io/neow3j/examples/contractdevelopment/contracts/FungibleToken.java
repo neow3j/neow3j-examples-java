@@ -3,11 +3,10 @@ package io.neow3j.examples.contractdevelopment.contracts;
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.Hash160;
-import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
+import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.StorageMap;
-import io.neow3j.devpack.StringLiteralHelper;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
@@ -18,44 +17,48 @@ import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
-import io.neow3j.devpack.events.Event2Args;
 import io.neow3j.devpack.events.Event3Args;
 
+@DisplayName("AxLabsToken")
 @ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandard(neoStandard = NeoStandard.NEP_17)
 @Permission(nativeContract = NativeContract.ContractManagement)
 public class FungibleToken {
 
-    static final StorageMap assetMap = new StorageMap(Storage.getStorageContext(), new byte[]{0x01});
-    static final byte[] totalSupplyKey = new byte[]{0x00};
+    static final int contractMapPrefix = 0;
+    static final byte[] contractOwnerKey = new byte[]{0x00};
+    static final byte[] totalSupplyKey = new byte[]{0x01};
+
+    static final int assetMapPrefix = 1;
 
     // region deploy, update, destroy
 
     @OnDeployment
     public static void deploy(Object data, boolean update) {
         if (!update) {
-            if (!Runtime.checkWitness(contractOwner())) {
-                fireErrorAndAbort("No authorization.", "deploy");
-            }
-            // Initialize the supply
+            StorageContext ctx = Storage.getStorageContext();
+            // Set the contract owner.
+            Storage.put(ctx, contractOwnerKey, (Hash160) data);
+            // Initialize the supply.
             int initialSupply = 200_000_000;
-            Storage.put(Storage.getStorageContext(), totalSupplyKey, initialSupply);
+            Storage.put(ctx, totalSupplyKey, initialSupply);
             // Allocate all tokens to the contract owner.
-            assetMap.put(contractOwner().toByteArray(), initialSupply);
+            new StorageMap(ctx, assetMapPrefix)
+                    .put(contractOwner(ctx).toByteArray(), initialSupply);
         }
     }
 
-    public static void update(ByteString script, String manifest) {
-        if (!Runtime.checkWitness(contractOwner())) {
-            fireErrorAndAbort("No authorization.", "update");
+    public static void update(ByteString script, String manifest) throws Exception {
+        if (!Runtime.checkWitness(contractOwner(Storage.getReadOnlyContext()))) {
+            throw new Exception("No authorization");
         }
         new ContractManagement().update(script, manifest);
     }
 
-    public static void destroy() {
-        if (!Runtime.checkWitness(contractOwner())) {
-            fireErrorAndAbort("No authorization.", "destroy");
+    public static void destroy() throws Exception {
+        if (!Runtime.checkWitness(contractOwner(Storage.getReadOnlyContext()))) {
+            throw new Exception("No authorization");
         }
         new ContractManagement().destroy();
     }
@@ -85,13 +88,14 @@ public class FungibleToken {
         if (amount < 0) {
             throw new Exception("The parameter 'amount' must be greater than or equal to 0.");
         }
-        if (amount > getBalance(from) || !Runtime.checkWitness(from)) {
+        StorageContext ctx = Storage.getStorageContext();
+        if (amount > getBalance(ctx, from) || !Runtime.checkWitness(from)) {
             return false;
         }
 
         if (from != to && amount != 0) {
-            deductFromBalance(from, amount);
-            addToBalance(to, amount);
+            deductFromBalance(ctx, from, amount);
+            addToBalance(ctx, to, amount);
         }
 
         onTransfer.fire(from, to, amount);
@@ -106,7 +110,7 @@ public class FungibleToken {
         if (!Hash160.isValid(account)) {
             throw new Exception("The parameter 'account' must be a 20-byte address.");
         }
-        return getBalance(account);
+        return getBalance(Storage.getReadOnlyContext(), account);
     }
 
     // endregion NEP-17 methods
@@ -115,40 +119,33 @@ public class FungibleToken {
     @DisplayName("Transfer")
     static Event3Args<Hash160, Hash160, Integer> onTransfer;
 
-    /**
-     * This event is intended to be fired before aborting the VM. The first argument should be a message and the
-     * second argument should be the method name whithin which it has been fired.
-     */
-    @DisplayName("Error")
-    private static Event2Args<String, String> error;
-
     // endregion events
     // region custom methods
 
     @Safe
     public static Hash160 contractOwner() {
-        return StringLiteralHelper.addressToScriptHash("NM7Aky765FG8NhhwtxjXRx7jEL1cnw7PBP");
+        return new StorageMap(Storage.getReadOnlyContext(), contractMapPrefix).getHash160(contractOwnerKey);
     }
 
     // endregion custom methods
     // region private helper methods
 
-    private static void fireErrorAndAbort(String msg, String method) {
-        error.fire(msg, method);
-        Helper.abort();
+    // When storage context is already loaded, this is a cheaper method than `contractOwner()`.
+    private static Hash160 contractOwner(StorageContext ctx) {
+        return new StorageMap(ctx, contractMapPrefix).getHash160(contractOwnerKey);
     }
 
-    private static void addToBalance(Hash160 key, int value) {
-        assetMap.put(key.toByteArray(), getBalance(key) + value);
+    private static void addToBalance(StorageContext ctx, Hash160 key, int value) {
+        new StorageMap(ctx, assetMapPrefix).put(key.toByteArray(), getBalance(ctx, key) + value);
     }
 
-    private static void deductFromBalance(Hash160 key, int value) {
-        int oldValue = getBalance(key);
-        assetMap.put(key.toByteArray(), oldValue - value);
+    private static void deductFromBalance(StorageContext ctx, Hash160 key, int value) {
+        int oldValue = getBalance(ctx, key);
+        new StorageMap(ctx, assetMapPrefix).put(key.toByteArray(), oldValue - value);
     }
 
-    private static int getBalance(Hash160 key) {
-        return assetMap.getIntOrZero(key.toByteArray());
+    private static int getBalance(StorageContext ctx, Hash160 key) {
+        return new StorageMap(ctx, assetMapPrefix).getIntOrZero(key.toByteArray());
     }
 
     // endregion private helper methods

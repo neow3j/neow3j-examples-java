@@ -1,6 +1,7 @@
 package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.SmartContract;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.transaction.TransactionBuilder;
 import io.neow3j.types.Hash160;
 import io.neow3j.types.Hash256;
@@ -17,10 +18,13 @@ import static io.neow3j.types.ContractParameter.string;
 
 public class OracleMakeRequest {
 
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_TESTNET;
+
     public static void main(String[] args) throws Throwable {
         // The contract CallOracleContract is deployed on testnet with the following address.
         Hash160 contractHash = new Hash160("ae2e396f6b082cadeb74d13d978960fa90af28ed");
-        SmartContract smartContract = new SmartContract(contractHash, NEOW3J_TESTNET);
+        SmartContract smartContract = new SmartContract(contractHash, neow3j);
 
         BigInteger gasForResponse = toFractions(BigDecimal.ONE, 8);
         TransactionBuilder b = smartContract.invokeFunction("request",

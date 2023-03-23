@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'io.neow3j.gradle-plugin' version "3.18.1"
+    id 'io.neow3j.gradle-plugin' version "3.19.3"
 }
 
 group 'io.neow3j'
@@ -12,15 +12,16 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    // Uncomment the next line to use snapshot versions of neow3j
-//    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    // The next line is used for snapshot versions of neow3j
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
-    implementation 'io.neow3j:contract:3.18.1'
-    implementation 'io.neow3j:devpack:3.18.1'
-    implementation 'io.neow3j:compiler:3.18.1'
-    implementation 'ch.qos.logback:logback-classic:1.2.11'
+    implementation 'io.neow3j:contract:3.19.3'
+    implementation 'io.neow3j:devpack:3.19.3'
+    implementation 'io.neow3j:compiler:3.19.3'
+    implementation 'io.neow3j:neofs:3.19.4-SNAPSHOT'
+    implementation 'ch.qos.logback:logback-classic:1.3.4'
 }
 
 tasks.withType(Test) {
@@ -40,7 +41,7 @@ neow3jCompiler {
     // className = System.getProperty("className")
     // 
     // Then, you can compile your code with:
-    // ./gradlew -q -P className=io.neow3j.examples.contractdev.contracts.BongoCatToken neow3jCompile
+    // ./gradlew -q -P className=io.neow3j.examples.contractdevelopment.contracts.FungibleToken neow3jCompile
 
     // Set neow3j compiler to generate debug symbols
     debug = true
@@ -51,9 +52,9 @@ neow3jCompiler {
 // The following configuration enables you to execute any specific
 // class file that contains a main() method, directly in the command line.
 // For example:
-// ./gradlew -q -P mainClass=io.neow3j.examples.contractdev.CompileAndDeploy run
+// ./gradlew -q -P mainClass=io.neow3j.examples.contractdevelopment.CompileAndDeploy run
 application {
-    mainClassName = project.hasProperty("mainClass") ? getProperty("mainClass") : "null"
+    mainClassName = project.hasProperty("mainClass") ? project.getProperty("mainClass") : "null"
 }
 
 // The following task is *not* required for a neow3j project.

@@ -1,6 +1,7 @@
 package io.neow3j.examples.jsonrpc;
 
 import io.neow3j.contract.GasToken;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.response.NeoApplicationLog;
 import io.neow3j.protocol.core.response.NeoBlock;
 import io.neow3j.protocol.core.response.Transaction;
@@ -11,16 +12,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
 public class SubscribeToContractNotifications {
+
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
 
     public static void main(String[] args) throws IOException {
 
         // The contract hash to track.
         Hash160 contractHash = GasToken.SCRIPT_HASH;
 
-        NEOW3J.subscribeToNewBlocksObservable(true).subscribe((blockReqResult) -> {
+        neow3j.subscribeToNewBlocksObservable(true).subscribe((blockReqResult) -> {
             NeoBlock block = blockReqResult.getBlock();
             System.out.println("#######################################");
             System.out.println("Block Index: " + block.getIndex());
@@ -28,7 +32,7 @@ public class SubscribeToContractNotifications {
             List<Hash256> transactionsWithNotification = new ArrayList<>();
             for (Transaction t : block.getTransactions()) {
                 List<NeoApplicationLog.Execution> execs =
-                        NEOW3J.getApplicationLog(t.getHash()).send().getApplicationLog().getExecutions();
+                        neow3j.getApplicationLog(t.getHash()).send().getApplicationLog().getExecutions();
 
                 boolean notificationFound = execs.stream().anyMatch(
                         e -> e.getNotifications().stream().anyMatch(n -> n.getContract().equals(contractHash)));

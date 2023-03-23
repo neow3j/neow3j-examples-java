@@ -3,6 +3,7 @@ package io.neow3j.examples.contractinvoke;
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.types.Hash256;
 import io.neow3j.utils.Await;
 
@@ -10,15 +11,18 @@ import java.math.BigInteger;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.GENESIS;
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 import static io.neow3j.transaction.AccountSigner.calledByEntry;
 
 public class VoteForValidator {
 
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+
     public static void main(String[] args) throws Throwable {
 
-        NeoToken neoToken = new NeoToken(NEOW3J);
-        GasToken gasToken = new GasToken(NEOW3J);
+        NeoToken neoToken = new NeoToken(neow3j);
+        GasToken gasToken = new GasToken(neow3j);
 
         // The voting account needs NEO because only NEO holders can participate in governance.
         Hash256 txHash = neoToken
@@ -28,7 +32,7 @@ public class VoteForValidator {
                 .send()
                 .getSendRawTransaction()
                 .getHash();
-        Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
+        Await.waitUntilTransactionIsExecuted(txHash, neow3j);
 
         System.out.println("Voting account funded with Neo.");
 
@@ -38,7 +42,7 @@ public class VoteForValidator {
                 .addMultiSigWitness(GENESIS.getVerificationScript(), ALICE)
                 .send()
                 .getSendRawTransaction().getHash();
-        Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
+        Await.waitUntilTransactionIsExecuted(txHash, neow3j);
 
         System.out.println("Voting account funded with Gas.");
 
@@ -49,7 +53,7 @@ public class VoteForValidator {
                 .sign()
                 .send()
                 .getSendRawTransaction().getHash();
-        Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
+        Await.waitUntilTransactionIsExecuted(txHash, neow3j);
 
         System.out.println("Candidate registered!");
 
@@ -58,12 +62,12 @@ public class VoteForValidator {
                 .sign()
                 .send()
                 .getSendRawTransaction().getHash();
-        Await.waitUntilTransactionIsExecuted(txHash, NEOW3J);
+        Await.waitUntilTransactionIsExecuted(txHash, neow3j);
 
         System.out.println("Voted!");
         System.out.println("Voted validators are:");
 
-        NEOW3J.getNextBlockValidators().send().getResult()
+        neow3j.getNextBlockValidators().send().getResult()
                 .forEach(v -> System.out.println("Pubkey: " + v.getPublicKey() + ", votes: " + v.getVotes()));
     }
 

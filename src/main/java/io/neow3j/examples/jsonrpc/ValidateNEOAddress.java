@@ -1,16 +1,21 @@
 package io.neow3j.examples.jsonrpc;
 
+import io.neow3j.protocol.Neow3j;
+
 import java.io.IOException;
 
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
 public class ValidateNEOAddress {
+
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
 
     public static void main(String[] args) throws IOException {
 
         String address = "NWcx4EfYdfqn5jNjDz8AHE6hWtWdUGDdmy";
 
-        Boolean isValid = NEOW3J.validateAddress(address)
+        Boolean isValid = neow3j.validateAddress(address)
                 .send()
                 .getValidation().isValid();
 

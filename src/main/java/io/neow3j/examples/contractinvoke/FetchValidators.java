@@ -5,16 +5,20 @@ import java.util.List;
 
 import io.neow3j.contract.NeoToken;
 import io.neow3j.crypto.ECKeyPair.ECPublicKey;
+import io.neow3j.protocol.Neow3j;
 import io.neow3j.utils.Numeric;
 
-import static io.neow3j.examples.Constants.NEOW3J;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
 public class FetchValidators {
+
+    // The neow3j instance used in this example.
+    static final Neow3j neow3j = NEOW3J_PRIVATENET;
 
     public static void main(String[] args) throws IOException {
 
         // Set up the NeoToken class with a node connection for further calls to the contract.
-        NeoToken neo = new NeoToken(NEOW3J);
+        NeoToken neo = new NeoToken(neow3j);
 
         // Get the public keys of nodes that are validators of the network.
         List<ECPublicKey> validators = neo.getNextBlockValidators();
