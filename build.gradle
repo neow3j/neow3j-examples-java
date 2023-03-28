@@ -41,7 +41,7 @@ neow3jCompiler {
     // className = System.getProperty("className")
     // 
     // Then, you can compile your code with:
-    // ./gradlew -q -P className=io.neow3j.examples.contractdev.contracts.BongoCatToken neow3jCompile
+    // ./gradlew -q -P className=io.neow3j.examples.contractdevelopment.contracts.FungibleToken neow3jCompile
 
     // Set neow3j compiler to generate debug symbols
     debug = true
@@ -52,9 +52,9 @@ neow3jCompiler {
 // The following configuration enables you to execute any specific
 // class file that contains a main() method, directly in the command line.
 // For example:
-// ./gradlew -q -P mainClass=io.neow3j.examples.contractdev.CompileAndDeploy run
+// ./gradlew -q -P mainClass=io.neow3j.examples.contractdevelopment.CompileAndDeploy run
 application {
-    mainClassName = project.hasProperty("mainClass") ? getProperty("mainClass") : "null"
+    mainClassName = project.hasProperty("mainClass") ? project.getProperty("mainClass") : "null"
 }
 
 // The following task is *not* required for a neow3j project.

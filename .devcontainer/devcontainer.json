@@ -1,0 +1,54 @@
+{
+	"name": "neow3j-examples-java",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": { }
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/java:1": {
+			"version": "none",
+			"installMaven": "false",
+			"installGradle": "true",
+			"gradleVersion": "7.4.1"
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"moby": true,
+			"dockerDashComposeVersion": "v1"
+		}
+	},
+
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"vscjava.vscode-java-pack",
+				"vsls-contrib.codetour",
+				"ngd-seattle.neo3-visual-tracker",
+				"ngd-seattle.neo-contract-debug",
+				"ms-azuretools.vscode-docker"
+			],
+			
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				"java.import.gradle.enabled": true,
+				"java.import.gradle.wrapper.enabled": true,
+				"java.autobuild.enabled": true,
+				"java.project.resourceFilters": [],
+				"extensions.ignoreRecommendations": true,
+				"java.server.launchMode": "Standard"
+			}
+		}
+	},
+	
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [5000, 5001],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "",
+
+	// More info about users: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode"
+}
