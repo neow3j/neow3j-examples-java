@@ -50,7 +50,7 @@ devcontainers extension, see below).
 ## Local Development
 
 With the following instructions you can develop on your local machine. If you want to use dev containers, there are less requirements,
-since a pre-configured docker image is used that configures all required VSCode extensions.
+since a pre-configured Docker image is used that configures all required VSCode extensions.
 See [here](https://code.visualstudio.com/docs/devcontainers/containers) for more in-depth information about it.
 
 First, clone the repository:
@@ -62,31 +62,27 @@ cd neow3j-examples-java
 
 Now follow the next steps below for developing with dev containers, or further below without dev containers.
 
-### Requirements and Setup for Developing with Dev Containers
+### Developing with Dev Containers
 
-- [*Visual Studio Code*](https://code.visualstudio.com/) (VSCode) IDE
-- [Docker](https://www.docker.com/)
+You will need [*Visual Studio Code*](https://code.visualstudio.com/) (VSCode), the 
+[Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) VSCode
+extension, and [Docker](https://www.docker.com/)
 
-1. Install the [dev container](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) VSCode
-extension.
-
-2. Login to the GitHub container repository through your terminal.
-
-```bash
-docker login ghcr.io
-```
-
-It will ask you for your Docker login credential. If you don't have an account with Docker, you can use your GitHub username with
-a personal access code from GitHub. See the GitHub docs for more info on personal access tokens.
+1. Login to the GitHub container repository through your terminal.
+    ```bash
+    docker login ghcr.io
+    ``` 
+    It will ask you for your Docker login credential. If you don't have an account with Docker, you can use your GitHub
+    username with a personal access code from GitHub. See the GitHub docs for more info on personal access tokens.
 
 3. Go to the command palette in VSCode (`View` -> `Command Palette`) and execute `>Dev Containers: Rebuild and Reopen in Container`.
    This will reload your VSCode IDE and install all necessary extensions in the container. This might take a while.
 
 4. Now you can [run the examples](#run-examples).
 
-### Requirements and Setup for Developing in your local Environment
+### Developing in your local Environment
 
-- Java 8
+You will need JDK 8 or higher.
 
 We recommend using [*Visual Studio Code*](https://code.visualstudio.com/) (VSCode) for trying these examples.
 You can then make use of the [*Neo Blockchain Toolkit*](https://marketplace.visualstudio.com/items?itemName=ngd-seattle.neo-blockchain-toolkit)
