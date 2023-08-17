@@ -36,9 +36,16 @@ You can get started in three different ways described more closely below:
 ## GitHub Codespaces
 
 Create a codespace on the `Code` button on top of this repo's landing page. It will take a while until the codespace
-is loaded and all extensions are installed. Once that process is done you're ready to run the examples.
+is loaded and all extensions are installed. Once that process is done you'll end up on a VSCode editor in your browser
+and are ready to run the examples. We've configured the repo to start a Codespace with all necessary tools
+pre-configured.
 
 <img width="430" alt="image" src="https://github.com/neow3j/neow3j-examples-java/assets/53603111/e4c3d3b6-ee9f-44fb-ae72-ab9353e3e662">
+
+By default GitHub Codespaces opens a VSCode isntance in the browser, but, you can configure GitHub such that it opens  a
+local VSCode instance connected to the codespace. This requires the GitHub Codespaces
+[extension](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces) to be installed (and the
+devcontainers extension, see below).
 
 ## Local Development
 
