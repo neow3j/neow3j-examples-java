@@ -1,38 +1,82 @@
 package io.neow3j.examples.contractdevelopment.contracts;
 
 import io.neow3j.devpack.ByteString;
+import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
+import io.neow3j.devpack.StorageContext;
+import io.neow3j.devpack.annotations.DisplayName;
+import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.Permission;
+import io.neow3j.devpack.annotations.Safe;
+import io.neow3j.devpack.annotations.Struct;
 import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.contracts.OracleContract;
+import io.neow3j.devpack.contracts.StdLib;
 
-@Permission(nativeContract = NativeContract.OracleContract)
+@DisplayName("OracleExampleContract")
+@ManifestExtra.ManifestExtras({
+        @ManifestExtra(key = "Author", value = "AxLabs"),
+        @ManifestExtra(key = "Description", value = "Example contract for using Neo's native Oracle Service")
+})
+@Permission(nativeContract = NativeContract.OracleContract, methods = "request")
 public class CallOracleContract {
 
-    // Use the OracleMakeRequest example to invoke the request method, and the OracleCheckResponse example to check
-    // whether the storage was updated accordingly.
-    // Check out the oracle service documentation here: https://docs.neo.org/docs/en-us/advanced/oracle.html
+    public static final StorageContext ctx = Storage.getStorageContext();
+    public static final int lockKey = 0x0f;
+    public static final int responseKey = 0xff;
 
-    public static void request(String url, String filter, int gasForResponse) {
-        new OracleContract().request(url, filter, "callback", null, gasForResponse);
+    public static final StdLib stdLib = new StdLib();
+    public static final OracleContract oracle = new OracleContract();
+
+    public static void request(String url, String filter) throws Exception {
+        if (isLocked()) {
+            throw new Exception("Wait until ongoing Oracle request has been finished.");
+        }
+        lock();
+        oracle.request(url, filter, "callback", null, 1000_0000);
     }
 
-    public static void callback(String url, Object userData, int responseCode, ByteString response) {
-        Storage.put(Storage.getStorageContext(), 0, url);
-        Storage.put(Storage.getStorageContext(), 1, responseCode);
-        Storage.put(Storage.getStorageContext(), 2, response);
+    public static void callback(String url, Object userData, int responseCode, ByteString response) throws Exception {
+        if (Runtime.getCallingScriptHash() != oracle.getHash()) {
+            throw new Exception("No authorization");
+        }
+        ByteString serialized = stdLib.serialize(new CustomResponseStruct(url, responseCode, response));
+        Storage.put(ctx, responseKey, serialized);
+        unlock();
     }
 
-    public static String getStoredUrl() {
-        return Storage.getString(Storage.getReadOnlyContext(), 0);
+    @Safe
+    public static CustomResponseStruct getResponse() {
+        ByteString serializedResponse = Storage.get(ctx, responseKey);
+        return (CustomResponseStruct) stdLib.deserialize(serializedResponse);
     }
 
-    public static int getStoredResponseCode() {
-        return Storage.getIntOrZero(Storage.getReadOnlyContext(), 1);
+    // Some methods to allow only one request at a time.
+
+    private static boolean isLocked() {
+        return Storage.getBoolean(ctx, lockKey);
     }
 
-    public static ByteString getStoredResponse() {
-        return Storage.get(Storage.getReadOnlyContext(), 2);
+    private static void lock() {
+        Storage.put(ctx, lockKey, 1);
+    }
+
+    private static void unlock() {
+        Storage.put(ctx, lockKey, 0);
+    }
+
+    @Struct
+    public static class CustomResponseStruct {
+        public String url;
+        public int responseCode;
+        public ByteString response;
+
+        public CustomResponseStruct(String url, int responseCode, ByteString response) {
+            this.url = url;
+            this.responseCode = responseCode;
+            this.response = response;
+        }
+
     }
 
 }

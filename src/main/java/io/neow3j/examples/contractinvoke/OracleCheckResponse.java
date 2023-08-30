@@ -2,12 +2,14 @@ package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.response.InvocationResult;
+import io.neow3j.protocol.core.stackitem.StackItem;
 import io.neow3j.types.Hash160;
 
 import java.io.IOException;
+import java.util.List;
 
 import static io.neow3j.examples.Constants.NEOW3J_TESTNET;
+import static java.util.Arrays.asList;
 
 public class OracleCheckResponse {
 
@@ -15,21 +17,18 @@ public class OracleCheckResponse {
     static final Neow3j neow3j = NEOW3J_TESTNET;
 
     public static void main(String[] args) throws IOException {
-        // The contract CallOracleContract is deployed on testnet with the following address.
-        Hash160 contractHash = new Hash160("ae2e396f6b082cadeb74d13d978960fa90af28ed");
-        SmartContract smartContract = new SmartContract(contractHash, neow3j);
+        // The OracleExampleContract is deployed on testnet with the following address.
+        Hash160 contractHash = new Hash160("f1922e6e590acfb52e52fa1c0d689c52ebe9a8e2");
+        SmartContract oracleExampleContract = new SmartContract(contractHash, neow3j);
 
-        InvocationResult result = smartContract.callInvokeFunction("getStoredUrl").getInvocationResult();
-        String storedURL = result.getStack().get(0).getString();
-        System.out.println("Stored URL: " + storedURL);
+        List<StackItem> list = oracleExampleContract.callInvokeFunction("getResponse", asList())
+                .getInvocationResult().getFirstStackItem().getList();
 
-        result = smartContract.callInvokeFunction("getStoredResponseCode").getInvocationResult();
-        String storedResponseCode = result.getStack().get(0).getString();
-        System.out.println("Stored response code: " + storedResponseCode);
-
-        result = smartContract.callInvokeFunction("getStoredResponse").getInvocationResult();
-        String storedResponse = result.getStack().get(0).getString();
-        System.out.println("Stored value: " + storedResponse);
+        System.out.println("######################");
+        System.out.println("URL:                     " + list.get(0).getString());
+        System.out.println("Response Code (decimal): " + list.get(1).getInteger());
+        System.out.println("Response:                " + list.get(2).getString());
+        System.out.println("######################");
     }
 
 }
