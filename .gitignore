@@ -177,3 +177,6 @@ gradle.properties
 **/gradle.properties
 .java-version
 !.idea/codeStyles/
+
+.DS_Store
+.vscode/
