@@ -1,5 +1,9 @@
 package io.neow3j.examples.contractdevelopment;
 
+import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
+import static io.neow3j.examples.contractdevelopment.CompileAndDeploy.writeNefAndManifestFiles;
+import java.util.HashMap;
 import io.neow3j.compiler.CompilationUnit;
 import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.GasToken;
@@ -7,13 +11,6 @@ import io.neow3j.contract.SmartContract;
 import io.neow3j.examples.contractdevelopment.contracts.ContractWithPlaceholders;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.types.Hash160;
-
-import java.util.HashMap;
-
-import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
-import static io.neow3j.examples.contractdevelopment.CompileAndDeploy.deployContract;
-import static io.neow3j.examples.contractdevelopment.CompileAndDeploy.writeNefAndManifestFiles;
 
 /**
  * This example compiles the contract {@link ContractWithPlaceholders}, deploys it and verifies that the placeholders
@@ -36,7 +33,7 @@ public class CompileAndDeployContractWithPlaceholders {
         writeNefAndManifestFiles(compUnit); // Store Nef and manifest
 
         // Deploy the contract
-        Hash160 contractHash = deployContract(neow3j, ALICE, compUnit);
+        Hash160 contractHash = CompileAndDeploy.deployContract(neow3j, ALICE, compUnit, null);
 
         // Verify that the placeholder values have been substituted correctly.
         SmartContract contract = new SmartContract(contractHash, neow3j);
