@@ -47,7 +47,7 @@ public class CompileAndDeploy {
     }
 
     /**
-     * Deploys a compiled contract with the provided deployer account. Passes the 
+     * Deploys a compiled contract with the provided deployer account.
      * 
      * @param neow3j The neow3j instance used to send the deployment transaction.
      * @param deployerAccount The account that deploys the contract, i.e., pays for it.
