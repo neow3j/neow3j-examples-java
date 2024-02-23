@@ -10,6 +10,7 @@ import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.NEOW3J_TESTNET;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 import static io.neow3j.transaction.AccountSigner.none;
+import static io.neow3j.types.ContractParameter.integer;
 import static io.neow3j.types.ContractParameter.string;
 
 public class OracleMakeRequest {
@@ -19,17 +20,18 @@ public class OracleMakeRequest {
 
     public static void main(String[] args) throws Throwable {
         // The contract CallOracleContract is deployed on testnet with the following address.
-        Hash160 contractHash = new Hash160("f1922e6e590acfb52e52fa1c0d689c52ebe9a8e2");
+        Hash160 contractHash = new Hash160("0x4bf831c0fe505c2bf69c6269181cf712645433ce");
         SmartContract oracleExampleContract = new SmartContract(contractHash, neow3j);
 
         TransactionBuilder b = oracleExampleContract.invokeFunction("request",
                 string("https://jsonplaceholder.typicode.com/users"), // the url
-                string("$[*].email")); // the filter -> here: get the email of all users
+                string("$[*].email"), // the filter -> here: get the email of all users
+                integer(10000000) // the gas for the oracle request
+        );
         NeoSendRawTransaction response = b.signers(none(ALICE))
                 .sign()
                 .send();
 
-        System.out.println("Request transaction hash: " + response.getSendRawTransaction().getHash());
         trackSentTransaction(response, neow3j);
     }
 

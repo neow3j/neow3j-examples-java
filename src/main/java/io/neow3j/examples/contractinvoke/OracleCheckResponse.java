@@ -18,7 +18,7 @@ public class OracleCheckResponse {
 
     public static void main(String[] args) throws IOException {
         // The OracleExampleContract is deployed on testnet with the following address.
-        Hash160 contractHash = new Hash160("f1922e6e590acfb52e52fa1c0d689c52ebe9a8e2");
+        Hash160 contractHash = new Hash160("0x4bf831c0fe505c2bf69c6269181cf712645433ce");
         SmartContract oracleExampleContract = new SmartContract(contractHash, neow3j);
 
         List<StackItem> list = oracleExampleContract.callInvokeFunction("getResponse", asList())
