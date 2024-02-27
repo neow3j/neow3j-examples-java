@@ -3,6 +3,7 @@ package io.neow3j.examples.contractdevelopment.contracts;
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Contract;
 import io.neow3j.devpack.Hash160;
+import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
@@ -39,13 +40,15 @@ public class FungibleToken {
         if (!update) {
             StorageContext ctx = Storage.getStorageContext();
             // Set the contract owner.
-            Storage.put(ctx, contractOwnerKey, (Hash160) data);
+            Hash160 initialOwner = (Hash160) data;
+            if (!Hash160.isValid(initialOwner)) Helper.abort("Invalid deployment parameter");
+            Storage.put(ctx, contractOwnerKey, initialOwner);
             // Initialize the supply.
             int initialSupply = 200_000_000;
             Storage.put(ctx, totalSupplyKey, initialSupply);
             // Allocate all tokens to the contract owner.
-            new StorageMap(ctx, assetMapPrefix)
-                    .put(contractOwner(ctx).toByteArray(), initialSupply);
+            new StorageMap(ctx, assetMapPrefix).put(initialOwner, initialSupply);
+            onTransfer.fire(null, initialOwner, initialSupply);
         }
     }
 
