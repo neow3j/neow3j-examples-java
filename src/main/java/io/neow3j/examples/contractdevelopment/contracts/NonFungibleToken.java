@@ -22,7 +22,6 @@ import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
-import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
 
 @DisplayName("FurryFriends")
@@ -195,9 +194,6 @@ public class NonFungibleToken {
     // endregion optional NEP-11 methods
     // region events
 
-    @DisplayName("Mint")
-    private static Event3Args<Hash160, ByteString, Map<String, String>> onMint;
-
     @DisplayName("Transfer")
     private static Event4Args<Hash160, Hash160, Integer, ByteString> onTransfer;
 
@@ -242,7 +238,7 @@ public class NonFungibleToken {
 
         increaseBalanceByOne(ctx, to);
         incrementTotalSupplyByOne(ctx);
-        onMint.fire(to, tokenId, properties);
+        onTransfer.fire(null, to, 1, tokenId);
     }
 
     public static void burn(ByteString tokenId) throws Exception {

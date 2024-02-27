@@ -21,7 +21,6 @@ import io.neow3j.devpack.constants.FindOptions;
 import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
-import io.neow3j.devpack.events.Event3Args;
 import io.neow3j.devpack.events.Event4Args;
 
 @DisplayName("SharedFurryFriends")
@@ -133,7 +132,6 @@ public class DivisibleNonFungibleToken {
             return false;
         }
         assert balanceOf(from, tokenId) == FACTOR;
-        onTransfer.fire(from, to, FACTOR, tokenId);
         if (from != to) {
             StorageContext ctx = Storage.getStorageContext();
             StorageMap amountOfOwnedTokensMap =
@@ -262,9 +260,6 @@ public class DivisibleNonFungibleToken {
     // endregion optional methods
     // region events
 
-    @DisplayName("Mint")
-    private static Event3Args<Hash160, ByteString, Map<String, String>> onMint;
-
     @DisplayName("Transfer")
     private static Event4Args<Hash160, Hash160, Integer, ByteString> onTransfer;
 
@@ -313,7 +308,7 @@ public class DivisibleNonFungibleToken {
         StorageMap amountOfOwnedTokensMap = new StorageMap(ctx, amountOfOwnedTokensMapPrefix);
         int amountOfOwnedTokens = amountOfOwnedTokensMap.getInt(owner.toByteArray());
         amountOfOwnedTokensMap.put(owner.toByteArray(), amountOfOwnedTokens + 1);
-        onMint.fire(owner, tokenId, properties);
+        onTransfer.fire(null, owner, FACTOR, tokenId);
         return true;
     }
 
