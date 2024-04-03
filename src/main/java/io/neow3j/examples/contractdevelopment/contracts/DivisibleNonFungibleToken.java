@@ -27,6 +27,7 @@ import io.neow3j.devpack.events.Event4Args;
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandard(neoStandard = NeoStandard.NEP_11)
 @Permission(nativeContract = NativeContract.ContractManagement)
+@Permission(contract = "*", methods = "onNEP11Payment")
 public class DivisibleNonFungibleToken {
 
     static final int contractMapPrefix = 0;
@@ -309,6 +310,9 @@ public class DivisibleNonFungibleToken {
         int amountOfOwnedTokens = amountOfOwnedTokensMap.getInt(owner.toByteArray());
         amountOfOwnedTokensMap.put(owner.toByteArray(), amountOfOwnedTokens + 1);
         onTransfer.fire(null, owner, FACTOR, tokenId);
+        if (new ContractManagement().getContract(owner) != null) {
+            Contract.call(owner, "onNEP11Payment", CallFlags.All, new Object[]{null, FACTOR, tokenId, null});
+        }
         return true;
     }
 
