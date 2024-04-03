@@ -24,10 +24,14 @@ import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event4Args;
 
+/**
+ * Be aware that this contract is an example. It has not been audited and should not be used in production.
+ */
 @DisplayName("FurryFriends")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandard(neoStandard = NeoStandard.NEP_11)
 @Permission(nativeContract = NativeContract.ContractManagement)
+@Permission(contract = "*", methods = "onNEP11Payment")
 public class NonFungibleToken {
 
     // Alice's address
@@ -122,7 +126,6 @@ public class NonFungibleToken {
         if (!Runtime.checkWitness(owner)) {
             return false;
         }
-        onTransfer.fire(owner, to, 1, tokenId);
         if (owner != to) {
             StorageContext ctx = Storage.getStorageContext();
             new StorageMap(ctx, ownerOfMapPrefix).put(tokenId, to.toByteArray());
@@ -136,6 +139,7 @@ public class NonFungibleToken {
         if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{owner, 1, tokenId, data});
         }
+        onTransfer.fire(owner, to, 1, tokenId);
         return true;
     }
 
@@ -238,6 +242,9 @@ public class NonFungibleToken {
 
         increaseBalanceByOne(ctx, to);
         incrementTotalSupplyByOne(ctx);
+        if (new ContractManagement().getContract(to) != null) {
+            Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{null, 1, tokenId, null});
+        }
         onTransfer.fire(null, to, 1, tokenId);
     }
 

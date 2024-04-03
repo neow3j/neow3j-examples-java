@@ -20,11 +20,15 @@ import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 
+/**
+ * Be aware that this contract is an example. It has not been audited and should not be used in production.
+ */
 @DisplayName("AxLabsToken")
 @ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandard(neoStandard = NeoStandard.NEP_17)
 @Permission(nativeContract = NativeContract.ContractManagement)
+@Permission(contract = "*", methods = "onNEP17Payment")
 public class FungibleToken {
 
     static final int contractMapPrefix = 0;
@@ -48,6 +52,9 @@ public class FungibleToken {
             Storage.put(ctx, totalSupplyKey, initialSupply);
             // Allocate all tokens to the contract owner.
             new StorageMap(ctx, assetMapPrefix).put(initialOwner, initialSupply);
+            if (new ContractManagement().getContract(initialOwner) != null) {
+                Contract.call(initialOwner, "onNEP17Payment", CallFlags.All, new Object[]{null, initialSupply, null});
+            }
             onTransfer.fire(null, initialOwner, initialSupply);
         }
     }
@@ -101,10 +108,10 @@ public class FungibleToken {
             addToBalance(ctx, to, amount);
         }
 
-        onTransfer.fire(from, to, amount);
         if (new ContractManagement().getContract(to) != null) {
-            Contract.call(to, "onNEP17Payment", CallFlags.All, data);
+            Contract.call(to, "onNEP17Payment", CallFlags.All, new Object[]{from, amount, data});
         }
+        onTransfer.fire(from, to, amount);
         return true;
     }
 
