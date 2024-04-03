@@ -52,10 +52,10 @@ public class FungibleToken {
             Storage.put(ctx, totalSupplyKey, initialSupply);
             // Allocate all tokens to the contract owner.
             new StorageMap(ctx, assetMapPrefix).put(initialOwner, initialSupply);
+            onTransfer.fire(null, initialOwner, initialSupply);
             if (new ContractManagement().getContract(initialOwner) != null) {
                 Contract.call(initialOwner, "onNEP17Payment", CallFlags.All, new Object[]{null, initialSupply, null});
             }
-            onTransfer.fire(null, initialOwner, initialSupply);
         }
     }
 
@@ -108,10 +108,10 @@ public class FungibleToken {
             addToBalance(ctx, to, amount);
         }
 
+        onTransfer.fire(from, to, amount);
         if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP17Payment", CallFlags.All, new Object[]{from, amount, data});
         }
-        onTransfer.fire(from, to, amount);
         return true;
     }
 
