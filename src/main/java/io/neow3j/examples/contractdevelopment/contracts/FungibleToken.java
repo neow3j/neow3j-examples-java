@@ -20,6 +20,9 @@ import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
 
+/**
+ * Be aware that this contract is an example. It has not been audited and should not be used in production.
+ */
 @DisplayName("AxLabsToken")
 @ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
