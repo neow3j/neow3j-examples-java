@@ -136,10 +136,10 @@ public class NonFungibleToken {
             decreaseBalanceByOne(ctx, owner);
             increaseBalanceByOne(ctx, to);
         }
+        onTransfer.fire(owner, to, 1, tokenId);
         if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{owner, 1, tokenId, data});
         }
-        onTransfer.fire(owner, to, 1, tokenId);
         return true;
     }
 
@@ -242,10 +242,10 @@ public class NonFungibleToken {
 
         increaseBalanceByOne(ctx, to);
         incrementTotalSupplyByOne(ctx);
+        onTransfer.fire(null, to, 1, tokenId);
         if (new ContractManagement().getContract(to) != null) {
             Contract.call(to, "onNEP11Payment", CallFlags.All, new Object[]{null, 1, tokenId, null});
         }
-        onTransfer.fire(null, to, 1, tokenId);
     }
 
     public static void burn(ByteString tokenId) throws Exception {
