@@ -17,8 +17,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.math.BigInteger;
 
-public class Escrow {
+public class EscrowExampleCreateTrustAgreement {
         public static void main(String[] args) throws Throwable {
+
+                // Todo: Write code to create a trust agreement in the Escrow contract
+                //  (see contractdevelopment/contracts/EscrowContract.java)
+                // Todo: Implement execute functionality in `ExecuteTrustAgreementInEscrow.java` to execute the trust
+                //  agreement.
+                // Note for Daniel: The examples should be as simple as possible to execute. Once the contract is
+                // deployed, the user should be able to execute this code here without changing anything and it
+                // should successfully create an agreement. Once that is done, the user should execute the main
+                // function in the ExecuteTrustAgreementInEscrow.java file (also without changing any code) to execute
+                // the trust agreement created here.
 
                 Account account = Account.fromWIF("KzrHihgvHGpF9urkSbrbRcgrxSuVhpDWkSfWvSg97pJ5YgbdHKCQ");
 
