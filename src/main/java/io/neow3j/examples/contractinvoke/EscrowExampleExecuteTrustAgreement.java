@@ -1,7 +1,51 @@
 package io.neow3j.examples.contractinvoke;
 
+import java.util.Scanner;
+
+import io.neow3j.contract.SmartContract;
+import io.neow3j.protocol.Neow3j;
+import io.neow3j.protocol.core.response.NeoSendRawTransaction;
+import io.neow3j.protocol.http.HttpService;
+import io.neow3j.transaction.AccountSigner;
+import io.neow3j.types.ContractParameter;
+import io.neow3j.types.Hash160;
+import io.neow3j.wallet.Account;
+
 public class EscrowExampleExecuteTrustAgreement {
-    public static void main(String[] args) {
-        // Todo: Implement the execution of the trust agreement created in `EscrowExampleCreateTrustAgreement.java`.
+    public static void main(String[] args) throws Throwable {
+        // 1. Instantiate a connection to the locally running Neo node
+        Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:50012"));
+
+        // 2. Create a script hash of your locally deployed Escrow contract
+        Hash160 scriptHash = new Hash160("0a47419ae8f3c19fea7f8f6100ee6813cab3b54e");
+
+        // 3. Initialize the arbiter account
+        Account ARBITER_WIF = Account.fromWIF("KzrHihgvHGpF9urkSbrbRcgrxSuVhpDWkSfWvSg97pJ5YgbdHKCQ");
+
+        // 4. Instantiate a scanner to get user input
+        Scanner scanner = new Scanner(System.in);
+
+        // 5. Get the name of the agreement to execute from user input
+        System.out.println("Enter the name of the agreement you want to retrieve:");
+        String agreementNameToGet = scanner.nextLine();
+
+        // 6. Close the scanner
+        scanner.close();
+
+        // 7. We will create a ContractParameter object for the agreement name
+        ContractParameter agreementNameParameter = ContractParameter.string(agreementNameToGet);
+
+        // 8. Now we will execute the agreement
+        NeoSendRawTransaction executeAgreementResult = new SmartContract(scriptHash,
+                neow3j)
+                .invokeFunction("executeAgreement",
+                        agreementNameParameter)
+                .signers(AccountSigner.calledByEntry(ARBITER_WIF))
+                .sign()
+                .send();
+
+        // 9. And lastly we will print the transaction hash
+        System.out.println("executeAgreementResult Txn Hash --> " +
+                executeAgreementResult.getSendRawTransaction().getHash());
     }
 }

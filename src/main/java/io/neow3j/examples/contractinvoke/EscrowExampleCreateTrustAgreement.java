@@ -1,156 +1,169 @@
 package io.neow3j.examples.contractinvoke;
 
-import io.neow3j.contract.NeoToken;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+import io.neow3j.contract.GasToken;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.response.InvocationResult;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.protocol.core.stackitem.StackItem;
 import io.neow3j.protocol.http.HttpService;
+import io.neow3j.transaction.AccountSigner;
 import io.neow3j.types.ContractParameter;
 import io.neow3j.types.Hash160;
 import io.neow3j.wallet.Account;
-import io.neow3j.transaction.AccountSigner;
-
-import java.util.Scanner;
-import java.util.Arrays;
-import java.util.List;
-import java.math.BigInteger;
 
 public class EscrowExampleCreateTrustAgreement {
         public static void main(String[] args) throws Throwable {
+                /*
+                 * This example will create a Trust agreement between a trustor, an arbiter and
+                 * a beneficiary.
+                 * Initially, you will run the `createAgreement` function to create a Trust
+                 * agreement where you will specifiy who the arbiter and beneficiary is. You
+                 * will automatically be assigned as the trustor.
+                 * 
+                 * Then you will run the `getAgreement` function to get the details of the
+                 * agreement you just created so you can see the agreement.
+                 * 
+                 * Next you will run the `executeAgreement` function provided in the
+                 * `EscrowExampleExecuteTrustAgreemnt` class file to execute the agreement as
+                 * the arbiter. This will transfer the funds to the beneficiary.
+                 * 
+                 * In between the last 2 steps, you can run the `getContractBalance` utility
+                 * function to get the total GAS balance of the Escrow to check if your code
+                 * worked.
+                 */
 
-                // Todo: Write code to create a trust agreement in the Escrow contract
-                //  (see contractdevelopment/contracts/EscrowContract.java)
-                // Todo: Implement execute functionality in `ExecuteTrustAgreementInEscrow.java` to execute the trust
-                //  agreement.
-                // Note for Daniel: The examples should be as simple as possible to execute. Once the contract is
-                // deployed, the user should be able to execute this code here without changing anything and it
-                // should successfully create an agreement. Once that is done, the user should execute the main
-                // function in the ExecuteTrustAgreementInEscrow.java file (also without changing any code) to execute
-                // the trust agreement created here.
-
-                Account account = Account.fromWIF("KzrHihgvHGpF9urkSbrbRcgrxSuVhpDWkSfWvSg97pJ5YgbdHKCQ");
-
-                // Transactions in the Trust contract refer to an "Agreement" between a trustor
-                // and beneficiary/beneficiaries with conditions set by the trustor and
-                // functions to process this agreement such as creation, updation, revocation
-                // and withdrawal from the Trust.
-
-                // Intial setup for the Trust contract
+                // First we will do some intial setup work for the Trust contract
                 // 1. Instantiate a connection to the locally running Neo node
                 Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:50012"));
 
                 // 2. Create a script hash of your locally deployed Escrow contract
-                Hash160 scriptHash = new Hash160("87f7e931e45562a10ea80004026e1e6418d40bf8");
+                Hash160 scriptHash = new Hash160("0a47419ae8f3c19fea7f8f6100ee6813cab3b54e");
 
-                // Initializing the NEO token
-                NeoToken neo = new NeoToken(neow3j);
+                // 3. Initialize the GAS token running on your local Neo node
+                GasToken gas = new GasToken(neow3j);
+
+                // 4. Initialize the trustor account
+                Account TRUSTOR_WIF = Account.fromWIF("L2g8aqX5WZS3n2ZqEtwHnYyBTY5K9RzvVsFc9zFNvSCxKFsMDx86");
 
                 // Function calls
-                createTransaction(account, scriptHash, neow3j);
-                getTransaction(account, scriptHash, neow3j);
-                transferFunds(account, scriptHash, neo, neow3j);
+                createAgreement(TRUSTOR_WIF, scriptHash, neow3j);
+                getAgreement(scriptHash, neow3j);
+
+                // Utility function to get the total GAS balance of the Escrow contract
+                getContractBalance(scriptHash, gas, neow3j);
         }
 
-        private static void createTransaction(Account account, Hash160 scriptHash, Neow3j neow3j) throws Throwable {
-                // Initialize the total amount with a sample value
-                BigInteger totalAmount = new BigInteger("0");
-
-                // 3. Instantiate a scanner to get user input
+        private static void createAgreement(Account account, Hash160 scriptHash, Neow3j neow3j) throws Throwable {
+                // 1. Instantiate a scanner to get user input
                 Scanner scanner = new Scanner(System.in);
 
-                // 4. Get all the information we'd need to create the agreement on-chain
-                // 4.1. Get the name of the transaction from user input
-                System.out.println("Enter the name of the transaction:");
-                String transactionName = scanner.nextLine();
+                // 2. Now we will get all the information we'd need to create the agreement
+                // on-chain
+                // 2.1. Get the name of the agreement from user input
+                System.out.println("Enter the name of the agreement:");
+                String agreementName = scanner.nextLine();
 
-                // 4.2. Get the beneficiary address from user input
+                // 2.2. Get the beneficiary address from user input
                 System.out.println("Enter the beneficiary address:");
-                String beneficiaryAddress = scanner.nextLine();
+                String beneficiaryAddressString = scanner.nextLine();
+                // Since the beneficiary name is a string by default, we need to convert it to a
+                // Hash160 object that can be understood by the NeoVM
+                Hash160 beneficiaryAddress = Hash160.fromAddress(beneficiaryAddressString);
 
-                // 4.3.Get the total amount to be sent to be held in escrow from user input
+                // 2.3. Get the arbiter address from user input
+                System.out.println("Enter the arbiter address:");
+                String arbiterAddressString = scanner.next();
+                // Since the arbiter name is a string by default, we need to convert it to a
+                // Hash160 object that can be understood by the NeoVM
+                Hash160 arbiterAddress = Hash160.fromAddress(arbiterAddressString);
+
+                // 2.4. Get the total amount to be held in escrow from user input
                 System.out.println("Enter the total amount to be held in escrow:");
-                totalAmount = scanner.nextBigInteger();
+                BigInteger totalAmount = scanner.nextBigInteger();
 
-                // 4.4. Get a boolean input from the user to determine if the transaction is
-                // revocable
-                System.out.println("Is the transaction revocable? (true/false)");
-                boolean isRevocable = scanner.nextBoolean();
-
-                // 5. Close the scanner
+                // 3. Close the scanner
                 scanner.close();
 
-                // 6. Construct the parameters using ContractParameter
+                // 4. Construct the parameters to be passed to the NeoVM using ContractParameter
+                // class
+                ContractParameter agreementNameParameter = ContractParameter.string(agreementName);
                 ContractParameter trustorParameter = ContractParameter.hash160(account.getScriptHash());
-                ContractParameter transactionNameParameter = ContractParameter.string(transactionName);
-                ContractParameter beneficiaryAddressParameter = ContractParameter.string(beneficiaryAddress);
+                ContractParameter beneficiaryAddressParameter = ContractParameter.hash160(beneficiaryAddress);
+                ContractParameter arbiterParameter = ContractParameter.hash160(arbiterAddress);
                 ContractParameter totalAmountParameter = ContractParameter.integer(totalAmount);
-                ContractParameter isRevocableParameter = ContractParameter.bool(isRevocable);
 
-                // 7. Call the createTransaction function in the Escrow contract
-                NeoSendRawTransaction createTransactionResult = new SmartContract(scriptHash,
+                // 5. Call the createAgreement function in the Escrow contract
+                NeoSendRawTransaction createAgreementResult = new SmartContract(scriptHash,
                                 neow3j)
-                                .invokeFunction("createTransaction", trustorParameter,
-                                                transactionNameParameter,
-                                                beneficiaryAddressParameter, totalAmountParameter, isRevocableParameter)
-                                .signers(AccountSigner.calledByEntry(account))
+                                .invokeFunction("createAgreement",
+                                                agreementNameParameter,
+                                                trustorParameter,
+                                                beneficiaryAddressParameter,
+                                                arbiterParameter,
+                                                totalAmountParameter)
+                                .signers(AccountSigner.none(account).setAllowedContracts(GasToken.SCRIPT_HASH))
                                 .sign()
                                 .send();
 
-                System.out.println("createTransactionResult Txn Hash --> " +
-                                createTransactionResult.getSendRawTransaction().getHash());
+                // 6. Print the transaction hash of the createAgreement function
+                System.out.println("createAgreementResult Txn Hash --> " +
+                                createAgreementResult.getSendRawTransaction().getHash());
         }
 
-        private static void getTransaction(Account account, Hash160 scriptHash, Neow3j neow3j) throws Throwable {
-                // Read from contract storage
-                ContractParameter accountParameter = ContractParameter.hash160(account.getScriptHash());
+        private static void getAgreement(Hash160 scriptHash, Neow3j neow3j) throws Throwable {
+                // 1. Instantiate a scanner to get user input
+                Scanner scanner = new Scanner(System.in);
 
-                InvocationResult getCreateTransactionResult = new SmartContract(scriptHash, neow3j)
-                                .callInvokeFunction("getTransaction", Arrays.asList(accountParameter))
+                // 2. Get the name of the agreement from user input
+                System.out.println("Enter the name of the agreement you want to retrieve:");
+                String agreementNameToGet = scanner.nextLine();
+
+                // 3. Close the scanner
+                scanner.close();
+
+                // 4. Construct the agreement name parameter to be passed to the NeoVM using
+                // ContractParameter class
+                ContractParameter agreementNameParameter = ContractParameter.string(agreementNameToGet);
+
+                // 5. Read the agreement details from Escrow contract storage
+                InvocationResult getcreateAgreementResult = new SmartContract(scriptHash, neow3j)
+                                .callInvokeFunction("getAgreement", Arrays.asList(agreementNameParameter))
                                 .getInvocationResult();
 
-                StackItem result = getCreateTransactionResult.getFirstStackItem();
+                // 6. The result of the getAgreement function is an item on the NeoVM stack. We
+                // will take the 1st item from the stack and assign it to a variable
+                StackItem result = getcreateAgreementResult.getFirstStackItem();
 
+                // 7. The result from step 6 is a list of StackItems. We will get the details of
+                // the agreement from the list and store it in a List<StackItem> object
                 List<StackItem> resutsAsStackItem = result.getList();
 
-                String trustor = resutsAsStackItem.get(0).getAddress();
+                // 8. Now we can access the agreement details by their index in the list
+                String agreementName = resutsAsStackItem.get(0).getString();
+                System.out.print("Agreement Name: " + agreementName + "\n");
+
+                String trustor = resutsAsStackItem.get(1).getAddress();
                 System.out.print("Trustor: " + trustor + "\n");
 
-                String transactionName = resutsAsStackItem.get(1).getString();
-                System.out.print("Transaction Name: " + transactionName + "\n");
+                String beneficiary = resutsAsStackItem.get(2).getAddress();
+                System.out.print("Beneficiary: " + beneficiary + "\n");
 
-                String benificiary = resutsAsStackItem.get(2).getString();
+                String arbiter = resutsAsStackItem.get(3).getAddress();
+                System.out.print("Arbiter: " + arbiter + "\n");
 
-                System.out.print("Beneficiary: " + benificiary + "\n");
-
-                BigInteger totalAmount = resutsAsStackItem.get(3).getInteger();
+                BigInteger totalAmount = resutsAsStackItem.get(4).getInteger();
                 System.out.print("Total Amount: " + totalAmount + "\n");
-
-                Boolean isRevocable = resutsAsStackItem.get(4).getBoolean();
-
-                System.out.print("isRevocable: " + isRevocable + "\n");
         }
 
-        // Function to transfer funds from trust to beneficiary
-        private static void transferFunds(Account account, Hash160 scriptHash, NeoToken neo, Neow3j neow3j)
-                        throws Throwable {
-                // Read from contract storage and get the amount
-                ContractParameter accountParameter = ContractParameter.hash160(account.getScriptHash());
-
-                InvocationResult getCreateTransactionResult = new SmartContract(scriptHash, neow3j)
-                                .callInvokeFunction("getTransaction", Arrays.asList(accountParameter))
-                                .getInvocationResult();
-
-                StackItem result = getCreateTransactionResult.getFirstStackItem();
-
-                List<StackItem> resutsAsStackItem = result.getList();
-
-                BigInteger totalAmount = resutsAsStackItem.get(3).getInteger();
-                System.out.print("Total Amount: " + totalAmount + "\n");
-
-                // Transfer the assets from the trust to the beneficiary
-                neo.transfer(account, new Hash160(resutsAsStackItem.get(2).getString()), totalAmount);
+        // Utulity function to get contract balance
+        private static void getContractBalance(Hash160 scriptHash, GasToken gas, Neow3j neow3j) throws Throwable {
+                BigInteger contractBalance = gas.getBalanceOf(scriptHash);
+                System.out.println("Contract Balance: " + contractBalance);
         }
-
 }

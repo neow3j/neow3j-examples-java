@@ -11,15 +11,15 @@ public class TrustAgreement {
     public String name;
     public Hash160 trustor;
     public Hash160 beneficiary;
+    public Hash160 arbiter;
     public Integer amount;
-    public Hash160 arbitor;
 
-    public TrustAgreement(String name, Hash160 trustor, Hash160 beneficiary, int amount, Hash160 arbitor) {
+    public TrustAgreement(String name, Hash160 trustor, Hash160 beneficiary, Hash160 arbiter, int amount) {
         this.name = name;
         this.trustor = trustor;
         this.beneficiary = beneficiary;
+        this.arbiter = arbiter;
         this.amount = amount;
-        this.arbitor = arbitor;
     }
 
     public static boolean isValid(TrustAgreement agreement) {
@@ -27,6 +27,6 @@ public class TrustAgreement {
                 Hash160.isValid(agreement.trustor) &&
                 Hash160.isValid(agreement.beneficiary) &&
                 agreement.amount > 0 &&
-                Hash160.isValid(agreement.arbitor);
+                Hash160.isValid(agreement.arbiter);
     }
 }
