@@ -17,6 +17,7 @@ public class EscrowExampleExecuteTrustAgreement {
         Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:50012"));
 
         // 2. Create a script hash of your locally deployed Escrow contract
+        // Make sure this hash is identical to the contract hash of your deployed Escrow contract.
         Hash160 scriptHash = new Hash160("0a47419ae8f3c19fea7f8f6100ee6813cab3b54e");
 
         // 3. Initialize the arbiter account
