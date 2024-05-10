@@ -22,8 +22,9 @@ public class EscrowExampleCreateTrustAgreement {
                 /*
                  * This example will create a Trust agreement between a trustor, an arbiter and
                  * a beneficiary.
+                 * 
                  * Initially, you will run the `createAgreement` function to create a Trust
-                 * agreement where you will specifiy who the arbiter and beneficiary is. You
+                 * agreement where you will specify who the arbiter and beneficiary is. You
                  * will automatically be assigned as the trustor.
                  * 
                  * Then you will run the `getAgreement` function to get the details of the
@@ -31,11 +32,13 @@ public class EscrowExampleCreateTrustAgreement {
                  * 
                  * Next you will run the `executeAgreement` function provided in the
                  * `EscrowExampleExecuteTrustAgreemnt` class file to execute the agreement as
-                 * the arbiter. This will transfer the funds to the beneficiary.
+                 * the arbiter. This will transfer the funds held in the Escrow contract
+                 * to the beneficiary.
                  * 
                  * In between the last 2 steps, you can run the `getContractBalance` utility
                  * function to get the total GAS balance of the Escrow to check if your code
-                 * worked.
+                 * worked and the Escrow contract actually holds the balance you specified
+                 * in the agreement.
                  */
 
                 // First we will do some intial setup work for the Trust contract
