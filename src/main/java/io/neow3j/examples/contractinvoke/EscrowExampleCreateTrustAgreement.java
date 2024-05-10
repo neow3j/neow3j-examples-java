@@ -71,17 +71,17 @@ public class EscrowExampleCreateTrustAgreement {
 
                 // 2.2. Get the beneficiary address from user input
                 System.out.println("Enter the beneficiary address:");
-                String beneficiaryAddressString = scanner.nextLine();
+                String beneficiaryAddress = scanner.nextLine();
                 // Since the beneficiary name is a string by default, we need to convert it to a
                 // Hash160 object that can be understood by the NeoVM
-                Hash160 beneficiaryAddress = Hash160.fromAddress(beneficiaryAddressString);
+                Hash160 beneficiaryScriptHash = Hash160.fromAddress(beneficiaryAddress);
 
                 // 2.3. Get the arbiter address from user input
                 System.out.println("Enter the arbiter address:");
-                String arbiterAddressString = scanner.next();
+                String arbiterAddress = scanner.next();
                 // Since the arbiter name is a string by default, we need to convert it to a
                 // Hash160 object that can be understood by the NeoVM
-                Hash160 arbiterAddress = Hash160.fromAddress(arbiterAddressString);
+                Hash160 arbiterScriptHash = Hash160.fromAddress(arbiterAddress);
 
                 // 2.4. Get the total amount to be held in escrow from user input
                 System.out.println("Enter the total amount to be held in escrow:");
@@ -94,8 +94,8 @@ public class EscrowExampleCreateTrustAgreement {
                 // class
                 ContractParameter agreementNameParameter = ContractParameter.string(agreementName);
                 ContractParameter trustorParameter = ContractParameter.hash160(account.getScriptHash());
-                ContractParameter beneficiaryAddressParameter = ContractParameter.hash160(beneficiaryAddress);
-                ContractParameter arbiterParameter = ContractParameter.hash160(arbiterAddress);
+                ContractParameter beneficiaryAddressParameter = ContractParameter.hash160(beneficiaryScriptHash);
+                ContractParameter arbiterParameter = ContractParameter.hash160(arbiterScriptHash);
                 ContractParameter totalAmountParameter = ContractParameter.integer(totalAmount);
 
                 // 5. Call the createAgreement function in the Escrow contract
