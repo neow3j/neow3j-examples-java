@@ -75,8 +75,7 @@ public class EscrowExampleCreateTrustAgreement {
                 // 2.2. Get the beneficiary address from user input
                 System.out.println("Enter the beneficiary address:");
                 String beneficiaryAddressString = scanner.nextLine();
-                // Since the beneficiary name is a string by default, we need to convert it to a
-                // Hash160 object that can be understood by the NeoVM
+                // Create a Hash160 object from the address that it can be understood by the NeoVM.
                 Hash160 beneficiaryAddress = Hash160.fromAddress(beneficiaryAddressString);
 
                 // 2.3. Get the arbiter address from user input
