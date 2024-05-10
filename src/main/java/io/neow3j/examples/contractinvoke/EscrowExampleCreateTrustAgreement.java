@@ -52,10 +52,10 @@ public class EscrowExampleCreateTrustAgreement {
                 GasToken gas = new GasToken(neow3j);
 
                 // 4. Initialize the trustor account
-                Account TRUSTOR_WIF = Account.fromWIF("L2g8aqX5WZS3n2ZqEtwHnYyBTY5K9RzvVsFc9zFNvSCxKFsMDx86");
+                Account trustorAccount = Account.fromWIF("L2g8aqX5WZS3n2ZqEtwHnYyBTY5K9RzvVsFc9zFNvSCxKFsMDx86");
 
                 // Function calls
-                createAgreement(TRUSTOR_WIF, scriptHash, neow3j);
+                createAgreement(trustorAccount, scriptHash, neow3j);
                 getAgreement(scriptHash, neow3j);
 
                 // Utility function to get the total GAS balance of the Escrow contract
