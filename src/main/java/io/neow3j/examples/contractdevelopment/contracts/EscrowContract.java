@@ -5,6 +5,7 @@ import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.ByteString;
+import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnNEP17Payment;
@@ -63,11 +64,11 @@ public class EscrowContract {
     /**
      * Creates the agreement with the given name.
      *
-     * @param agreementName the name of the agreement to execute.
-     * @param trustor       the trustor of the agreement.
-     * @param beneficiary   the beneficiary of the agreement.
-     * @param arbiter       the arbiter of the agreement.
-     * @param amount        the amount of GAS to be held in escrow.
+     * @param name        the name of the agreement to execute.
+     * @param trustor     the trustor of the agreement.
+     * @param beneficiary the beneficiary of the agreement.
+     * @param arbiter     the arbiter of the agreement.
+     * @param amount      the amount of GAS to be held in escrow.
      */
     public static void createAgreement(String name, Hash160 trustor, Hash160 beneficiary, Hash160 arbiter, int amount) {
         TrustAgreement agreement = new TrustAgreement(name, trustor, beneficiary, arbiter, amount);
@@ -77,7 +78,7 @@ public class EscrowContract {
         if (Storage.get(ctx, name) != null) {
             abort("Agreement already exists.");
         }
-        Storage.put(getStorageContext(), name, serializedAgreement);
+        Storage.put(ctx, name, serializedAgreement);
         onAgreementCreate.fire(agreement.name, agreement.trustor, agreement.beneficiary, agreement.arbiter,
                 agreement.amount);
 
