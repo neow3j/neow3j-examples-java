@@ -74,6 +74,10 @@ public class EscrowContract {
         TrustAgreement agreement = new TrustAgreement(name, trustor, beneficiary, arbiter, amount);
 
         ByteString serializedAgreement = new StdLib().serialize(agreement);
+        StorageContext ctx = getStorageContext();
+        if (Storage.get(ctx, name) != null) {
+            abort("Agreement already exists.");
+        }
         Storage.put(getStorageContext(), name, serializedAgreement);
         onAgreementCreate.fire(agreement.name, agreement.trustor, agreement.beneficiary, agreement.arbiter,
                 agreement.amount);
