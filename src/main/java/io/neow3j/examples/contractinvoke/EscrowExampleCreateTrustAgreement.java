@@ -44,6 +44,8 @@ public class EscrowExampleCreateTrustAgreement {
                 // First we will do some intial setup work for the Trust contract
                 // 1. Instantiate a connection to the locally running Neo node
                 Neow3j neow3j = Neow3j.build(new HttpService("http://localhost:50012"));
+                // If you are using the neo3-privatenet-docker, you can use the following line:
+                //  Neow3j neow3j = io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
 
                 // 2. Create a script hash of your locally deployed Escrow contract
                 Hash160 scriptHash = new Hash160("0a47419ae8f3c19fea7f8f6100ee6813cab3b54e");
@@ -102,8 +104,7 @@ public class EscrowExampleCreateTrustAgreement {
                 ContractParameter totalAmountParameter = ContractParameter.integer(totalAmount);
 
                 // 5. Call the createAgreement function in the Escrow contract
-                NeoSendRawTransaction createAgreementResult = new SmartContract(scriptHash,
-                                neow3j)
+                NeoSendRawTransaction createAgreementResult = new SmartContract(scriptHash, neow3j)
                                 .invokeFunction("createAgreement",
                                                 agreementNameParameter,
                                                 trustorParameter,
