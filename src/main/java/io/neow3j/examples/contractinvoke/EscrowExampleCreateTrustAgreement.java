@@ -81,8 +81,7 @@ public class EscrowExampleCreateTrustAgreement {
                 // 2.3. Get the arbiter address from user input
                 System.out.println("Enter the arbiter address:");
                 String arbiterAddressString = scanner.next();
-                // Since the arbiter name is a string by default, we need to convert it to a
-                // Hash160 object that can be understood by the NeoVM
+                // Create a Hash160 object from the address that it can be understood by the NeoVM.
                 Hash160 arbiterAddress = Hash160.fromAddress(arbiterAddressString);
 
                 // 2.4. Get the total amount to be held in escrow from user input
