@@ -22,7 +22,6 @@ import static io.neow3j.devpack.Storage.getStorageContext;
 
 @DisplayName("Escrow")
 @ManifestExtra(key = "author", value = "AxLabs")
-
 @Permission(nativeContract = NativeContract.GasToken)
 public class EscrowContract {
 
