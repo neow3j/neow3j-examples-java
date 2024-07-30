@@ -15,7 +15,6 @@ import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.annotations.Safe;
 import io.neow3j.devpack.annotations.SupportedStandard;
 import io.neow3j.devpack.constants.CallFlags;
-import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event3Args;
@@ -27,8 +26,7 @@ import io.neow3j.devpack.events.Event3Args;
 @ManifestExtra(key = "name", value = "AxLabsToken")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandard(neoStandard = NeoStandard.NEP_17)
-@Permission(nativeContract = NativeContract.ContractManagement)
-@Permission(contract = "*", methods = "onNEP17Payment")
+@Permission(contract = "*")
 public class FungibleToken {
 
     static final int contractMapPrefix = 0;

@@ -19,7 +19,6 @@ import io.neow3j.devpack.annotations.Safe;
 import io.neow3j.devpack.annotations.SupportedStandard;
 import io.neow3j.devpack.constants.CallFlags;
 import io.neow3j.devpack.constants.FindOptions;
-import io.neow3j.devpack.constants.NativeContract;
 import io.neow3j.devpack.constants.NeoStandard;
 import io.neow3j.devpack.contracts.ContractManagement;
 import io.neow3j.devpack.events.Event4Args;
@@ -30,8 +29,7 @@ import io.neow3j.devpack.events.Event4Args;
 @DisplayName("FurryFriends")
 @ManifestExtra(key = "author", value = "AxLabs")
 @SupportedStandard(neoStandard = NeoStandard.NEP_11)
-@Permission(nativeContract = NativeContract.ContractManagement)
-@Permission(contract = "*", methods = "onNEP11Payment")
+@Permission(contract = "*")
 public class NonFungibleToken {
 
     // Alice's address
