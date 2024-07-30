@@ -5,10 +5,9 @@ import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.annotations.Instruction;
 import io.neow3j.devpack.annotations.Permission;
-import io.neow3j.script.OpCode;
-import io.neow3j.types.StackItemType;
-
-import static io.neow3j.script.InteropService.SYSTEM_STORAGE_GET;
+import io.neow3j.devpack.constants.InteropService;
+import io.neow3j.devpack.constants.OpCode;
+import io.neow3j.devpack.constants.StackItemType;
 
 @Permission(contract = "*", methods = "*")
 public class CustomScriptContract {
@@ -28,7 +27,7 @@ public class CustomScriptContract {
     static class Helper {
 
         @Instruction(opcode = OpCode.SWAP)
-        @Instruction(interopService = SYSTEM_STORAGE_GET)
+        @Instruction(interopService = InteropService.SYSTEM_STORAGE_GET)
         @Instruction(opcode = OpCode.DUP)
         @Instruction(opcode = OpCode.ISNULL)
         @Instruction(opcode = OpCode.JMPIFNOT, operand = 0x16)
@@ -39,7 +38,7 @@ public class CustomScriptContract {
                         0x2e, 0x22} // bytes for "no entry found" message
                 )
         @Instruction(opcode = OpCode.THROW)
-        @Instruction(opcode = OpCode.CONVERT, operand = StackItemType.INTEGER_CODE)
+        @Instruction(opcode = OpCode.CONVERT, operand = StackItemType.INTEGER)
         public static native int getIntOrThrow(StorageContext context, ByteString key) throws Exception;
 
     }
