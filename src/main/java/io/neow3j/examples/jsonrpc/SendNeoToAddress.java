@@ -10,15 +10,14 @@ import io.neow3j.contract.NeoToken;
 import io.neow3j.protocol.core.response.NeoOpenWallet;
 
 import static io.neow3j.examples.Constants.BOB;
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
+import static io.neow3j.examples.Constants.neow3jPrivatenet;
 
 public class SendNeoToAddress {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+    static final Neow3j neow3j = neow3jPrivatenet();
 
     public static void main(String[] args) throws IOException {
-
         // This example requires that the wallet of Alice's account is open on the node. Thus,
         // first the wallet is opened with the `openwallet` RPC method.
         NeoOpenWallet resp = neow3j.openWallet("Alice.wallet.json", "neo").send();

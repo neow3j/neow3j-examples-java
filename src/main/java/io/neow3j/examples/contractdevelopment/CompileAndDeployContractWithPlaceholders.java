@@ -1,9 +1,5 @@
 package io.neow3j.examples.contractdevelopment;
 
-import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
-import static io.neow3j.examples.contractdevelopment.CompileAndDeploy.writeNefAndManifestFiles;
-import java.util.HashMap;
 import io.neow3j.compiler.CompilationUnit;
 import io.neow3j.compiler.Compiler;
 import io.neow3j.contract.GasToken;
@@ -12,6 +8,12 @@ import io.neow3j.examples.contractdevelopment.contracts.ContractWithPlaceholders
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.types.Hash160;
 
+import java.util.HashMap;
+
+import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.neow3jPrivatenet;
+import static io.neow3j.examples.contractdevelopment.CompileAndDeploy.writeNefAndManifestFiles;
+
 /**
  * This example compiles the contract {@link ContractWithPlaceholders}, deploys it and verifies that the placeholders
  * were substituted correctly.
@@ -19,7 +21,7 @@ import io.neow3j.types.Hash160;
 public class CompileAndDeployContractWithPlaceholders {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+    static final Neow3j neow3j = neow3jPrivatenet();
 
     public static void main(String[] args) throws Throwable {
         // Define all placeholder values
@@ -29,7 +31,8 @@ public class CompileAndDeployContractWithPlaceholders {
         replaceMap.put("ownerAddress", ALICE.getAddress());
 
         // Pass the replaceMap when compiling the contract
-        CompilationUnit compUnit = new Compiler().compile(ContractWithPlaceholders.class.getCanonicalName(), replaceMap);
+        CompilationUnit compUnit = new Compiler()
+                .compile(ContractWithPlaceholders.class.getCanonicalName(), replaceMap);
         writeNefAndManifestFiles(compUnit); // Store Nef and manifest
 
         // Deploy the contract

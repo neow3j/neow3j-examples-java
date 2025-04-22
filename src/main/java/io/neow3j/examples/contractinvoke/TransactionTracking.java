@@ -1,9 +1,5 @@
 package io.neow3j.examples.contractinvoke;
 
-import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.BOB;
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
-
 import java.math.BigInteger;
 
 import io.neow3j.contract.NeoToken;
@@ -14,10 +10,14 @@ import io.neow3j.protocol.core.response.NeoApplicationLog;
 import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.Transaction;
 
+import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.BOB;
+import static io.neow3j.examples.Constants.neow3jPrivatenet;
+
 public class TransactionTracking {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+    static final Neow3j neow3j = neow3jPrivatenet();
 
     public static void main(String[] args) throws Throwable {
 

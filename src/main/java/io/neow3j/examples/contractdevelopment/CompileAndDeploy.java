@@ -3,7 +3,7 @@ package io.neow3j.examples.contractdevelopment;
 import static io.neow3j.contract.ContractUtils.writeContractManifestFile;
 import static io.neow3j.contract.ContractUtils.writeNefFile;
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
+import static io.neow3j.examples.Constants.neow3jPrivatenet;
 import static java.lang.String.format;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -27,7 +27,7 @@ import io.neow3j.wallet.Account;
 public class CompileAndDeploy {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+    static final Neow3j neow3j = neow3jPrivatenet();
 
     public static void main(String[] args) throws Throwable {
         CompilationUnit compUnit = compile(FungibleToken.class);

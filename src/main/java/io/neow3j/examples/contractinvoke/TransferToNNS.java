@@ -10,12 +10,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J_TESTNET;
+import static io.neow3j.examples.Constants.neow3jTestnet;
 
 public class TransferToNNS {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_TESTNET;
+    static final Neow3j neow3j = neow3jTestnet();
 
     public static void main(String[] args) throws Throwable {
         GasToken gasToken = new GasToken(neow3j);

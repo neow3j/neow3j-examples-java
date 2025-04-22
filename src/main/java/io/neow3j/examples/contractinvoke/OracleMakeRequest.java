@@ -7,7 +7,7 @@ import io.neow3j.transaction.TransactionBuilder;
 import io.neow3j.types.Hash160;
 
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J_TESTNET;
+import static io.neow3j.examples.Constants.neow3jTestnet;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 import static io.neow3j.transaction.AccountSigner.none;
 import static io.neow3j.types.ContractParameter.integer;
@@ -16,7 +16,7 @@ import static io.neow3j.types.ContractParameter.string;
 public class OracleMakeRequest {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_TESTNET;
+    static final Neow3j neow3j = neow3jTestnet();
 
     public static void main(String[] args) throws Throwable {
         // The contract CallOracleContract is deployed on testnet with the following address.

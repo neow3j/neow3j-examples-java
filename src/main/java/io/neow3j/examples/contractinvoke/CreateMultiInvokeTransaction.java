@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
+import static io.neow3j.examples.Constants.neow3jPrivatenet;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 
 /**
@@ -22,7 +22,7 @@ import static io.neow3j.examples.Utils.trackSentTransaction;
 public class CreateMultiInvokeTransaction {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+    static final Neow3j neow3j = neow3jPrivatenet();
 
     static final String MINT = "mint";
     static final String NAME = "name";

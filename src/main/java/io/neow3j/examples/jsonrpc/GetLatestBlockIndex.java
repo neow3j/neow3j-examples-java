@@ -5,13 +5,12 @@ import io.neow3j.protocol.Neow3j;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
-
+import static io.neow3j.examples.Constants.neow3jPrivatenet;
 
 public class GetLatestBlockIndex {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+    static final Neow3j neow3j = neow3jPrivatenet();
 
     public static void main(String[] args) throws IOException {
 

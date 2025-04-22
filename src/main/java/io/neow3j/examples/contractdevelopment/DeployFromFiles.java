@@ -1,10 +1,5 @@
 package io.neow3j.examples.contractdevelopment;
 
-import static io.neow3j.examples.Constants.ALICE;
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.file.Paths;
 import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.NefFile;
 import io.neow3j.contract.SmartContract;
@@ -15,11 +10,18 @@ import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
 import io.neow3j.types.Hash160;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Paths;
+
+import static io.neow3j.examples.Constants.ALICE;
+import static io.neow3j.examples.Constants.neow3jPrivatenet;
+
 // Shows how to read a smart contract's files from the disk and deployed it on through a local neo-node.
 public class DeployFromFiles {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+    static final Neow3j neow3j = neow3jPrivatenet();
 
     public static void main(String[] args) throws Throwable {
 

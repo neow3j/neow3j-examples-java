@@ -8,13 +8,13 @@ import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.BOB;
-import static io.neow3j.examples.Constants.NEOW3J_PRIVATENET;
+import static io.neow3j.examples.Constants.neow3jPrivatenet;
 import static io.neow3j.examples.Utils.trackSentTransaction;
 
 public class TransferGas {
 
     // The neow3j instance used in this example.
-    static final Neow3j neow3j = NEOW3J_PRIVATENET;
+    static final Neow3j neow3j = neow3jPrivatenet();
 
     public static void main(String[] args) throws Throwable {
 
