@@ -20,7 +20,7 @@ public class SendNeoToAddress {
     public static void main(String[] args) throws IOException {
         // This example requires that the wallet of Alice's account is open on the node. Thus,
         // first the wallet is opened with the `openwallet` RPC method.
-        NeoOpenWallet resp = neow3j.openWallet("Alice.wallet.json", "neo").send();
+        NeoOpenWallet resp = neow3j.openWallet("wallet.json", "neo").send();
         if (resp.hasError()) {
             System.out.println("Couldn't open wallet. Error message was: '" + resp.getError().getMessage() + "'");
             return;
