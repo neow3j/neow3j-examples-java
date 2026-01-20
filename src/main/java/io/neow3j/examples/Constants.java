@@ -31,10 +31,6 @@ public class Constants {
         return Neow3j.build(mainnetHttpService);
     }
 
-    // Endpoint to a NeoFS node and the NeoFS contract hash on testnet.
-    public static String NEOFS_GRPC_ENDPOINT_TESTNET = "grpcs://st1.t5.fs.neo.org:8082";
-    public static Hash160 NEOFS_CONTRACT_TESTNET = Hash160.fromAddress("NZAUkYbJ1Cb2HrNmwZ1pg9xYHBhm2FgtKV");
-
     // This is Alice's account which is also available on the pre-configured private network.
     public static Account ALICE = Account.fromWIF("L1eV34wPoj9weqhGijdDLtVQzUpWGHszXXpdU9dPuh2nRFFzFa7E");
 
