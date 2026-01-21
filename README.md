@@ -8,27 +8,6 @@ The **master** branch contains neow3j examples for the **Neo N3** blockchain.
 If you seek examples for the **Neo Legacy** blockchain, you can find those in the according branches: `neo-legacy/examples`,
 `neo-legacy/android-examples` and `neo-legacy/spring-boot-examples`.
 
-<table>
-  <tr>
-    <td>
-      <a href="https://marketplace.digitalocean.com/apps/1clicknode-for-neo">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://cdn.axlabs.net/1clicknode-logos/1clicknode-logo-for-dark.png"
-          width="200">
-        <source media="(prefers-color-scheme: light)" srcset="https://cdn.axlabs.net/1clicknode-logos/1clicknode-logo-for-light.png"
-          width="200">
-        <img alt="1ClickNode Logo" src="">
-      </picture> 
-    </a>
-    </td>
-    <td>
-      If you are in need of a testnet or mainnet Neo node for your dApp but don't want to spend hours on setup, check 
-      out <a href="https://marketplace.digitalocean.com/apps/1clicknode-for-neo">1ClickNode</a>.
-    </td>
-  </tr>
-</table>
-
-
 ## Neo N3 examples
 
 The project in the master branch provides Java examples for the neow3j SDK and devpack based on Neo N3.
