@@ -5,7 +5,6 @@ import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
-import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnDeployment;
@@ -26,7 +25,6 @@ import io.neow3j.devpack.contracts.StdLib;
 @Permission(nativeContract = NativeContract.ContractManagement)
 public class CallOracleContract {
 
-    public static final StorageContext ctx = Storage.getStorageContext();
     public static final int responseKey = 0x01;
 
     public static final StdLib stdLib = new StdLib();
@@ -41,13 +39,12 @@ public class CallOracleContract {
             throw new Exception("No authorization");
         }
         ByteString serialized = stdLib.serialize(new CustomResponseStruct(url, responseCode, response));
-        Storage.put(ctx, responseKey, serialized);
+        Storage.put(responseKey, serialized);
     }
 
     @Safe
     public static CustomResponseStruct getResponse() {
-        ByteString serializedResponse = Storage.get(ctx, responseKey);
-        return (CustomResponseStruct) stdLib.deserialize(serializedResponse);
+        return (CustomResponseStruct) stdLib.deserialize(Storage.get(responseKey));
     }
 
     @Struct
@@ -74,18 +71,18 @@ public class CallOracleContract {
         if (!isUpdate) {
             Hash160 ownerHash = (Hash160) owner;
             if (!Hash160.isValid(ownerHash)) Helper.abort("Deployment data requires a Hash160 value.");
-            Storage.put(ctx, ownerKey, ownerHash);
+            Storage.put(ownerKey, ownerHash);
         }
     }
 
     public static void setOwner(Hash160 newOwner) {
         if (!Runtime.checkWitness(owner())) Helper.abort("No authorization");
-        Storage.put(ctx, ownerKey, newOwner);
+        Storage.put(ownerKey, newOwner);
     }
 
     @Safe
     public static Hash160 owner() {
-        return Storage.getHash160(ctx, ownerKey);
+        return Storage.getHash160(ownerKey);
     }
 
     public static void update(ByteString nef, String manifest) {

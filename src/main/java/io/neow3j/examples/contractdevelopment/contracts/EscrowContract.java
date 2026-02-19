@@ -5,7 +5,6 @@ import io.neow3j.devpack.Helper;
 import io.neow3j.devpack.Runtime;
 import io.neow3j.devpack.Storage;
 import io.neow3j.devpack.ByteString;
-import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.annotations.DisplayName;
 import io.neow3j.devpack.annotations.ManifestExtra;
 import io.neow3j.devpack.annotations.OnNEP17Payment;
@@ -18,8 +17,6 @@ import io.neow3j.devpack.events.Event5Args;
 import io.neow3j.devpack.constants.NativeContract;
 
 import static io.neow3j.devpack.Helper.abort;
-import static io.neow3j.devpack.Storage.getReadOnlyContext;
-import static io.neow3j.devpack.Storage.getStorageContext;
 
 @DisplayName("Escrow")
 @ManifestExtra(key = "author", value = "AxLabs")
@@ -74,11 +71,10 @@ public class EscrowContract {
         TrustAgreement agreement = new TrustAgreement(name, trustor, beneficiary, arbiter, amount);
 
         ByteString serializedAgreement = new StdLib().serialize(agreement);
-        StorageContext ctx = getStorageContext();
-        if (Storage.get(ctx, name) != null) {
+        if (Storage.get(name) != null) {
             abort("Agreement already exists.");
         }
-        Storage.put(ctx, name, serializedAgreement);
+        Storage.put(name, serializedAgreement);
         onAgreementCreate.fire(agreement.name, agreement.trustor, agreement.beneficiary, agreement.arbiter,
                 agreement.amount);
 
@@ -104,7 +100,7 @@ public class EscrowContract {
             Helper.abort("Unauthorized.");
         }
         // Delete the agreement before execution so it can't be called more than once.
-        Storage.delete(Storage.getStorageContext(), agreementName);
+        Storage.delete(agreementName);
         // Transfer the funds based on the agreement.
         boolean success = new GasToken().transfer(Runtime.getExecutingScriptHash(), agreement.beneficiary,
                 agreement.amount, null);
@@ -123,7 +119,7 @@ public class EscrowContract {
      */
     @Safe
     public static TrustAgreement getAgreement(String agreementName) {
-        ByteString agreementDetails = Storage.get(getReadOnlyContext(), agreementName);
+        ByteString agreementDetails = Storage.get(agreementName);
         return (TrustAgreement) new StdLib().deserialize(agreementDetails);
     }
 

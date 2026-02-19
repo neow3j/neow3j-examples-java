@@ -2,7 +2,6 @@ package io.neow3j.examples.contractdevelopment.contracts;
 
 import io.neow3j.devpack.ByteString;
 import io.neow3j.devpack.Storage;
-import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.annotations.Instruction;
 import io.neow3j.devpack.annotations.Permission;
 import io.neow3j.devpack.constants.InteropService;
@@ -13,12 +12,12 @@ import io.neow3j.devpack.constants.StackItemType;
 public class CustomScriptContract {
 
     public static void put(ByteString key, int value) {
-        Storage.put(Storage.getStorageContext(), key, value);
+        Storage.put(key, value);
     }
 
     public static int get(ByteString key) throws Exception {
         try {
-            return Helper.getIntOrThrow(Storage.getReadOnlyContext(), key);
+            return Helper.getIntOrThrow(key);
         } catch (Exception e) {
             throw new Exception("Couldn't find a value corresponding to key " + key.toString());
         }
@@ -39,7 +38,7 @@ public class CustomScriptContract {
                 )
         @Instruction(opcode = OpCode.THROW)
         @Instruction(opcode = OpCode.CONVERT, operand = StackItemType.INTEGER)
-        public static native int getIntOrThrow(StorageContext context, ByteString key) throws Exception;
+        public static native int getIntOrThrow(ByteString key) throws Exception;
 
     }
 

@@ -2,7 +2,6 @@ package io.neow3j.examples.contractdevelopment.contracts;
 
 import io.neow3j.devpack.Hash160;
 import io.neow3j.devpack.Storage;
-import io.neow3j.devpack.StorageContext;
 import io.neow3j.devpack.StringLiteralHelper;
 import io.neow3j.devpack.annotations.OnDeployment;
 import io.neow3j.devpack.annotations.Permission;
@@ -12,7 +11,6 @@ import io.neow3j.devpack.contracts.FungibleToken;
 import java.util.Map;
 
 import static io.neow3j.devpack.Runtime.checkWitness;
-import static io.neow3j.devpack.Storage.getStorageContext;
 
 /**
  * This contract contains placeholders. A placeholder value can be substituted in the compilation when calling
@@ -24,7 +22,6 @@ import static io.neow3j.devpack.Storage.getStorageContext;
 @Permission(contract = "${allowedTokenContractHash}", methods = "transfer")
 public class ContractWithPlaceholders {
 
-    static final StorageContext ctx = getStorageContext();
     static final byte[] ownerHashKey = new byte[]{0x00};
     static final byte[] ownerNameKey = new byte[]{0x01};
 
@@ -34,26 +31,26 @@ public class ContractWithPlaceholders {
     @OnDeployment
     public static void deploy(Object data, boolean update) {
         if (!update) {
-            Storage.put(ctx, ownerHashKey, StringLiteralHelper.addressToScriptHash(ownerAddress));
-            Storage.put(ctx, ownerNameKey, "${ownerName}");
+            Storage.put(ownerHashKey, StringLiteralHelper.addressToScriptHash(ownerAddress));
+            Storage.put(ownerNameKey, "${ownerName}");
         }
     }
 
     @Safe
     public static String getOwnerName() {
-        return Storage.getString(ctx, ownerNameKey);
+        return Storage.getString(ownerNameKey);
     }
 
     @Safe
     public static Hash160 getOwner() {
-        return Storage.getHash160(ctx, ownerHashKey);
+        return Storage.getHash160(ownerHashKey);
     }
 
     public static void changeOwnerName(String ownerName) throws Exception {
         if (!checkWitness(getOwner())) {
             throw new Exception("No authorization!");
         }
-        Storage.put(ctx, ownerNameKey, ownerName);
+        Storage.put(ownerNameKey, ownerName);
     }
 
     @Safe
