@@ -2,10 +2,10 @@ package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
 import io.neow3j.transaction.Transaction;
 import io.neow3j.transaction.TransactionBuilder;
+import io.neow3j.transaction.TransactionSubmission;
 import io.neow3j.types.ContractParameter;
 import io.neow3j.types.Hash160;
 
@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.neow3jPrivatenet;
-import static io.neow3j.examples.Utils.trackSentTransaction;
+import static io.neow3j.examples.Utils.trackTransactionSubmission;
 
 /**
  * This example shows how to create a transaction that contains multiple contract invocations.
@@ -76,8 +76,8 @@ public class CreateMultiInvokeTransaction {
         Transaction tx = transactionBuilder.signers(AccountSigner.calledByEntry(ALICE))
                 .sign();
 
-        NeoSendRawTransaction response = tx.send();
-        trackSentTransaction(response, neow3j);
+        TransactionSubmission txSubmission = tx.send();
+        trackTransactionSubmission(txSubmission, neow3j);
     }
 
 }

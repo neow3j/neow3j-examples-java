@@ -2,15 +2,15 @@ package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.GasToken;
 import io.neow3j.contract.types.NNSName;
-import io.neow3j.examples.Utils;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
+import io.neow3j.transaction.TransactionSubmission;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.neow3jTestnet;
+import static io.neow3j.examples.Utils.trackTransactionSubmission;
 
 public class TransferToNNS {
 
@@ -24,10 +24,10 @@ public class TransferToNNS {
         BigInteger amount = gasToken.toFractions(BigDecimal.valueOf(1));
 
         // Resolves the provided NNS domain name's text record and transfers 1 GAS to that address.
-        NeoSendRawTransaction response = gasToken.transfer(ALICE, neow3jExampleNNS, amount)
+        TransactionSubmission txSubmission = gasToken.transfer(ALICE, neow3jExampleNNS, amount)
                 .sign()
                 .send();
-        Utils.trackSentTransaction(response, neow3j);
+        trackTransactionSubmission(txSubmission, neow3j);
     }
 
 }

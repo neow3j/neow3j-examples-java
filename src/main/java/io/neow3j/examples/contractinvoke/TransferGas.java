@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 
 import io.neow3j.contract.GasToken;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
+import io.neow3j.transaction.TransactionSubmission;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.BOB;
 import static io.neow3j.examples.Constants.neow3jPrivatenet;
-import static io.neow3j.examples.Utils.trackSentTransaction;
+import static io.neow3j.examples.Utils.trackTransactionSubmission;
 
 public class TransferGas {
 
@@ -23,7 +23,7 @@ public class TransferGas {
 
         // The transfer method will add the wallets default account as the signer and use that accounts tokens to
         // cover the transfer amount.
-        NeoSendRawTransaction response = gasToken
+        TransactionSubmission txSubmission = gasToken
                 // The amount can be passed directly in fractions, e.g., BigInteger("150000000").
                 // But here we use the method `toFractions()` providing that takes the number of decimals of the
                 // specific token (here GasToken) into account. There is also a static method `Token.toFractions(...)`
@@ -32,7 +32,7 @@ public class TransferGas {
                 .sign() // Signs the transaction with the account that was configured as the signer.
                 .send(); // Sends the transaction to the neo-node.
 
-        trackSentTransaction(response, neow3j);
+        trackTransactionSubmission(txSubmission, neow3j);
     }
 
 }

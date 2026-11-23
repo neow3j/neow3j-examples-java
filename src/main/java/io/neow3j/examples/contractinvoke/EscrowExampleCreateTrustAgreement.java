@@ -9,10 +9,10 @@ import io.neow3j.contract.GasToken;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.response.InvocationResult;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.protocol.core.stackitem.StackItem;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.transaction.AccountSigner;
+import io.neow3j.transaction.TransactionSubmission;
 import io.neow3j.types.ContractParameter;
 import io.neow3j.types.Hash160;
 import io.neow3j.wallet.Account;
@@ -104,7 +104,7 @@ public class EscrowExampleCreateTrustAgreement {
                 ContractParameter totalAmountParameter = ContractParameter.integer(totalAmount);
 
                 // 5. Call the createAgreement function in the Escrow contract
-                NeoSendRawTransaction createAgreementResult = new SmartContract(scriptHash, neow3j)
+                TransactionSubmission createAgreementTxSubmission = new SmartContract(scriptHash, neow3j)
                                 .invokeFunction("createAgreement",
                                                 agreementNameParameter,
                                                 trustorParameter,
@@ -116,8 +116,8 @@ public class EscrowExampleCreateTrustAgreement {
                                 .send();
 
                 // 6. Print the transaction hash of the createAgreement function
-                System.out.println("createAgreementResult Txn Hash --> " +
-                                createAgreementResult.getSendRawTransaction().getHash());
+                System.out.println("createAgreementTxSubmission Txn Hash --> " +
+                                createAgreementTxSubmission.getSendRawTransaction().getHash());
         }
 
         private static void getAgreement(Hash160 scriptHash, Neow3j neow3j) throws Throwable {

@@ -2,13 +2,13 @@ package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.TransactionBuilder;
+import io.neow3j.transaction.TransactionSubmission;
 import io.neow3j.types.Hash160;
 
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.neow3jTestnet;
-import static io.neow3j.examples.Utils.trackSentTransaction;
+import static io.neow3j.examples.Utils.trackTransactionSubmission;
 import static io.neow3j.transaction.AccountSigner.none;
 import static io.neow3j.types.ContractParameter.integer;
 import static io.neow3j.types.ContractParameter.string;
@@ -28,11 +28,11 @@ public class OracleMakeRequest {
                 string("$[*].email"), // the filter -> here: get the email of all users
                 integer(10000000) // the gas for the oracle request
         );
-        NeoSendRawTransaction response = b.signers(none(ALICE))
+        TransactionSubmission txSubmission = b.signers(none(ALICE))
                 .sign()
                 .send();
 
-        trackSentTransaction(response, neow3j);
+        trackTransactionSubmission(txSubmission, neow3j);
     }
 
 }

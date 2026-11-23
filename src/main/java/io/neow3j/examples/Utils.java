@@ -3,8 +3,8 @@ package io.neow3j.examples;
 import io.neow3j.compiler.DebugInfo;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.ObjectMapperFactory;
+import io.neow3j.transaction.TransactionSubmission;
 import io.neow3j.types.Hash256;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.utils.Await;
 
 import java.io.File;
@@ -18,14 +18,14 @@ import java.util.zip.ZipOutputStream;
 
 public class Utils {
 
-    public static void trackSentTransaction(NeoSendRawTransaction response, Neow3j neow3j) throws IOException {
+    public static void trackTransactionSubmission(TransactionSubmission sub, Neow3j neow3j) throws IOException {
 
         System.out.println("####################");
-        if (response.hasError()) {
+        if (sub.hasError()) {
             System.out.printf("The neo-node responded with the error message '%s'.%n",
-                    response.getError().getMessage());
+                    sub.getError().getMessage());
         } else {
-            Hash256 txHash = response.getSendRawTransaction().getHash();
+            Hash256 txHash = sub.getSendRawTransaction().getHash();
             System.out.printf("Successfully transmitted the transaction with hash '%s'.%n", txHash);
             System.out.println("Waiting until transaction is persisted in a block...");
             Await.waitUntilTransactionIsExecuted(txHash, neow3j);

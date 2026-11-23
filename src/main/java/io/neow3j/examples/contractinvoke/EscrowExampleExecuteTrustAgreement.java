@@ -4,9 +4,9 @@ import java.util.Scanner;
 
 import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.transaction.AccountSigner;
+import io.neow3j.transaction.TransactionSubmission;
 import io.neow3j.types.ContractParameter;
 import io.neow3j.types.Hash160;
 import io.neow3j.wallet.Account;
@@ -41,16 +41,14 @@ public class EscrowExampleExecuteTrustAgreement {
         ContractParameter agreementNameParameter = ContractParameter.string(agreementNameToGet);
 
         // 8. Now we will execute the agreement
-        NeoSendRawTransaction executeAgreementResult = new SmartContract(scriptHash,
-                neow3j)
-                .invokeFunction("executeAgreement",
-                        agreementNameParameter)
+        TransactionSubmission executeAgreementTxSubmission = new SmartContract(scriptHash, neow3j)
+                .invokeFunction("executeAgreement", agreementNameParameter)
                 .signers(AccountSigner.calledByEntry(arbiterAccount))
                 .sign()
                 .send();
 
         // 9. And lastly we will print the transaction hash
-        System.out.println("executeAgreementResult Txn Hash --> " +
-                executeAgreementResult.getSendRawTransaction().getHash());
+        System.out.println("executeAgreementTxSubmission Txn Hash --> " +
+                executeAgreementTxSubmission.getSendRawTransaction().getHash());
     }
 }

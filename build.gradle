@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'io.neow3j.gradle-plugin' version "3.24.2"
+    id 'io.neow3j.gradle-plugin' version "3.25.0"
 }
 
 group 'io.neow3j'
@@ -17,10 +17,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.neow3j:contract:3.24.2'
-    implementation 'io.neow3j:devpack:3.24.2'
-    implementation 'io.neow3j:compiler:3.24.2'
-    implementation 'ch.qos.logback:logback-classic:1.3.4'
+    implementation 'io.neow3j:contract:3.25.0'
+    implementation 'io.neow3j:devpack:3.25.0'
+    implementation 'io.neow3j:compiler:3.25.0'
+    implementation 'ch.qos.logback:logback-classic:1.6.6'
 }
 
 tasks.withType(Test).configureEach {

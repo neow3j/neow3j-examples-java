@@ -4,7 +4,9 @@ import io.neow3j.protocol.Neow3j;
 
 import java.io.IOException;
 
+import static io.neow3j.examples.Constants.neow3jMainnet;
 import static io.neow3j.examples.Constants.neow3jPrivatenet;
+import static io.neow3j.examples.Constants.neow3jTestnet;
 
 public class SubscribeToNewBlocks {
 

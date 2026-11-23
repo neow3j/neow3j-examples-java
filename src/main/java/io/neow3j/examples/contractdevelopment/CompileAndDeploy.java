@@ -14,8 +14,8 @@ import io.neow3j.contract.ContractManagement;
 import io.neow3j.contract.SmartContract;
 import io.neow3j.examples.contractdevelopment.contracts.FungibleToken;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
+import io.neow3j.transaction.TransactionSubmission;
 import io.neow3j.types.ContractParameter;
 import io.neow3j.types.Hash160;
 import io.neow3j.utils.Await;
@@ -59,17 +59,17 @@ public class CompileAndDeploy {
         ContractParameter deploymentParam) throws Throwable {
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to the Neo node.
-        NeoSendRawTransaction response = new ContractManagement(neow3j)
+        TransactionSubmission txSubmission = new ContractManagement(neow3j)
                 .deploy(compUnit.getNefFile(), compUnit.getManifest(), deploymentParam)
                 .signers(AccountSigner.none(deployerAccount))
                 .sign()
                 .send();
 
-        if (response.hasError()) {
+        if (txSubmission.hasError()) {
             throw new Exception(format("Deployment was not successful. Error message from neo-node was: '%s'\n",
-                    response.getError().getMessage()));
+                    txSubmission.getError().getMessage()));
         } else {
-            Await.waitUntilTransactionIsExecuted(response.getResult().getHash(), neow3j);
+            Await.waitUntilTransactionIsExecuted(txSubmission.getTxId(), neow3j);
             Hash160 contractHash = SmartContract.calcContractHash(
                     ALICE.getScriptHash(),
                     compUnit.getNefFile().getCheckSumAsInteger(),

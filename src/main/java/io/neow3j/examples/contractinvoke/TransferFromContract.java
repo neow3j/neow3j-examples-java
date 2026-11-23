@@ -2,9 +2,9 @@ package io.neow3j.examples.contractinvoke;
 
 import io.neow3j.contract.GasToken;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
 import io.neow3j.transaction.ContractSigner;
+import io.neow3j.transaction.TransactionSubmission;
 import io.neow3j.types.Hash160;
 
 import java.math.BigInteger;
@@ -12,7 +12,7 @@ import java.math.BigInteger;
 import static io.neow3j.examples.Constants.ALICE;
 import static io.neow3j.examples.Constants.BOB;
 import static io.neow3j.examples.Constants.neow3jPrivatenet;
-import static io.neow3j.examples.Utils.trackSentTransaction;
+import static io.neow3j.examples.Utils.trackTransactionSubmission;
 import static io.neow3j.types.ContractParameter.string;
 
 /*
@@ -32,10 +32,7 @@ public class TransferFromContract {
         Hash160 contract = new Hash160("0xe7c27a246c701755574134aaa094b4fd5c79f78a");
 
         GasToken gas = new GasToken(neow3j);
-        NeoSendRawTransaction response = gas.transfer(
-                        contract,
-                        BOB.getScriptHash(),
-                        new BigInteger("100"))
+        TransactionSubmission txSubmission = gas.transfer(contract, BOB.getScriptHash(), new BigInteger("100"))
                 .signers( // The contract owner (Alice) and the contract are both required here.
                         AccountSigner.calledByEntry(ALICE),
                         ContractSigner.calledByEntry(contract, string("hello, world!")))
@@ -43,9 +40,9 @@ public class TransferFromContract {
                 // ("hello, world!") that should be passed to the verify method.
                 .send();
 
-        System.out.println(response);
+        System.out.println(txSubmission);
 
-        trackSentTransaction(response, neow3j);
+        trackTransactionSubmission(txSubmission, neow3j);
     }
 
 }

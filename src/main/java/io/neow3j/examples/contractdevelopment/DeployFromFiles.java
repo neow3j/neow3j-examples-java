@@ -6,8 +6,8 @@ import io.neow3j.contract.SmartContract;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.ObjectMapperFactory;
 import io.neow3j.protocol.core.response.ContractManifest;
-import io.neow3j.protocol.core.response.NeoSendRawTransaction;
 import io.neow3j.transaction.AccountSigner;
+import io.neow3j.transaction.TransactionSubmission;
 import io.neow3j.types.Hash160;
 
 import java.io.File;
@@ -37,18 +37,18 @@ public class DeployFromFiles {
         }
 
         // Deploy the contract's NEF and manifest. This creates, signs and send a transaction to the neo-node.
-        NeoSendRawTransaction response = new ContractManagement(neow3j)
+        TransactionSubmission txSubmission = new ContractManagement(neow3j)
                 .deploy(nefFile, manifest)
                 .signers(AccountSigner.global(ALICE))
                 .sign()
                 .send();
 
-        if (response.hasError()) {
+        if (txSubmission.hasError()) {
             System.out.printf("Deployment was not successful. Error message from neo-node was: '%s'\n",
-                    response.getError().getMessage());
+                    txSubmission.getError().getMessage());
         } else {
             System.out.printf("The contract was deployed in transaction %s\n",
-                    response.getSendRawTransaction().getHash());
+                    txSubmission.getSendRawTransaction().getHash());
             Hash160 contractHash = SmartContract.calcContractHash(
                     ALICE.getScriptHash(), nefFile.getCheckSumAsInteger(), manifest.getName());
             System.out.printf("Script hash of the deployed contract: %s\n", contractHash);
